@@ -1,5 +1,6 @@
 package com.mcdonalds.foodordering.model;
 
-public class PaymentType {
-    
+public enum PaymentType {
+    CASH,
+    CARD
 }

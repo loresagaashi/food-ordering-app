@@ -1,12 +1,12 @@
 package com.mcdonalds.foodordering.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
-public class Category extends BaseEntity {
-    private String name;
+public class Admin extends UserAccount {
 }
