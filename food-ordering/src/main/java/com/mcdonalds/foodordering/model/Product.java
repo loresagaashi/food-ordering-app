@@ -1,8 +1,8 @@
 package com.mcdonalds.foodordering.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+// import jakarta.persistence.JoinColumn;
+// import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,9 +18,9 @@ public class Product extends BaseEntity {
 
     private BigDecimal price;
 
-    @ManyToOne
-    @JoinColumn
-    private Category category;
+    // @ManyToOne
+    // @JoinColumn
+    // private Category category;
 
     private Integer bonusPoints;
 }
