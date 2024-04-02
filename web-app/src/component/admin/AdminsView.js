@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import {Link} from "react-router-dom";
+import Search from "../common/Search";
 
 const AdminsView = () => {
   const [admins, setAdmins] = useState([]);
+
+  const[search,setSearch] = useState("");
 
   useEffect(() => {
     loadAdmins();
@@ -20,12 +24,19 @@ const AdminsView = () => {
     }
   };
 
+  const handleDelete = async(id) => {
+    await axios.delete(`http://localhost:8080/admins/delete/${id}`);
+    loadAdmins();
+}
+
   return (
     <section>
+      <Search search={search}
+      setSearch={setSearch} />
       <table className="table table-bordered table-hover shadow">
         <thead>
           <tr className="text-center">
-            <th>Id</th>
+            <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
@@ -36,7 +47,11 @@ const AdminsView = () => {
         </thead>
 
         <tbody className="text-center">
-          {admins.map((admin, index) => (
+          {admins.filter((ad) => 
+          ad.firstName.toLowerCase().includes(search)
+            )
+          
+          .map((admin, index) => (
             <tr key={admin.id}>
               <th scope="row" key={index}>
                 {index + 1}
@@ -47,17 +62,23 @@ const AdminsView = () => {
               <td>{admin.birthDate}</td>
               <td>{admin.phoneNumber}</td>
               <td className="mx-2">
-                <button className="btn btn-info">
+                <Link 
+                to={`/admin-profile/${admin.id}`}
+                className="btn btn-info">
                 View
-                </button>
+                </Link>
                 </td>
               <td className="mx-2">
-              <button className="btn btn-warning">
+              <Link 
+              to={`/edit-admin/${admin.id}`}
+              className="btn btn-warning">
                 Update
-                </button>
+                </Link>
                 </td>
               <td className="mx-2">
-              <button className="btn btn-danger">
+              <button 
+              className="btn btn-danger"
+              onClick={()=> handleDelete(admin.id)}>
                 Delete
                 </button>
                 </td>
