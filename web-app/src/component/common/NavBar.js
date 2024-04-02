@@ -18,20 +18,40 @@ const NavBar = () => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
+
+        {/* Admin */}
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
               <Link className="nav-link active" aria-current="page" to={"/view-admins"}>
-                View All 
+                View All Admins
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to={"/add-admins"}>
-                Add New 
+                Add New Admin
               </Link>
             </li>
           </ul>
         </div>
+
+        {/* Product */}
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <Link className="nav-link active" aria-current="page" to={"/view-products"}>
+                View All Products
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to={"/add-products"}>
+                Add New Product 
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        
       </div>
     </nav>
   );

@@ -14,15 +14,17 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService {
+public class ProductService implements IProductService {
     
     @Autowired
     private final ProductRepository productRepository;
 
+    @Override
     public List<Product> getProducts(){
         return productRepository.findAll();
     }
 
+    @Override
     public Product addProduct(Product product){
         if(productAlreadyExists(product.getName())){
             throw new AlreadyExistsException(product.getName()+" - Product already exists!");
@@ -30,6 +32,7 @@ public class ProductService {
         return productRepository.save(product);
     }
     
+    @Override
     public Product getProductById(Long id){
         return productRepository.findById(id).orElseThrow(() -> new NotFoundException("No product found with this id: "+id+"!"));
     }
@@ -38,17 +41,19 @@ public class ProductService {
         return productRepository.findByName(name).isPresent();
     }
 
+    @Override
     public Product updateProduct(Product product, Long id){
         return productRepository.findById(id).map(p -> {
             p.setName(product.getName());
             p.setDescription(product.getDescription());
             p.setPrice(product.getPrice());
-            // p.setCategory(product.getCategory());
+            p.setCategory(product.getCategory());
             p.setBonusPoints(product.getBonusPoints());
             return productRepository.save(p);
         }).orElseThrow(() -> new NotFoundException("This product could not be found!"));
     }
 
+    @Override
     public void deleteProduct(Long id){
         if(!productRepository.existsById(id)){
             throw new NotFoundException("No product was found with this id: "+id+"!");
