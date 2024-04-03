@@ -23,7 +23,7 @@ public class AdminService {
 
     public Admin addAdmin(Admin admin) {
         if(adminAlreadyExists(admin.getEmail())){
-            throw new AlreadyExistsException(admin.getEmail()+"Admin already Exists!");
+            throw new AlreadyExistsException(admin.getEmail()+" Admin already Exists!");
         }
         return adminRepository.save(admin);
     }

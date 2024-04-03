@@ -1,6 +1,5 @@
 package com.mcdonalds.foodordering.model;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
