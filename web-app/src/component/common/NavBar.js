@@ -35,6 +35,22 @@ const NavBar = () => {
           </ul>
         </div>
 
+         {/* Customer */}
+         <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <Link className="nav-link active" aria-current="page" to={"/view-customers"}>
+                View All Customers
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to={"/add-customers"}>
+                Add New Customer
+              </Link>
+            </li>
+          </ul>
+        </div>
+
         {/* Product */}
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
