@@ -8,12 +8,16 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AddAdmin from "./component/admin/AddAdmin";
 import EditAdmin from "./component/admin/EditAdmin";
 import AdminProfile from "./component/admin/AdminProfile";
-import AddProduct from "./component/product/AddProduct";
-import ProductsView from "./component/product/ProductsView";
+
 import AddCustomer from "./component/customer/AddCustomer";
 import EditCustomer from "./component/customer/EditCustomer";
 import CustomersView from "./component/customer/CustomersView";
 import CustomerProfile from "./component/customer/CustomerProfile";
+
+import AddProduct from "./component/product/AddProduct";
+import ProductsView from "./component/product/ProductsView";
+import EditProduct from "./component/product/EditProduct";
+import ProductProfile from "./component/product/ProductProfile";
 
 function App() {
   return (
@@ -40,6 +44,8 @@ function App() {
           <Route exact path="/" element={<Home />}></Route>
           <Route exact path="/view-products" element={<ProductsView />}></Route>
           <Route exact path="/add-products" element={<AddProduct />}></Route>
+          <Route exact path="/edit-product/:id" element={<EditProduct />}></Route>
+          <Route exact path="/product-profile/:id" element={<ProductProfile />}></Route>
         </Routes>
       </Router>
     </main>

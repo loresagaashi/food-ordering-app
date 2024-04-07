@@ -1,8 +1,12 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import Search from "../common/Search";
+import {Link} from "react-router-dom";
 
 const ProductsView = () => {
     const [products, setProducts] = useState([]);
+    
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         loadProducts();
@@ -19,8 +23,15 @@ const ProductsView = () => {
         }
     };
 
+    const handleDelete = async(id) => {
+        await axios.delete(`http://localhost:8080/products/delete/${id}`);
+        loadProducts();
+    }
+
     return (
         <section>
+          <Search search = {search}
+          setSearch = {setSearch}/>
           <table className="table table-bordered table-hover shadow">
             <thead>
               <tr className="text-center">
@@ -35,7 +46,9 @@ const ProductsView = () => {
             </thead>
 
             <tbody className="text-center">
-              {products.map((product,index) => (
+              {products.filter((pr) =>
+              pr.name.toLowerCase().includes(search))
+              .map((product,index) => (
                 <tr key = {product.id}>
                   <th scope="row" key={index}>
                       {index+1}
@@ -47,21 +60,26 @@ const ProductsView = () => {
                   <td>{product.bonusPoints}</td>
 
                   <td className="mx-2">
-                      <button className="btn btn-info">
-                          View
-                      </button>
+                    <Link 
+                      to = {`/product-profile/${product.id}`}
+                      className="btn btn-info">
+                      View
+                    </Link>
                   </td>
 
                    <td className="mx-2">
-                       <button className="btn btn-warning">
-                           Update
-                       </button>
+                    <Link 
+                      to = {`/edit-product/${product.id}`}
+                      className="btn btn-warning">
+                      Update
+                    </Link>
                    </td>
 
                    <td className="mx-2">
-                       <button className="btn btn-danger">
-                           Delete
-                       </button>
+                     <button className="btn btn-danger"
+                     onClick={() => handleDelete(product.id)}>
+                      Delete
+                     </button>
                    </td>
                 </tr>
               ))}
