@@ -32,6 +32,7 @@ import AddCategory from "./component/category/AddCategory";
 import CategoriesView from "./component/category/CategoriesView";
 import EditCategory from "./component/category/EditCategory";
 import CategoryProfile from "./component/category/CategoryProfile";
+import StoreHoursProfile from "./component/storeHours/StoreHoursProfile";
 
 function App() {
   return (
@@ -79,7 +80,7 @@ function App() {
           <Route exact path="/view-storeHours" element={<StoreHoursViews />}></Route>
           <Route exact path="/add-storeHours" element={<AddStoreHours />}></Route>
           <Route exact path="/edit-storeHours/:id" element={<EditStoreHours />}></Route>
-          {/* <Route exact path="/storeHours-profile/:id" element={<StoreHoursProfile />}></Route> */}
+          <Route exact path="/storeHours-profile/:id" element={<StoreHoursProfile />}></Route>
         </Routes>
       </Router>
     </main>

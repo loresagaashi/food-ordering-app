@@ -63,14 +63,14 @@ const StoreHoursViews = () => {
                 <td>{storeHours.dayOfWeek}</td>
                 <td>{storeHours.startTime}</td>
                 <td>{storeHours.endTime}</td>
-                {/* <td className="mx-2">
+                <td className="mx-2">
                   <Link
                     to={`/storeHours-profile/${storeHours.id}`}
                     className="btn btn-info"
                   >
                     View
                   </Link>
-                </td> */}
+                </td>
                 <td className="mx-2">
                   <Link
                     to={`/edit-storeHours/${storeHours.id}`}
