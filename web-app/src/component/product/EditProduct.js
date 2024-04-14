@@ -100,7 +100,7 @@ const EditProduct = () => {
             name="category"
             id="category"
             required
-            value={category}
+            value={category.name}
             onChange={(e) => handleInputChange(e)}
           />
         </div>

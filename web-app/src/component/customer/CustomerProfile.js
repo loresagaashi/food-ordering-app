@@ -13,7 +13,8 @@ const CustomerProfile = () => {
     lastName : '',
     email : '',
     birthDate : '',
-    phoneNumber : ''
+    phoneNumber : '',
+	password : ''
 })
 
 	useEffect(() => {
@@ -111,6 +112,20 @@ const CustomerProfile = () => {
 									</div>
 								</div>
 								<hr />
+								<div className="row">
+									<div className="col-sm-3">
+										<h5 className="mb-0">
+											Password
+										</h5>
+									</div>
+
+									<div className="col-sm-9">
+										<p className="text-muted mb-0">
+											{customer.password}
+										</p>
+									</div>
+								</div>
+								<hr/>
 
 								<div className="row">
 									<div className="col-sm-3">

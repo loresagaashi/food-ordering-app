@@ -6,11 +6,11 @@ const AddProduct = () => {
 
    let navigate = useNavigate();
    const[product, setProducts] = useState({
-      name : '',
-      description : '',
-      price : '',
-      category : '',
-      bonusPoints : ''
+         name : '',
+         description : '',
+         price : '',
+         category : '',
+         bonusPoints : ''
    })
 
    const{name, description, price, category, bonusPoints} = product;

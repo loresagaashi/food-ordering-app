@@ -18,7 +18,7 @@ const EditCategory = () => {
 
   const loadCategory = async () => {
     try {
-      const result = await axios.get(`http://localhost:8080/categories/${id}`);
+      const result = await axios.get(`http://localhost:8080/categories/category/${id}`,);
       setCategory(result.data);
     } catch (error) {
       console.error("Error loading category:", error);

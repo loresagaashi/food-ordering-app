@@ -40,6 +40,7 @@ const AdminsView = () => {
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
+            <th>Password</th>
             <th>Birth Date</th>
             <th>Phone Number</th>
             <th colSpan="3">Actions</th>
@@ -54,11 +55,12 @@ const AdminsView = () => {
           .map((admin, index) => (
             <tr key={admin.id}>
               <th scope="row" key={index}>
-                {index + 1}
+                {admin.id}
               </th>
               <td>{admin.firstName}</td>
               <td>{admin.lastName}</td>
               <td>{admin.email}</td>
+              <td>{admin.password}</td>
               <td>{admin.birthDate}</td>
               <td>{admin.phoneNumber}</td>
               <td className="mx-2">

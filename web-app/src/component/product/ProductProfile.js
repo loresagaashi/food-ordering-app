@@ -90,7 +90,7 @@ const ProductProfile = () => {
                   </div>
 
                   <div className="col-sm-9">
-                    <p className="text-muted mb-0">{product.category}</p>
+                    <p className="text-muted mb-0">{product.category.name}</p>
                   </div>
                 </div>
                 <hr />

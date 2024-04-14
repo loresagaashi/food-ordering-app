@@ -51,7 +51,7 @@ const CategoriesView = () => {
                         )
                         .map((category, index) => (
                             <tr key={category.id}>
-                                <th scope="row">{index + 1}</th>
+                                <th scope="row">{category.id}</th>
                                 <td>{category.name}</td>
                                 <td className="mx-2">
                                     <Link
