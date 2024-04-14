@@ -1,4 +1,5 @@
- package com.mcdonalds.foodordering;
+
+package com.mcdonalds.foodordering;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

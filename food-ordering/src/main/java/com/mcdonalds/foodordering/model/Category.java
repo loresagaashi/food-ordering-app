@@ -9,4 +9,5 @@ import lombok.EqualsAndHashCode;
 @Entity
 public class Category extends BaseEntity {
     private String name;
+    
 }

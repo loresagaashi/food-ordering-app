@@ -19,6 +19,11 @@ import ProductsView from "./component/product/ProductsView";
 import EditProduct from "./component/product/EditProduct";
 import ProductProfile from "./component/product/ProductProfile";
 
+import AddCategory from "./component/category/AddCategory";
+import CategoriesView from "./component/category/CategoriesView";
+import EditCategory from "./component/category/EditCategory";
+import CategoryProfile from "./component/category/CategoryProfile";
+
 function App() {
   return (
     <main className="App">
@@ -46,6 +51,12 @@ function App() {
           <Route exact path="/add-products" element={<AddProduct />}></Route>
           <Route exact path="/edit-product/:id" element={<EditProduct />}></Route>
           <Route exact path="/product-profile/:id" element={<ProductProfile />}></Route>
+
+          {/* Category */}
+          <Route path="/view-categories" element={<CategoriesView />} />
+          <Route path="/add-category" element={<AddCategory />} />
+          <Route path="/edit-category/:id" element={<EditCategory />} />
+          <Route path="/category-profile/:id" element={<CategoryProfile />} />
         </Routes>
       </Router>
     </main>

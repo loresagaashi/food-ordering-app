@@ -1,5 +1,6 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+
 const NavBar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
@@ -35,8 +36,8 @@ const NavBar = () => {
           </ul>
         </div>
 
-         {/* Customer */}
-         <div className="collapse navbar-collapse" id="navbarNav">
+        {/* Customer */}
+        <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
               <Link className="nav-link active" aria-current="page" to={"/view-customers"}>
@@ -61,13 +62,27 @@ const NavBar = () => {
             </li>
             <li className="nav-item">
               <Link className="nav-link" to={"/add-products"}>
-                Add New Product 
+                Add New Product
               </Link>
             </li>
           </ul>
         </div>
 
-        
+        {/* Categories */}
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <Link className="nav-link active" aria-current="page" to={"/view-categories"}>
+                View All Categories
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to={"/add-category"}>
+                Add New Category
+              </Link>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   );
