@@ -12,21 +12,21 @@ const CategoriesView = () => {
     }, []);
 
     const loadCategories = async () => {
-        try {
-            const result = await axios.get("http://localhost:3001/categories", {
-                validateStatus: () => true,
-            });
-            if (result.status === 302) {
-                setCategories(result.data);
+      
+        const result = await axios.get("http://localhost:8080/categories", {
+            validateStatus: () => {
+              return true;
             }
-        } catch (error) {
-            console.error("Error loading categories:", error);
-        }
+          }
+          );
+          if (result.status === 302) {
+            setCategories(result.data);
+          }
     };
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/categories/delete/${id}`);
+            await axios.delete(`http://localhost:8080/categories/delete/${id}`);
             loadCategories();
         } catch (error) {
             console.error("Error deleting category:", error);
