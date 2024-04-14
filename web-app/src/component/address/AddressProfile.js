@@ -16,20 +16,11 @@ const AddressProfile = () => {
         loadAddresses();
     }, []);  
 
-    const loadAddresses = async()=>{
-		try {
-			const result = await axios.get(`http://localhost:8080/addresses/address/${id}`);
-        	setAddresses(result.data);
-		} catch (error) {
-			if (!error.response) {
-				// Network error occurred
-				console.error('Network error:', error);
-			  } else {
-				// The server responded with a status other than 200 range
-				console.error('Error response:', error.response);
-			  }
-		}
-        
+	const loadAddresses = async () => {
+		const result = await axios.get(
+			`http://localhost:8080/addresses/address/${id}`
+		 );
+		 setAddresses(result.data);        
     };
     
     return (
@@ -41,12 +32,6 @@ const AddressProfile = () => {
 					<div className="col-lg-3">
 						<div className="card mb-4">
 							<div className="card-body text-center">
-								<img
-									src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-									alt="avatar"
-									className="rounded-circle img-fluid"
-									style={{ width: 150 }}
-								/>
 								<h5 className="my-3">
 									{`${address.streetName} ${address.city}`}
 								</h5>
@@ -68,7 +53,7 @@ const AddressProfile = () => {
 
 									<div className="col-sm-9">
 										<p className="text-muted mb-0">
-											{address.streettName}
+											{address.streetName}
 										</p>
 									</div>
 								</div>

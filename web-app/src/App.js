@@ -23,6 +23,9 @@ import AddressView from "./component/address/AddressView";
 import AddAddress from "./component/address/AddAddress";
 import EditAddress from "./component/address/EditAddress";
 import AddressProfile from "./component/address/AddressProfile";
+import StoreHoursViews from "./component/storeHours/StoreHoursViews";
+import AddStoreHours from "./component/storeHours/AddStoreHours";
+import EditStoreHours from "./component/storeHours/EditStoreHours";
 
 
 function App() {
@@ -59,6 +62,13 @@ function App() {
           <Route exact path="/add-address" element={<AddAddress />}></Route>
           <Route exact path="/edit-address/:id" element={<EditAddress />}></Route>
           <Route exact path="/address-profile/:id" element={<AddressProfile />}></Route>
+
+          {/* Store Hours */}
+          <Route exact path="/" element={<Home />}></Route>
+          <Route exact path="/view-storeHours" element={<StoreHoursViews />}></Route>
+          <Route exact path="/add-storeHours" element={<AddStoreHours />}></Route>
+          <Route exact path="/edit-storeHours/:id" element={<EditStoreHours />}></Route>
+          {/* <Route exact path="/storeHours-profile/:id" element={<StoreHoursProfile />}></Route> */}
         </Routes>
       </Router>
     </main>

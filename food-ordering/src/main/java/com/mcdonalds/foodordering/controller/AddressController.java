@@ -18,7 +18,7 @@ import com.mcdonalds.foodordering.service.IAddressService;
 
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin("http;//localhost:3000")
+@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/addresses")
 @RequiredArgsConstructor

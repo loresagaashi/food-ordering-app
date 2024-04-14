@@ -2,39 +2,44 @@ package com.mcdonalds.foodordering.controller;
 
 import com.mcdonalds.foodordering.model.StoreHours;
 import com.mcdonalds.foodordering.service.StoreHoursService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("http://localhost:3000")
 @RestController
-@RequestMapping("/storehours")
+@RequestMapping("/storeHours")
+@RequiredArgsConstructor
 public class StoreHoursController {
 
-    @Autowired
-    private StoreHoursService storeHoursService;
+    private final StoreHoursService storeHoursService;
 
     @GetMapping
-    public List<StoreHours> getAllStoreHours() {
-        return storeHoursService.getAllStoreHours();
+    public ResponseEntity<List<StoreHours>> getAllStoreHours() {
+        return new ResponseEntity<>(storeHoursService.getAllStoreHours(), HttpStatus.FOUND);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/storeHour/{id}")
     public StoreHours getStoreHoursById(@PathVariable Long id) {
         return storeHoursService.getStoreHoursById(id);
     }
 
     @PostMapping
-    public StoreHours createStoreHours(@RequestBody StoreHours storeHours) {
-        return storeHoursService.createStoreHours(storeHours);
+    public StoreHours addStoreHours(@RequestBody StoreHours storeHours) {
+        return storeHoursService.addStoreHours(storeHours);
     }
 
-    @PutMapping("/{id}")
-    public StoreHours updateStoreHours(@PathVariable Long id, @RequestBody StoreHours storeHours) {
-        return storeHoursService.updateStoreHours(id, storeHours);
+    @PutMapping("/update/{id}")
+    public StoreHours updateStoreHours(@RequestBody StoreHours storeHours, @PathVariable Long id) {
+        return storeHoursService.updateStoreHours(storeHours, id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteStoreHours(@PathVariable Long id) {
         storeHoursService.deleteStoreHours(id);
     }

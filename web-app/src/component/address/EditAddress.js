@@ -20,30 +20,23 @@ const EditAddress = () => {
     loadAddresses();
 }, []);  
 
-const loadAddresses = async()=>{
-    try {
-        const result = await axios.get(`http://localhost:8080/addresses/address/${id}`);
-        setAddresses(result.data);
-    } catch (error) {
-        if (!error.response) {
-            // Network error occurred
-            console.error('Network error:', error);
-          } else {
-            // The server responded with a status other than 200 range
-            console.error('Error response:', error.response);
-          }
-    }
-    
-};
+const loadAddresses = async () => {
+    const result = await axios.get(`http://localhost:8080/addresses/address/${id}`,);
+    setAddresses(result.data);
+  };
 
   const handleInputChange = (e)=>{
       setAddresses({...address, [e.target.name] : e.target.value})
   };
 
   const updateAddress = async (e) => {
+    try {
       e.preventDefault();
-      await axios.put(`http://localhost:8080/addresses/updates/${id}`, address);
+      await axios.put(`http://localhost:8080/addresses/update/${id}`, address);
       navigate("/view-address");
+    } catch (error) {
+      console.error("Error saving address:", error);
+    }
   };
 
 return (

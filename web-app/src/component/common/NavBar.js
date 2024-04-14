@@ -82,6 +82,21 @@ const NavBar = () => {
             </li>
           </ul>
         </div>
+         {/* StoreHours */}
+         <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <Link className="nav-link active" aria-current="page" to={"/view-storeHours"}>
+                View All StoreHours
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to={"/add-address"}>
+                Add New StoreHour
+              </Link>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   );

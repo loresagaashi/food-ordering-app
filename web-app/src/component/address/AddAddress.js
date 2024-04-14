@@ -17,20 +17,13 @@ const AddAddresses = () => {
     };
 
     const saveAddress = async (e) => {
-        e.preventDefault();
         try {
+            e.preventDefault();
             await axios.post("http://localhost:8080/addresses", address);
             navigate("/view-address");
         } catch (error) {
-            if (!error.response) {
-                // Network error occurred
-                console.error('Network error:', error);
-              } else {
-                // The server responded with a status other than 200 range
-                console.error('Error response:', error.response);
-              }
+            console.error("Error saving address:", error);
         }
-       
     };
 
   return (
