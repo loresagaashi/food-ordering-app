@@ -23,10 +23,15 @@ import AddressView from "./component/address/AddressView";
 import AddAddress from "./component/address/AddAddress";
 import EditAddress from "./component/address/EditAddress";
 import AddressProfile from "./component/address/AddressProfile";
+
 import StoreHoursViews from "./component/storeHours/StoreHoursViews";
 import AddStoreHours from "./component/storeHours/AddStoreHours";
 import EditStoreHours from "./component/storeHours/EditStoreHours";
 
+import AddCategory from "./component/category/AddCategory";
+import CategoriesView from "./component/category/CategoriesView";
+import EditCategory from "./component/category/EditCategory";
+import CategoryProfile from "./component/category/CategoryProfile";
 
 function App() {
   return (
@@ -55,6 +60,12 @@ function App() {
           <Route exact path="/add-products" element={<AddProduct />}></Route>
           <Route exact path="/edit-product/:id" element={<EditProduct />}></Route>
           <Route exact path="/product-profile/:id" element={<ProductProfile />}></Route>
+
+          {/* Category */}
+          <Route path="/view-categories" element={<CategoriesView />} />
+          <Route path="/add-category" element={<AddCategory />} />
+          <Route path="/edit-category/:id" element={<EditCategory />} />
+          <Route path="/category-profile/:id" element={<CategoryProfile />} />
 
           {/* Address */}
           <Route exact path="/" element={<Home />}></Route>

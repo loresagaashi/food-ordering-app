@@ -25,8 +25,15 @@ const CustomersView = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:8080/customers/delete/${id}`);
-    loadCustomers();
+    const confirmed = window.confirm("Are you sure you want to delete this costumer?");
+    if(confirmed){
+        try{
+            await axios.delete(`http://localhost:8080/costumers/delete/${id}`);
+            loadCustomers();
+        }catch(error){
+            console.error("Error deleting costumer:", error);
+        }
+    }
   };
 
   return (

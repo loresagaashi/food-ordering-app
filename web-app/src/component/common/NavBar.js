@@ -67,6 +67,22 @@ const NavBar = () => {
           </ul>
         </div>
 
+        {/* Categories */}
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <Link className="nav-link active" aria-current="page" to={"/view-categories"}>
+                View All Categories
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to={"/add-category"}>
+                Add New Category
+              </Link>
+            </li>
+          </ul>
+        </div>
+
         {/* Address */}
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
@@ -82,6 +98,7 @@ const NavBar = () => {
             </li>
           </ul>
         </div>
+
          {/* StoreHours */}
          <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
@@ -91,7 +108,7 @@ const NavBar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to={"/add-address"}>
+              <Link className="nav-link" to={"/add-storeHours"}>
                 Add New StoreHour
               </Link>
             </li>

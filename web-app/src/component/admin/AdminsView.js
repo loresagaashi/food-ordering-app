@@ -24,10 +24,17 @@ const AdminsView = () => {
     }
   };
 
-  const handleDelete = async(id) => {
-    await axios.delete(`http://localhost:8080/admins/delete/${id}`);
-    loadAdmins();
-}
+  const handleDelete = async (id) => {
+    const confirmed = window.confirm("Are you sure you want to delete this admin?");
+    if(confirmed){
+        try{
+            await axios.delete(`http://localhost:8080/admins/delete/${id}`);
+            loadAdmins();
+        }catch(error){
+            console.error("Error deleting admin:", error);
+        }
+    }
+  };
 
   return (
     <section>

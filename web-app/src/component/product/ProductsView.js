@@ -23,11 +23,18 @@ const ProductsView = () => {
         }
     };
 
-    const handleDelete = async(id) => {
-        await axios.delete(`http://localhost:8080/products/delete/${id}`);
-        loadProducts();
-    }
-
+    const handleDelete = async (id) => {
+      const confirmed = window.confirm("Are you sure you want to delete this product?");
+      if(confirmed){
+          try{
+              await axios.delete(`http://localhost:8080/products/delete/${id}`);
+              loadProducts();
+          }catch(error){
+              console.error("Error deleting product:", error);
+          }
+      }
+    };
+  
     return (
         <section>
           <Search search = {search}

@@ -25,11 +25,14 @@ const CategoriesView = () => {
     };
 
     const handleDelete = async (id) => {
-        try {
-            await axios.delete(`http://localhost:8080/categories/delete/${id}`);
-            loadCategories();
-        } catch (error) {
-            console.error("Error deleting category:", error);
+        const confirmed = window.confirm("Are you sure you want to delete this category?");
+        if(confirmed){
+            try{
+                await axios.delete(`http://localhost:8080/categories/delete/${id}`);
+                loadCategories();
+            }catch(error){
+                console.error("Error deleting category:", error);
+            }
         }
     };
 

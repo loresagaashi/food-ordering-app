@@ -23,11 +23,14 @@ const AddressView = () => {
   };
 
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:8080/addresses/delete/${id}`);
-      loadAddresses();
-    } catch (error) {
-      console.error("Error deleting address:", error);
+    const confirmed = window.confirm("Are you sure you want to delete this address?");
+    if(confirmed){
+        try{
+            await axios.delete(`http://localhost:8080/addresses/delete/${id}`);
+            loadAddresses();
+        }catch(error){
+            console.error("Error deleting address:", error);
+        }
     }
   };
 

@@ -24,8 +24,15 @@ const StoreHoursViews = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:8080/storeHours/delete/${id}`);
-    loadStoreHours();
+    const confirmed = window.confirm("Are you sure you want to delete this store hour?");
+    if(confirmed){
+        try{
+            await axios.delete(`http://localhost:8080/storeHours/delete/${id}`);
+            loadStoreHours();
+        }catch(error){
+            console.error("Error deleting store hour:", error);
+        }
+    }
   };
 
   return (

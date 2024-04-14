@@ -31,7 +31,7 @@ const AddProduct = () => {
 
    return (
       <div className="col-sm-8 py-2 px-5 offset-2 shadow">
-          
+         <h2 className="mb-4">Add Product</h2>
          <form onSubmit={(e) => saveProduct(e)}>
             <div className="input-group mb-5">
                <label className="input-group-text" htmlFor="name">
@@ -42,7 +42,8 @@ const AddProduct = () => {
                   type="text" 
                   name="name" 
                   id="name" 
-                  required value={name}
+                  required 
+                  value={name}
                   onChange={(e) =>handleInputChange(e)}
                />
             </div>
@@ -127,7 +128,7 @@ const AddProduct = () => {
             </div>
          </form>
       </div>
-    );
-  };
+   );
+};
   
 export default AddProduct;
