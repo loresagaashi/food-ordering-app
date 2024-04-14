@@ -20,10 +20,10 @@ const EditAdmin = () => {
     const{firstName, lastName, email, password, birthDate, phoneNumber} = admin;
 
     useEffect(() => {
-        loadAdmin();
+        loadAddress();
       }, []);
     
-      const loadAdmin = async () => {
+      const loadAddress = async () => {
         const result = await axios.get(`http://localhost:8080/admins/admin/${id}`,);
         setAdmin(result.data);
       };
