@@ -34,6 +34,11 @@ import EditCategory from "./component/category/EditCategory";
 import CategoryProfile from "./component/category/CategoryProfile";
 import StoreHoursProfile from "./component/storeHours/StoreHoursProfile";
 
+import CitiesView from "./component/city/CitiesView";
+import AddCity from "./component/city/AddCity";
+import EditCity from "./component/city/EditCity";
+import CityProfile from "./component/city/CityProfile";
+
 function App() {
   return (
     <main className="App">
@@ -81,6 +86,13 @@ function App() {
           <Route exact path="/add-storeHours" element={<AddStoreHours />}></Route>
           <Route exact path="/edit-storeHours/:id" element={<EditStoreHours />}></Route>
           <Route exact path="/storeHours-profile/:id" element={<StoreHoursProfile />}></Route>
+
+          {/* City */}
+          <Route exact path="/" element={<Home />}></Route>
+          <Route exact path="/view-cities" element={<CitiesView />}></Route>
+          <Route exact path="/add-cities" element={<AddCity />}></Route>
+          <Route exact path="/edit-city/:id" element={<EditCity />}></Route>
+          <Route exact path="/city-profile/:id" element={<CityProfile />}></Route>
         </Routes>
       </Router>
     </main>
