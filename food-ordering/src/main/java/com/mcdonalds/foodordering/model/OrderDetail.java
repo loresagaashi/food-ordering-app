@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -17,6 +18,12 @@ public class OrderDetail extends BaseAuditEntity {
     private String notes;
 
     private BigDecimal total;
+
+    private LocalDateTime dateTime;
+
+    private LocalDateTime startDateTime;
+
+    private LocalDateTime endDateTime;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
