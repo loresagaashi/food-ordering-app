@@ -28,6 +28,7 @@ public class EmployeeService extends BasicServiceOperations<EmployeeRepository, 
 
     @Autowired
     private EmployeeRepository employeeRepository;    
+    
     private boolean employeeAlreadyExists(String email) {
         return employeeRepository.findByEmail(email).isPresent();
     }

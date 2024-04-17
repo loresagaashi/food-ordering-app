@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 
@@ -28,6 +28,21 @@ const AddProduct = () => {
          console.error("Error saving product:", error);
        }
    };
+
+   const [categories, setCategories] = useState([]);
+
+   useEffect(() => {
+      const fetchCategories = async () => {
+         try {
+            const response = await axios.get("http://localhost:8080/categories");
+            console.log("Response:", response.data); 
+            setCategories(response.data); 
+         } catch (error) {
+            console.error("Error fetching categories:", error.message);
+         }
+      };
+      fetchCategories();
+   }, []);
 
    return (
       <div className="col-sm-8 py-2 px-5 offset-2 shadow">
@@ -82,15 +97,20 @@ const AddProduct = () => {
                <label className="input-group-text" htmlFor="category">
                   Category
                </label>
-               <input 
-                  className="form-control col-sm-6" 
-                  type="text" 
-                  name="category" 
-                  id="category" 
-                  required 
+               <select
+                  className="form-control col-sm-6"
+                  name="category"
+                  id="category"
                   value={category}
-                  onChange={(e) =>handleInputChange(e)}
-               />
+                  onChange={(e) => handleInputChange(e)}
+               >
+                  <option value="">Select category</option>
+                  {categories.map((cat) => (
+                     <option key={cat.id} value={cat.name}>
+                        {cat.name}
+                     </option>
+                  ))}
+               </select>
             </div>
 
             <div className="input-group mb-5">

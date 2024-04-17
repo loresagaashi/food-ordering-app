@@ -19,7 +19,7 @@ const CategoriesView = () => {
             }
           }
           );
-          if (result.status === 302) {
+          if (result.status === 302 || result.status === 200) {
             setCategories(result.data);
           }
     };
@@ -54,7 +54,7 @@ const CategoriesView = () => {
                         )
                         .map((category, index) => (
                             <tr key={category.id}>
-                                <th scope="row">{category.id}</th>
+                                <th scope="row" key={index}>{category.id}</th>
                                 <td>{category.name}</td>
                                 <td className="mx-2">
                                     <Link

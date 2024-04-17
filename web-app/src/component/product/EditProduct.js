@@ -43,6 +43,21 @@ const EditProduct = () => {
     }
   };
 
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+       try {
+          const response = await axios.get("http://localhost:8080/categories");
+          console.log("Response:", response.data); 
+          setCategories(response.data); 
+       } catch (error) {
+          console.error("Error fetching categories:", error.message);
+       }
+    };
+    fetchCategories();
+ }, []);
+
   return (
     <div className="col-sm-8 py-2 px-5 offset-2 shadow">
       <h2 className="mt-5 mb-3">Edit Product</h2>
@@ -91,19 +106,25 @@ const EditProduct = () => {
         </div>
 
         <div className="input-group mb-5">
-          <label className="input-group-text" htmlFor="category">
-            Category
-          </label>
-          <input
-            className="form-control col-sm-6"
-            type="text"
-            name="category"
-            id="category"
-            required
-            value={category.name}
-            onChange={(e) => handleInputChange(e)}
-          />
+           <label className="input-group-text" htmlFor="category">
+              Category
+           </label>
+           <select
+              className="form-control col-sm-6"
+              name="category"
+              id="category"
+              value={product.category.name}
+              onChange={(e) => handleInputChange(e)}
+           >
+              <option value="">Select category</option>
+              {categories.map((cat) => (
+                 <option key={cat.id} value={cat.name}>
+                    {cat.name}
+                 </option>
+              ))}
+           </select>
         </div>
+
         <div className="input-group mb-5">
           <label className="input-group-text" htmlFor="bonusPoints">
             Bonus Points

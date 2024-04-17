@@ -22,7 +22,8 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<List<Category>> getCategories() {
 
-        return new ResponseEntity<>(categoryService.getCategories(), HttpStatus.FOUND);
+        // return new ResponseEntity<>(categoryService.getCategories(), HttpStatus.FOUND);
+        return new ResponseEntity<>(categoryService.getCategories(), HttpStatus.OK);
     }
 
     @PostMapping

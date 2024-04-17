@@ -48,7 +48,8 @@ const ProductProfile = () => {
           <div className="col-lg-9">
             <div className="card mb-4">
               <div className="card-body">
-                <hr />
+               <h5 className="card-title">Product Details</h5>
+               <hr />
 
                 <div className="row">
                   <div className="col-sm-3">

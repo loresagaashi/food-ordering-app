@@ -1,4 +1,3 @@
-
 package com.mcdonalds.foodordering;
 
 import org.springframework.boot.SpringApplication;
