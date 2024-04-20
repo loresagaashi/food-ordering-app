@@ -56,11 +56,9 @@ public void createDeliveryHours(StoreHours storeHours){
 // }
 // public void updateDeliveryHours(DeliveryHours updatedDeliveryHours) {
 //     DeliveryHours existingDeliveryHours = deliveryHoursRepository.getDeliveryHoursById(updatedDeliveryHours.getId());
-//     // Update the existing delivery hours entity with the new values
 //     existingDeliveryHours.setDayOfWeek(updatedDeliveryHours.getDayOfWeek());
 //     existingDeliveryHours.setStartTime(updatedDeliveryHours.getStartTime());
 //     existingDeliveryHours.setEndTime(updatedDeliveryHours.getEndTime());
-//     // Save the updated entity
 //     deliveryHoursRepository.save(existingDeliveryHours);
 // }
 // public void deleteDeliveryHours(Long id) {

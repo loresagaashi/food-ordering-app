@@ -4,28 +4,28 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class DeliveryHours extends StoreHours {
+public class DeliveryHours extends BaseEntity {
 
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
 
    
+    @OneToOne
+    @JoinColumn(name = "store_hours_id")
+    private StoreHours storeHours;
 
-    public void setStoreHours(StoreHours storeHours) {
-        super.setId(storeHours.getId()); 
+    // public void setStoreHours(StoreHours storeHours) {
+    //     super.setId(storeHours.getId()); 
       
-    }
+    // }
 
- 
 }
-
