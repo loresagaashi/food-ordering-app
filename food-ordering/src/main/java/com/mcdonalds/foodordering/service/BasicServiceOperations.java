@@ -3,6 +3,7 @@ package com.mcdonalds.foodordering.service;
 import java.util.List;
 import java.util.Set;
 
+import com.mcdonalds.foodordering.exception.EntityValidationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.mcdonalds.foodordering.model.BaseEntity;
@@ -15,6 +16,7 @@ public abstract class BasicServiceOperations<R extends JpaRepository<E, Long>, E
   protected final R repository;
 
   public E save(E entity) {
+    validateEntity(entity);
     return repository.save(entity);
   }
 
@@ -34,5 +36,5 @@ public abstract class BasicServiceOperations<R extends JpaRepository<E, Long>, E
     repository.deleteById(id);
   }
 
-
+  protected void validateEntity(E entity) throws EntityValidationException {}
 }

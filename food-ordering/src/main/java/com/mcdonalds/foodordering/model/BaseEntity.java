@@ -1,9 +1,12 @@
 package com.mcdonalds.foodordering.model;
 
+import com.mcdonalds.foodordering.validation.group.Update;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -11,5 +14,6 @@ import lombok.Data;
 public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull(groups = Update.class)
     private Long id;
 }

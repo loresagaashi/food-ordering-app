@@ -2,8 +2,11 @@ package com.mcdonalds.foodordering.controller;
 
 import java.util.List;
 
+import com.mcdonalds.foodordering.model.Admin;
+import com.mcdonalds.foodordering.payload.LoginPayload;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/customers")
 @RequiredArgsConstructor
 public class CustomerController {
-    
+
     private final CustomerService customerService;
 
     @GetMapping
@@ -55,5 +58,10 @@ public class CustomerController {
     @GetMapping("/{id}/favorite-products")
     public List<Product> getFavoriteProducts(@PathVariable Long id) {
         return customerService.getFavoriteProducts(id);
+    }
+
+    @PostMapping("/login")
+    public Customer login(@RequestBody @Validated LoginPayload login) {
+        return customerService.login(login.getEmail(), login.getPassword());
     }
 }

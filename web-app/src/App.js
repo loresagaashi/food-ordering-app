@@ -1,101 +1,106 @@
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "/node_modules/bootstrap/dist/js/bootstrap.min.js";
 import "./App.css";
-import AdminsView from "./component/admin/AdminsView";
-import Home from "./Home";
-import NavBar from "./component/common/NavBar";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AddAdmin from "./component/admin/AddAdmin";
-import EditAdmin from "./component/admin/EditAdmin";
-import AdminProfile from "./component/admin/AdminProfile";
+// import AdminsView from "./component/admin/AdminsView";
+// import Home from "./Home";
+// import { Routes, Route } from "react-router-dom";
+// import AddAdmin from "./component/admin/AddAdmin";
+// import EditAdmin from "./component/admin/EditAdmin";
+// import AdminProfile from "./component/admin/AdminProfile";
+//
+// import AddCustomer from "./component/customer/AddCustomer";
+// import EditCustomer from "./component/customer/EditCustomer";
+// import CustomersView from "./component/customer/CustomersView";
+// import CustomerProfile from "./component/customer/CustomerProfile";
+//
+// import AddProduct from "./component/product/AddProduct";
+// import ProductsView from "./component/product/ProductsView";
+// import EditProduct from "./component/product/EditProduct";
+// import ProductProfile from "./component/product/ProductProfile";
+//
+// import AddressView from "./component/address/AddressView";
+// import AddAddress from "./component/address/AddAddress";
+// import EditAddress from "./component/address/EditAddress";
+// import AddressProfile from "./component/address/AddressProfile";
+//
+// import StoreHoursViews from "./component/storeHours/StoreHoursViews";
+// import AddStoreHours from "./component/storeHours/AddStoreHours";
+// import EditStoreHours from "./component/storeHours/EditStoreHours";
+//
+// import AddCategory from "./component/category/AddCategory";
+// import CategoriesView from "./component/category/CategoriesView";
+// import EditCategory from "./component/category/EditCategory";
+// import CategoryProfile from "./component/category/CategoryProfile";
+// import StoreHoursProfile from "./component/storeHours/StoreHoursProfile";
+//
+// import CitiesView from "./component/city/CitiesView";
+// import AddCity from "./component/city/AddCity";
+// import EditCity from "./component/city/EditCity";
+// import CityProfile from "./component/city/CityProfile";
+import { useState } from "react";
+import { createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
+import { queryClient, setQueryDefaults } from "./service/QueryClient";
+import { QueryClientProvider } from "react-query";
+import UserContext from "./context/UserContext";
+import AppRoutes from "./routes/Routes";
+import { Routes } from "react-router-dom";
 
-import AddCustomer from "./component/customer/AddCustomer";
-import EditCustomer from "./component/customer/EditCustomer";
-import CustomersView from "./component/customer/CustomersView";
-import CustomerProfile from "./component/customer/CustomerProfile";
+const customTheme = {
+  overrides: {
+    MuiTableRow: {
+      head: {
+        background:
+          "linear-gradient(90deg, rgba(191,16,0,1) 0%, rgba(209,9,9,1) 28%, rgba(227,99,35,1) 58%, rgba(255,250,37,1) 100%)",
+        color: "white",
+      },
+    },
+    MuiTableSortLabel: {
+      root: {
+        color: "yellow",
+        fontSize: "1.2em",
+        "&:hover": {
+          color: "#424242 !important",
+        },
+        "&.MuiTableSortLabel-active": {
+          color: "#121212",
+        },
+        "& *": {
+          color: "#2f2f2f !important",
+        },
+      },
+    },
+  },
+  palette: {
+    primary: {
+      main: "#DB0007",
+      mainGradient:
+        "linear-gradient(90deg, rgba(191,16,0,1) 0%, rgba(209,9,9,1) 28%, rgba(227,99,35,1) 58%, rgba(255,250,37,1) 100%)",
+    },
+    secondary: {
+      main: "#FFBC0D",
+    },
+    text: {
+      dark: "#121212",
+    },
+    type: "light",
+  },
+  toolbarHeight: 50,
+};
 
-import AddProduct from "./component/product/AddProduct";
-import ProductsView from "./component/product/ProductsView";
-import EditProduct from "./component/product/EditProduct";
-import ProductProfile from "./component/product/ProductProfile";
-
-import AddressView from "./component/address/AddressView";
-import AddAddress from "./component/address/AddAddress";
-import EditAddress from "./component/address/EditAddress";
-import AddressProfile from "./component/address/AddressProfile";
-
-import StoreHoursViews from "./component/storeHours/StoreHoursViews";
-import AddStoreHours from "./component/storeHours/AddStoreHours";
-import EditStoreHours from "./component/storeHours/EditStoreHours";
-
-import AddCategory from "./component/category/AddCategory";
-import CategoriesView from "./component/category/CategoriesView";
-import EditCategory from "./component/category/EditCategory";
-import CategoryProfile from "./component/category/CategoryProfile";
-import StoreHoursProfile from "./component/storeHours/StoreHoursProfile";
-
-import CitiesView from "./component/city/CitiesView";
-import AddCity from "./component/city/AddCity";
-import EditCity from "./component/city/EditCity";
-import CityProfile from "./component/city/CityProfile";
+setQueryDefaults();
 
 function App() {
+  const [theme, setTheme] = useState(customTheme);
+  const [user, setUser] = useState();
   return (
-    <main className="App">
-      
-      <Router>
-      <NavBar />
-        <Routes>
-          {/* Admin */}
-          <Route exact path="/" element={<Home />}></Route>
-          <Route exact path="/view-admins" element={<AdminsView />}></Route>
-          <Route exact path="/add-admins" element={<AddAdmin />}></Route>
-          <Route exact path="/edit-admin/:id" element={<EditAdmin />}></Route>
-          <Route exact path="/admin-profile/:id" element={<AdminProfile />}></Route>
-
-          {/* Customer */}
-          <Route exact path="/" element={<Home />}></Route>
-          <Route exact path="/view-customers" element={<CustomersView />}></Route>
-          <Route exact path="/add-customers" element={<AddCustomer />}></Route>
-          <Route exact path="/edit-customer/:id" element={<EditCustomer />}></Route>
-          <Route exact path="/customer-profile/:id" element={<CustomerProfile />}></Route>
-          
-          {/* Product */}
-          <Route exact path="/" element={<Home />}></Route>
-          <Route exact path="/view-products" element={<ProductsView />}></Route>
-          <Route exact path="/add-products" element={<AddProduct />}></Route>
-          <Route exact path="/edit-product/:id" element={<EditProduct />}></Route>
-          <Route exact path="/product-profile/:id" element={<ProductProfile />}></Route>
-
-          {/* Category */}
-          <Route path="/view-categories" element={<CategoriesView />} />
-          <Route path="/add-category" element={<AddCategory />} />
-          <Route path="/edit-category/:id" element={<EditCategory />} />
-          <Route path="/category-profile/:id" element={<CategoryProfile />} />
-
-          {/* Address */}
-          <Route exact path="/" element={<Home />}></Route>
-          <Route exact path="/view-address" element={<AddressView />}></Route>
-          <Route exact path="/add-address" element={<AddAddress />}></Route>
-          <Route exact path="/edit-address/:id" element={<EditAddress />}></Route>
-          <Route exact path="/address-profile/:id" element={<AddressProfile />}></Route>
-
-          {/* Store Hours */}
-          <Route exact path="/" element={<Home />}></Route>
-          <Route exact path="/view-storeHours" element={<StoreHoursViews />}></Route>
-          <Route exact path="/add-storeHours" element={<AddStoreHours />}></Route>
-          <Route exact path="/edit-storeHours/:id" element={<EditStoreHours />}></Route>
-          <Route exact path="/storeHours-profile/:id" element={<StoreHoursProfile />}></Route>
-
-          {/* City */}
-          <Route exact path="/" element={<Home />}></Route>
-          <Route exact path="/view-cities" element={<CitiesView />}></Route>
-          <Route exact path="/add-cities" element={<AddCity />}></Route>
-          <Route exact path="/edit-city/:id" element={<EditCity />}></Route>
-          <Route exact path="/city-profile/:id" element={<CityProfile />}></Route>
-        </Routes>
-      </Router>
-    </main>
+    <UserContext.Provider value={{ user, setUser }}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={createTheme(theme)}>
+          <CssBaseline />
+          <Routes>{AppRoutes}</Routes>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </UserContext.Provider>
   );
 }
 

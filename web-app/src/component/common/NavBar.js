@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 const NavBar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
@@ -23,7 +23,11 @@ const NavBar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to={"/view-admins"}>
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to={"/view-admins"}
+              >
                 View All Admins
               </Link>
             </li>
@@ -35,11 +39,15 @@ const NavBar = () => {
           </ul>
         </div>
 
-         {/* Customer */}
-         <div className="collapse navbar-collapse" id="navbarNav">
+        {/* Customer */}
+        <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to={"/view-customers"}>
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to={"/view-customers"}
+              >
                 View All Customers
               </Link>
             </li>
@@ -55,13 +63,17 @@ const NavBar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to={"/view-products"}>
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to={"/view-products"}
+              >
                 View All Products
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to={"/add-products"}>
-                Add New Product 
+                Add New Product
               </Link>
             </li>
           </ul>
@@ -71,7 +83,11 @@ const NavBar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to={"/view-categories"}>
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to={"/view-categories"}
+              >
                 View All Categories
               </Link>
             </li>
@@ -87,23 +103,31 @@ const NavBar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to={"/view-address"}>
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to={"/view-address"}
+              >
                 View All Addresses
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to={"/add-address"}>
-                Add New Address 
+                Add New Address
               </Link>
             </li>
           </ul>
         </div>
 
-         {/* StoreHours */}
-         <div className="collapse navbar-collapse" id="navbarNav">
+        {/* StoreHours */}
+        <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to={"/view-storeHours"}>
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to={"/view-storeHours"}
+              >
                 View All StoreHours
               </Link>
             </li>
@@ -119,19 +143,21 @@ const NavBar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to={"/view-cities"}>
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to={"/view-cities"}
+              >
                 View All Cities
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to={"/add-cities"}>
-                Add New City 
+                Add New City
               </Link>
             </li>
           </ul>
         </div>
-
-
       </div>
     </nav>
   );

@@ -1,6 +1,8 @@
 package com.mcdonalds.foodordering.model;
 
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -8,6 +10,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 public class Category extends BaseEntity {
+    @NotBlank
     private String name;
-    
 }

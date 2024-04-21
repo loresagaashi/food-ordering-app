@@ -1,6 +1,7 @@
 package com.mcdonalds.foodordering.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -8,4 +9,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 public class Admin extends UserAccount {
+    @Transient
+    private String type = "Admin";
 }

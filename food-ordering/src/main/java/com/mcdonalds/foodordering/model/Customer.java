@@ -19,8 +19,10 @@ public class Customer extends UserAccount {
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> favorites;
 
-
     @OneToOne
     @JoinColumn
     private Address address;
+
+    @Transient
+    private String type = "Customer";
 }

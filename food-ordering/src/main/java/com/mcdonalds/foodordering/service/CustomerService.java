@@ -2,6 +2,9 @@ package com.mcdonalds.foodordering.service;
 
 import java.util.List;
 
+import com.mcdonalds.foodordering.exception.EntityValidationException;
+import com.mcdonalds.foodordering.exception.ExceptionPayload;
+import com.mcdonalds.foodordering.model.Admin;
 import org.springframework.stereotype.Service;
 
 import com.mcdonalds.foodordering.exception.AlreadyExistsException;
@@ -15,13 +18,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
-    
+
     private final CustomerRepository customerRepository;
 
     public List<Customer> getCustomers() {
         return customerRepository.findAll();
     }
-    
+
     public Customer addCustomer(Customer customer) {
         if(customerAlreadyExists(customer.getEmail())) {
             throw new AlreadyExistsException(customer.getEmail()+" Customer already Exists!");
@@ -60,5 +63,26 @@ public class CustomerService {
 
     private boolean customerAlreadyExists(String email) {
         return customerRepository.findByEmail(email).isPresent();
+    }
+
+    public Customer login(String email, String password) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityValidationException(ExceptionPayload.builder()
+                        .code("WrongEmail")
+                        .fieldName("email")
+                        .rejectedValue(email)
+                        .message("Wrong email")
+                        .build())
+                );
+        if (!customer.getPassword().equals(password)) {
+            throw new EntityValidationException(ExceptionPayload.builder()
+                    .code("WrongPassword")
+                    .fieldName("password")
+                    .rejectedValue(password)
+                    .message("Wrong password")
+                    .build());
+        }
+
+        return customer;
     }
 }
