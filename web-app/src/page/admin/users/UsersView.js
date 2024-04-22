@@ -1,4 +1,11 @@
+import { UserService } from "../../../service/UserService";
+import { QueryKeys } from "../../../service/QueryKeys";
+import { useRef } from "react";
+import { TextFieldTableCell } from "../../../component/TableCells";
+import CustomMaterialTable from "../../../component/dashboard/CustomMaterialTable";
+
 export default function UsersView({}) {
-  console.log("Inside users: ");
-  return <div>Ckemi</div>;
+  return (
+    <div>C</div>
+  )
 }

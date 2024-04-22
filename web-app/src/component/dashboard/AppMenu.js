@@ -34,10 +34,16 @@ const appMenuItems = [
     link: "/admin/products",
   },
   {
-    name: "Users",
+    name: "Admins",
     Icon: PersonIcon,
-    link: "/admin/users",
+    link: "/admin/admins",
   },
+  {
+    name: "Customers",
+    Icon: PersonIcon,
+    link: "/admin/customers",
+  },
+
 ];
 
 export default function AppMenu({}) {

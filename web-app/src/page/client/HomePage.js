@@ -2,6 +2,9 @@ import Carousel from "react-material-ui-carousel";
 import { Box } from "@material-ui/core";
 import image1 from "../../images/home/1.png";
 import image2 from "../../images/home/2.png";
+import image3 from "../../images/home/3.png";
+import image4 from "../../images/home/4.png";
+import image5 from "../../images/home/5.png";
 import ProductList from "../../component/home/ProductList";
 
 export default function HomePage() {
@@ -11,6 +14,15 @@ export default function HomePage() {
     },
     {
       image: image2,
+    },
+    {
+      image: image3,
+    },
+    {
+      image: image4,
+    },
+    {
+      image: image5,
     },
   ];
 

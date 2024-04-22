@@ -26,6 +26,8 @@ import CategoriesView from "./categories/CategoriesView";
 import ProductsView from "./products/ProductsView";
 import UsersView from "./users/UsersView";
 import AdminDashboard from "./dashboard/AdminDashboard";
+import CustomersView from "./customers/CustomersView";
+import AdminsView from "./admins/AdminsView";
 
 const drawerWidth = 240;
 
@@ -182,6 +184,8 @@ export default function AdminLayout({}) {
           <Route path="/categories" element={<CategoriesView />} />
           <Route path="/products" element={<ProductsView />} />
           <Route path="/users" element={<UsersView />} />
+          <Route path="/customers" element={<CustomersView />} />
+          <Route path="/admins" element={<AdminsView />} />
         </Routes>
       </main>
     </div>

@@ -3,7 +3,7 @@ import { axiosInstance } from "./axiosInstance";
 
 export class UserService extends BaseService {
   constructor() {
-    super();
+    super("/users");
   }
 
   adminLogIn(body) {

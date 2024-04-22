@@ -2,6 +2,8 @@ import { makeStyles, useTheme } from "@material-ui/core";
 import { useMutation, useQuery } from "react-query";
 import Typography from "@material-ui/core/Typography";
 import MaterialTable from "@material-table/core";
+import DeleteIcon from '@material-ui/icons/DeleteOutlined';
+
 
 export default function CustomMaterialTable({
   title,
@@ -28,6 +30,14 @@ export default function CustomMaterialTable({
       onError: (e) => (errorRef.current = e),
     },
   );
+  const { mutateAsync: deleteRecord } = useMutation(
+    (payload) => service.delete(payload),
+    {
+      onSuccess: onSuccessReset,
+      onError: (e) => (errorRef.current = e),
+    }
+  );
+
 
   function onSuccessReset() {
     refetch();
@@ -37,6 +47,13 @@ export default function CustomMaterialTable({
   function resetErrors() {
     errorRef.current = null;
   }
+  const handleDelete = async (id) => {
+    try {
+      await deleteRecord(id);
+    } catch (error) {
+      console.error("Error deleting record:", error);
+    }
+  };
 
   return (
     <MaterialTable
@@ -78,6 +95,13 @@ export default function CustomMaterialTable({
         onRowUpdateCancelled: resetErrors,
         onRowAddCancelled: resetErrors,
       }}
+      actions={[
+        {
+          icon: DeleteIcon,
+          tooltip: "Delete",
+          onClick: (event, rowData) => handleDelete(rowData.id),
+        },
+      ]}
     />
   );
 }
