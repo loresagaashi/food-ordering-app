@@ -16,6 +16,7 @@ import { UserService } from "../../service/UserService";
 import useUser from "../../hooks/useUser";
 import { QueryKeys } from "../../service/QueryKeys";
 import LoadingButton from "../../component/LoadingButton";
+import { AppBar } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -75,6 +76,7 @@ export default function AdminSignIn({ onSuccess, hideSignUpLink, isLoading }) {
   }
 
   return (
+    <>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -148,5 +150,6 @@ export default function AdminSignIn({ onSuccess, hideSignUpLink, isLoading }) {
         </Grid>
       </div>
     </Container>
+    </>
   );
 }

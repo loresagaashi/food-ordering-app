@@ -1,15 +1,14 @@
 import {
-  AppBar,
-  Button,
-  CssBaseline,
-  Link,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
-import { Link as RouterLink, Routes } from "react-router-dom";
-import AppRoutes from "../../routes/Routes";
-import HomePage from "./HomePage";
-
+    AppBar,
+    Button,
+    CssBaseline,
+    Link,
+    makeStyles,
+    Typography,
+  } from "@material-ui/core";
+  import { Link as RouterLink, Routes } from "react-router-dom";
+  import AppRoutes from "../../routes/Routes";
+  
 const useStyles = makeStyles((theme) => ({
   "@global": {
     ul: {
@@ -73,43 +72,40 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-export default function ClientLayout() {
-  const classes = useStyles();
-
-  return (
-    <>
-      <AppBar position={"static"} elevation={0} className={classes.appBar}>
-        <Typography
-          variant="h6"
-          noWrap
-          className={classes.toolbarTitle}
-          component={RouterLink}
-          to={"/client/home"}
-        >
-          McDonalds
-        </Typography>
-        <nav>
-          <Link
-            variant="button"
-            to="/client/home"
-            component={RouterLink}
-            className={classes.link}
-          >
-            Home
-          </Link>
-        </nav>
-        <Button
-          color="primary"
-          variant="contained"
-          className={classes.link}
-          component={RouterLink}
-          to={"/client/sign-in"}
-        >
-          Sign In
-        </Button>
-      </AppBar>
-      <HomePage />
+export default function MuiAppBar() {
+    const classes = useStyles();
+    return (
+        <>
+    <AppBar  position={"static"} elevation={0} className={classes.appBar}>
+    <Typography
+      variant="h6"
+      noWrap
+      className={classes.toolbarTitle}
+      component={RouterLink}
+      to={"/client/home"}
+    >
+      McDonalds
+    </Typography>
+    <nav>
+      <Link
+        variant="button"
+        to="/client/home"
+        component={RouterLink}
+        className={classes.link}
+      >
+        Home
+      </Link>
+    </nav>
+    <Button
+      color="primary"
+      variant="contained"
+      className={classes.link}
+      component={RouterLink}
+      to={"/client/sign-in"}
+    >
+      Sign In
+    </Button>
+    </AppBar>
     </>
-  );
+    );
 }

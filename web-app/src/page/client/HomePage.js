@@ -10,16 +10,16 @@ import ProductList from "../../component/home/ProductList";
 export default function HomePage() {
   const items = [
     {
-      image: image1,
-    },
-    {
       image: image2,
     },
     {
-      image: image3,
+      image: image1,
     },
     {
       image: image4,
+    },
+    {
+      image: image3,
     },
     {
       image: image5,
