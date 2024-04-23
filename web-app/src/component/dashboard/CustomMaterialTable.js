@@ -11,6 +11,7 @@ export default function CustomMaterialTable({
   service,
   columns,
   errorRef,
+  disableDeleteAction 
 }) {
   const theme = useTheme();
   const { isLoading, data, refetch } = useQuery(queryKey, () =>
@@ -54,6 +55,13 @@ export default function CustomMaterialTable({
       console.error("Error deleting record:", error);
     }
   };
+  const actions = disableDeleteAction ? [] : [
+    {
+      icon: DeleteIcon,
+      tooltip: "Delete",
+      onClick: (event, rowData) => handleDelete(rowData.id),
+    },
+  ];
 
   return (
     <MaterialTable
@@ -95,13 +103,7 @@ export default function CustomMaterialTable({
         onRowUpdateCancelled: resetErrors,
         onRowAddCancelled: resetErrors,
       }}
-      actions={[
-        {
-          icon: DeleteIcon,
-          tooltip: "Delete",
-          onClick: (event, rowData) => handleDelete(rowData.id),
-        },
-      ]}
+      actions={actions} 
     />
   );
 }

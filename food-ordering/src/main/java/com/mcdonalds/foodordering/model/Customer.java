@@ -23,6 +23,10 @@ public class Customer extends UserAccount {
     // @JoinColumn
     // private Address address;
 
+    @ManyToOne
+    @JoinColumn
+    private City city;
+
     @Transient
     private String type = "Customer";
 }
