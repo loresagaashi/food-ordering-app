@@ -16,6 +16,8 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
+import LocationCityIcon from '@material-ui/icons/LocationCity';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
 const appMenuItems = [
   {
@@ -35,13 +37,18 @@ const appMenuItems = [
   },
   {
     name: "Admins",
-    Icon: PersonIcon,
+    Icon: SupervisorAccountIcon,
     link: "/admin/admins",
   },
   {
     name: "Customers",
     Icon: PersonIcon,
     link: "/admin/customers",
+  },
+  {
+    name: "City",
+    Icon: LocationCityIcon,
+    link: "/admin/city",
   },
 
 ];

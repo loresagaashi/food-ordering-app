@@ -28,6 +28,7 @@ import UsersView from "./users/UsersView";
 import AdminDashboard from "./dashboard/AdminDashboard";
 import CustomersView from "./customers/CustomersView";
 import AdminsView from "./admins/AdminsView";
+import CityView from "./cities/CityView";
 
 const drawerWidth = 240;
 
@@ -186,6 +187,7 @@ export default function AdminLayout({}) {
           <Route path="/users" element={<UsersView />} />
           <Route path="/customers" element={<CustomersView />} />
           <Route path="/admins" element={<AdminsView />} />
+          <Route path="/city" element={<CityView />} />
         </Routes>
       </main>
     </div>

@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { TextFieldTableCell } from "../../../component/TableCells";
 import { QueryKeys } from "../../../service/QueryKeys";
 import { AdminService } from "../../../service/AdminService";
+import { DateTextFieldCell } from "../../../component/DateTextFieldCell ";
 
 const adminsService = new AdminService();
 
@@ -32,8 +33,9 @@ export default function AdminsView({}) {
           },
           {
             title: "Birth Date",
+            type:"date",
             field: "birthDate",
-            editComponent: (props) => TextFieldTableCell(props, errorRef),
+            editComponent: (props) => DateTextFieldCell(props, errorRef),
           },
           {
             title: "Phone Number",

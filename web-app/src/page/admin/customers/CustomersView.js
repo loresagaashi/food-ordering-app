@@ -3,6 +3,7 @@ import CustomMaterialTable from "../../../component/dashboard/CustomMaterialTabl
 import { useRef } from "react";
 import { TextFieldTableCell } from "../../../component/TableCells";
 import { QueryKeys } from "../../../service/QueryKeys";
+import { DateTextFieldCell } from "../../../component/DateTextFieldCell ";
 
 const customersService = new CustomerService();
 
@@ -33,7 +34,7 @@ export default function CustomersView({}) {
           {
             title: "Birth Date",
             field: "birthDate",
-            editComponent: (props) => TextFieldTableCell(props, errorRef),
+            editComponent: (props) => DateTextFieldCell(props, errorRef),
           },
           {
             title: "Phone Number",
