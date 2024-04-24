@@ -4,7 +4,6 @@ import com.mcdonalds.foodordering.model.DeliveryHours;
 import com.mcdonalds.foodordering.service.DeliveryHoursService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/delivery-hours")

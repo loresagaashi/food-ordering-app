@@ -1,6 +1,5 @@
 package com.mcdonalds.foodordering.service;
 
-import com.mcdonalds.foodordering.exception.AlreadyExistsException;
 import com.mcdonalds.foodordering.exception.NotFoundException;
 import com.mcdonalds.foodordering.model.StoreHours;
 import com.mcdonalds.foodordering.repository.StoreHoursRepository;
