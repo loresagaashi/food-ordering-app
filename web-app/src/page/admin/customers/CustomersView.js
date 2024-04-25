@@ -3,7 +3,7 @@ import { CityService } from "../../../service/CityService";
 import CustomMaterialTable from "../../../component/dashboard/CustomMaterialTable";
 import { useRef } from "react";
 import {useQuery} from "react-query";
-import { SelectTableCell, TextFieldTableCell } from "../../../component/TableCells";
+import { NumberFieldTableCell, SelectTableCell, TextFieldTableCell } from "../../../component/TableCells";
 import { QueryKeys } from "../../../service/QueryKeys";
 import { DateTextFieldCell } from "../../../component/DateTextFieldCell ";
 
@@ -52,7 +52,7 @@ export default function CustomersView({}) {
           {
             title: "Bonus Points",
             field: "bonusPoints",
-            editComponent: (props) => TextFieldTableCell(props, errorRef),
+            editComponent: (props) => NumberFieldTableCell(props, errorRef),
           },
       ];
 

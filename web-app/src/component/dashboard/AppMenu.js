@@ -18,22 +18,13 @@ import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import LocationCityIcon from '@material-ui/icons/LocationCity';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import BadgeIcon from '@mui/icons-material/Badge';
 
 const appMenuItems = [
   {
     name: "Dashboard",
     Icon: DashboardIcon,
     link: "/admin/dashboard",
-  },
-  {
-    name: "Categories",
-    Icon: CategoryIcon,
-    link: "/admin/categories",
-  },
-  {
-    name: "Products",
-    Icon: FastfoodIcon,
-    link: "/admin/products",
   },
   {
     name: "Admins",
@@ -46,15 +37,26 @@ const appMenuItems = [
     link: "/admin/customers",
   },
   {
+    name: "Employee",
+    Icon: BadgeIcon,
+    link: "/admin/employee",
+  },
+  {
+    name: "Products",
+    Icon: FastfoodIcon,
+    link: "/admin/products",
+  },
+  {
+    name: "Categories",
+    Icon: CategoryIcon,
+    link: "/admin/categories",
+  },
+  {
     name: "City",
     Icon: LocationCityIcon,
     link: "/admin/city",
   },
-  {
-    name: "Employee",
-    Icon: PersonIcon,
-    link: "/admin/employee",
-  },
+
   
 
 ];

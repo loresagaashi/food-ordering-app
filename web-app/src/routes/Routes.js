@@ -3,6 +3,7 @@ import AdminSignIn from "../page/admin/AdminSignIn";
 import ClientSignIn from "../page/client/ClientSignIn";
 import AdminLayout from "../page/admin/AdminLayout";
 import ClientLayout from "../page/client/ClientLayout";
+import ClientSignUp from "../page/client/ClientSignUp";
 
 const AppRoutes = [
   // Client routes
@@ -18,6 +19,7 @@ const AppRoutes = [
   // // Other routes
   <Route key={11} path="/admin/sign-in" element={<AdminSignIn />} />,
   <Route key={11} path="/client/sign-in" element={<ClientSignIn />} />,
+  <Route key={11} path="/client/sign-up" element={<ClientSignUp />} />,
 ];
 
 export default AppRoutes;

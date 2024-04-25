@@ -12,6 +12,7 @@ import com.mcdonalds.foodordering.model.Product;
 public interface CustomerRepository extends JpaRepository<Customer, Long>{
      Optional<Customer> findByEmail(String email);
 
+     boolean existsByEmail(String email);
 
      @Query("SELECT c.favorites FROM Customer c WHERE c.id = ?1")
      List<Product> findFavoriteProductsByCustomerId(Long id);

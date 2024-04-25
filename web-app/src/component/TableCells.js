@@ -146,7 +146,11 @@ export const PriceFieldTableCell = (props, errorRef, textFieldProps = {}) => {
   };
 
   const formatValue = (value) => {
-    return `${value.toFixed(2)} $`;
+    if (value && typeof value === "number") {
+      return `${value.toFixed(2)} $`;
+    } else {
+      return "";
+    }
   };
 
   const [editedValue, setEditedValue] = useState(formatValue(props.value));
@@ -170,5 +174,3 @@ export const PriceFieldTableCell = (props, errorRef, textFieldProps = {}) => {
     />
   );
 };
-
-

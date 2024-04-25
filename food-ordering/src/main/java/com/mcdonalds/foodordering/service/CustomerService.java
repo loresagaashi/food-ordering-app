@@ -7,7 +7,11 @@ import org.springframework.stereotype.Service;
 
 
 import com.mcdonalds.foodordering.model.Customer;
+import com.mcdonalds.foodordering.model.UserAccount;
 import com.mcdonalds.foodordering.repository.CustomerRepository;
+// import org.springframework.security.crypto.password.PasswordEncoder;
+
+import jakarta.persistence.EntityNotFoundException;
 
 
 @Service
@@ -15,6 +19,33 @@ public class CustomerService extends BasicServiceOperations<CustomerRepository,C
     public CustomerService(CustomerRepository repository) {
         super(repository);
     }
+
+     @Override
+  public Customer save(Customer entity) {
+    if (entity.getId() == null) {
+    //   entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        entity.setPassword(entity.getPassword());
+    } else {
+        Customer user = repository.findById(entity.getId())
+          .orElseThrow(() -> new EntityNotFoundException("No entity found with id: " + entity.getId()));
+      entity.setPassword(user.getPassword());
+    }
+
+    return super.save(entity);
+  }
+
+  @Override
+  protected void validateEntity(Customer entity) throws EntityValidationException {
+    if (repository.existsByEmail(entity.getEmail())) {
+      throw new EntityValidationException(ExceptionPayload.builder()
+          .code("DuplicateEmail")
+          .fieldName("email")
+          .rejectedValue(entity.getEmail())
+          .message("This email already exists")
+          .build()
+      );
+    }
+  }
 
     public Customer login(String email, String password) {
         Customer customer = this.repository.findByEmail(email)

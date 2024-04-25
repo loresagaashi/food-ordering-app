@@ -140,7 +140,7 @@ export default function AdminSignIn({ onSuccess, hideSignUpLink, isLoading }) {
               <Link
                 href="#"
                 variant="body2"
-                to="/sign-up"
+                to="/client/sign-up"
                 component={RouterLink}
               >
                 Don't have an account? Sign Up
