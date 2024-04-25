@@ -10,6 +10,10 @@ import lombok.EqualsAndHashCode;
 @Entity
 public class Employee extends UserAccount {
 
-    private String Jobposition;
+    private String fristName;
+
+    private String lastName;
+
+    private String jobPosition;
 
 }
