@@ -7,6 +7,7 @@ import {
   FormHelperText,
   InputLabel,
   MenuItem,
+  TextField,
   Select,
 } from "@material-ui/core";
 import { KeyboardTimePicker } from "@material-ui/pickers";
@@ -123,3 +124,51 @@ export const MultipleCheckboxTableCell = (props, allItems, renderLabel) => {
     </FormGroup>
   );
 };
+
+export const NumberFieldTableCell = (props, errorRef, textFieldProps = {}) => {
+  return (
+    <TextField
+      {...textFieldProps}
+      type="number"
+      fullWidth
+      label={props.columnDef.title}
+      value={props.value || ""}
+      onChange={(e) => props.onChange(e.target.value)}
+      error={errorRef.current && errorRef.current[props.columnDef.field]}
+      style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.42)" }}
+    />
+  );
+};
+
+export const PriceFieldTableCell = (props, errorRef, textFieldProps = {}) => {
+  const parseValue = (value) => {
+    return parseFloat(value.replace("$", ""));
+  };
+
+  const formatValue = (value) => {
+    return `${value.toFixed(2)} $`;
+  };
+
+  const [editedValue, setEditedValue] = useState(formatValue(props.value));
+
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    setEditedValue(newValue);
+    props.onChange(parseValue(newValue));
+  };
+
+  return (
+    <TextField
+      {...textFieldProps}
+      type="text"
+      fullWidth
+      label={props.columnDef.title}
+      value={editedValue}
+      onChange={handleChange}
+      error={errorRef.current && errorRef.current[props.columnDef.field]}
+      style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.42)" }}
+    />
+  );
+};
+
+
