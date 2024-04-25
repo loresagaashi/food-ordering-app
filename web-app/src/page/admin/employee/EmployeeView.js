@@ -11,7 +11,7 @@ const storeLocationService = new StoreLocationService();
 
 export default function EmployeeView({}) {
     const errorRef = useRef();
-    const {data: allEmployers} = useQuery(QueryKeys.EMPLOYEE, () => employeeService.findAll());
+    const {data: allstoreLocations} = useQuery(QueryKeys.STORELOCATION, () => storeLocationService.findAll());
     const columns = [
         {
           title: "Fist Name",
@@ -31,8 +31,8 @@ export default function EmployeeView({}) {
         {
           title: 'Store Location',
           field: 'storeLocation',
-          render: rowData => rowData.storeLocation?.name,
-          editComponent: props => SelectTableCell(props, errorRef, allstoreLocations?.map(x => ({value: x, label: x.name})) || [], "id")
+          render: rowData => rowData.storeLocation?.nameOfLocation,
+          editComponent: props => SelectTableCell(props, errorRef, allstoreLocations?.map(x => ({value: x, label: x.nameOfLocation})) || [], "id")
         },
       ];
 

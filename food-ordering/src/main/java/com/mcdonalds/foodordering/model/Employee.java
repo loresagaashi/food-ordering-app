@@ -1,19 +1,25 @@
 package com.mcdonalds.foodordering.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Entity
-public class Employee extends UserAccount {
 
-    private String fristName;
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Entity
+public class Employee extends BaseEntity {
+
+    private String firstName;
 
     private String lastName;
 
     private String jobPosition;
 
+    @ManyToOne
+    @JoinColumn
+    private StoreLocation storeLocation;
 }

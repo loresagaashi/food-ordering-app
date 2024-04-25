@@ -6,6 +6,7 @@ import { AdminService } from "./AdminService";
 import { CityService } from "./CityService";
 import { ProductService } from "./ProductService";
 import { EmployeeService } from "./EmployeeService";
+import { StoreLocationService } from "./StoreLocationService";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +27,7 @@ export const setQueryDefaults = () => {
   const cityService = new CityService();
   const productService = new ProductService();
   const employeeService = new EmployeeService();
+  const storeLocationService = new StoreLocationService();
 
   queryClient.setQueryDefaults(QueryKeys.CATEGORIES, {
     queryFn: () => categoriesService.findAll(),
@@ -41,6 +43,9 @@ export const setQueryDefaults = () => {
   });
   queryClient.setQueryDefaults(QueryKeys.PRODUCTS, {
     queryFn: () => productService.findAll(),
+  });
+  queryClient.setQueryDefaults(QueryKeys.STORELOCATION, {
+    queryFn: () => storeLocationService.findAll(),
   });
   queryClient.setQueryDefaults(QueryKeys.EMPLOYEE, {
     queryFn: () => employeeService.findAll(),
