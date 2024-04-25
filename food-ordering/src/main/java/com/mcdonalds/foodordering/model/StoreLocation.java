@@ -15,11 +15,11 @@ import static jakarta.persistence.CascadeType.ALL;
 @Data
 @Entity
 public class StoreLocation extends BaseEntity {
-    private String name;
+    private String nameOfLocation;
 
-    @OneToOne
-    @JoinColumn
-    private Address address;
+    // @OneToOne
+    // @JoinColumn
+    // private Address address;
 
     @OneToMany(orphanRemoval = true, cascade = ALL)
     @JoinColumn

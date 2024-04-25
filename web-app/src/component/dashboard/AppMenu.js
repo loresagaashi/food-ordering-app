@@ -50,6 +50,12 @@ const appMenuItems = [
     Icon: LocationCityIcon,
     link: "/admin/city",
   },
+  {
+    name: "Employee",
+    Icon: PersonIcon,
+    link: "/admin/employee",
+  },
+  
 
 ];
 
