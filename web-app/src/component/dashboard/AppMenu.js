@@ -18,7 +18,7 @@ import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import LocationCityIcon from '@material-ui/icons/LocationCity';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import BadgeIcon from '@mui/icons-material/Badge';
+import RecentActorsIcon from '@material-ui/icons/RecentActors';
 
 const appMenuItems = [
   {
@@ -38,7 +38,7 @@ const appMenuItems = [
   },
   {
     name: "Employee",
-    Icon: BadgeIcon,
+    Icon: RecentActorsIcon,
     link: "/admin/employee",
   },
   {
