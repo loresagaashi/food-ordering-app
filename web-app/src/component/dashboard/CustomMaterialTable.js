@@ -1,9 +1,10 @@
-import { makeStyles, useTheme } from "@material-ui/core";
+import React, { useState } from 'react';
+import { useTheme } from "@material-ui/core";
 import { useMutation, useQuery } from "react-query";
 import Typography from "@material-ui/core/Typography";
 import MaterialTable from "@material-table/core";
 import DeleteIcon from '@material-ui/icons/DeleteOutlined';
-
+import AlertDialog from '../AlertDialog';
 
 export default function CustomMaterialTable({
   title,
@@ -39,6 +40,7 @@ export default function CustomMaterialTable({
     }
   );
 
+  const [selectedItemId, setSelectedItemId] = useState(null);
 
   function onSuccessReset() {
     refetch();
@@ -48,13 +50,24 @@ export default function CustomMaterialTable({
   function resetErrors() {
     errorRef.current = null;
   }
-  const handleDelete = async (id) => {
+
+  const handleDelete = (id) => {
+    setSelectedItemId(id);
+  };
+
+  const handleConfirmDelete = async () => {
     try {
-      await deleteRecord(id);
+      await deleteRecord(selectedItemId);
+      setSelectedItemId(null);
     } catch (error) {
       console.error("Error deleting record:", error);
     }
   };
+
+  const handleCloseDialog = () => {
+    setSelectedItemId(null);
+  };
+
   const actions = disableDeleteAction ? [] : [
     {
       icon: DeleteIcon,
@@ -64,6 +77,7 @@ export default function CustomMaterialTable({
   ];
 
   return (
+    <>
     <MaterialTable
       style={{
         margin: "2em",
@@ -105,5 +119,11 @@ export default function CustomMaterialTable({
       }}
       actions={actions} 
     />
+      <AlertDialog
+        open={Boolean(selectedItemId)}
+        onClose={handleCloseDialog}
+        onConfirmDelete={handleConfirmDelete}
+      />
+    </>
   );
 }

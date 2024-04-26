@@ -6,22 +6,21 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default function AlertDialog() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
+export default function AlertDialog({ open, onClose, onConfirmDelete }) {
+  const handleClose = () => {
+    onClose();
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleConfirm = () => {
+    onConfirmDelete(); 
+    onClose();
   };
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Open alert dialog
-      </Button>
+      </Button> */}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -31,14 +30,14 @@ export default function AlertDialog() {
         <DialogTitle id="alert-dialog-title">{"Delete"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to Delete?
+            Are you sure you want to delete?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
+          <Button onClick={handleConfirm} color="primary" autoFocus>
             Yes
           </Button>
         </DialogActions>
