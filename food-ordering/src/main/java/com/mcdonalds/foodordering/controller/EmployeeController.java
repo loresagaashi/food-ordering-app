@@ -9,7 +9,7 @@ import com.mcdonalds.foodordering.service.EmployeeService;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
-@RequestMapping("/employers")
+@RequestMapping("/employees")
 public class EmployeeController extends BasicControllerOperations<EmployeeService,Employee>{
 
     public EmployeeController(EmployeeService service){

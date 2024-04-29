@@ -13,9 +13,11 @@ export default function ProductList({}) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const { data: categories } = useQuery(QueryKeys.CATEGORIES);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   function handleChange(event, newValue) {
     setValue(newValue);
+    setSelectedCategory(categories[newValue]);
   }
 
   return (
@@ -27,10 +29,15 @@ export default function ProductList({}) {
         textColor="primary"
         centered
       >
-        {categories?.map((category) => (
-          <Tab label={category.name} />
+        {categories?.map((category, index) => (
+          <Tab key={index} label={category.name} />
         ))}
       </Tabs>
+      {selectedCategory && (
+        <div>
+          <h2>Products in {selectedCategory.name}</h2>
+        </div>
+      )}
     </Paper>
   );
 }

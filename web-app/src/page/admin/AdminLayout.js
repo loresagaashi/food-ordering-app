@@ -189,7 +189,7 @@ export default function AdminLayout({}) {
           <Route path="/customers" element={<CustomersView />} />
           <Route path="/admins" element={<AdminsView />} />
           <Route path="/city" element={<CityView />} />
-          <Route path="/employee" element={<EmployeeView />} />
+          <Route path="/employees" element={<EmployeeView />} />
         </Routes>
       </main>
     </div>

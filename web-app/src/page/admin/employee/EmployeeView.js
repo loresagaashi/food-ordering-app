@@ -14,7 +14,7 @@ export default function EmployeeView({}) {
     const {data: allstoreLocations} = useQuery(QueryKeys.STORELOCATION, () => storeLocationService.findAll());
     const columns = [
         {
-          title: "Fist Name",
+          title: "First Name",
           field: "firstName",
           editComponent: (props) => TextFieldTableCell(props, errorRef),
         },
@@ -38,7 +38,7 @@ export default function EmployeeView({}) {
 
       return (
         <CustomMaterialTable
-          title="Manage Employee"
+          title="Manage Employees"
           columns={columns}
           service={employeeService}
           queryKey={QueryKeys.EMPLOYEE}

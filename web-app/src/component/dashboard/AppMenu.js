@@ -37,9 +37,9 @@ const appMenuItems = [
     link: "/admin/customers",
   },
   {
-    name: "Employee",
+    name: "Employees",
     Icon: RecentActorsIcon,
-    link: "/admin/employee",
+    link: "/admin/employees",
   },
   {
     name: "Products",
@@ -52,7 +52,7 @@ const appMenuItems = [
     link: "/admin/categories",
   },
   {
-    name: "City",
+    name: "Cities",
     Icon: LocationCityIcon,
     link: "/admin/city",
   },
