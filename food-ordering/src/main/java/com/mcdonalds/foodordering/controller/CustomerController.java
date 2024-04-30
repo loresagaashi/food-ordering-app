@@ -1,7 +1,11 @@
 package com.mcdonalds.foodordering.controller;
 
 
+import com.mcdonalds.foodordering.payload.CustomerPayload;
 import com.mcdonalds.foodordering.payload.LoginPayload;
+
+import java.time.LocalDate;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +27,12 @@ public class CustomerController extends BasicControllerOperations<CustomerServic
     @PostMapping("/login")
     public Customer login(@RequestBody @Validated LoginPayload login) {
         return this.service.login(login.getEmail(), login.getPassword());
+    }
+  @PostMapping("/customers")
+    public void saveOrUpdateCustomer(@RequestBody CustomerPayload requestPayload) {
+        LocalDate birthDate = requestPayload.getBirthDate();
+
+        System.out.println("Received birth date: " + birthDate);
     }
     
 }

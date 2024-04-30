@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { KeyboardDatePicker } from "@material-ui/pickers";
+import { KeyboardDatePicker, MuiPickersUtilsProvider  } from "@material-ui/pickers";
 import { useMutation } from "react-query";
 import { QueryKeys } from "../../service/QueryKeys";
 import ValidTextField from "../../component/common/ValidTextField";
@@ -20,7 +20,8 @@ import { CustomerService } from "../../service/CustomerService";
 import { UserService } from "../../service/UserService";
 import { SelectTableCell } from "../../component/TableCells";
 import { CityService } from "../../service/CityService";
-import { useEffect } from 'react';
+import { useEffect } from "react";
+import DateFnsUtils from '@date-io/date-fns';
 
 function Copyright() {
   return (
@@ -59,27 +60,27 @@ const customerService = new CustomerService();
 const cityService = new CityService();
 
 export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
-    // const [cityOptions, setCityOptions] = useState([]); 
-    // const [fetchError, setError] = useState(null);
+  // const [cityOptions, setCityOptions] = useState([]);
+  // const [fetchError, setError] = useState(null);
   const classes = useStyles();
   let navigate = useNavigate();
   const { setUser } = useUser();
 
-//   useEffect(() => {
-//     const fetchCities = async () => {
-//         try {
-//             const cityService = new CityService();
-//             const cities = await cityService.getAll(); 
-//           
-//             const cityOptions = cities.map(city => ({ value: city.id, label: city.name }));
-//             setCityOptions(cityOptions); 
-//         } catch (error) {
-//             setError(error);
-//         }
-//     };
+  //   useEffect(() => {
+  //     const fetchCities = async () => {
+  //         try {
+  //             const cityService = new CityService();
+  //             const cities = await cityService.getAll();
+  //
+  //             const cityOptions = cities.map(city => ({ value: city.id, label: city.name }));
+  //             setCityOptions(cityOptions);
+  //         } catch (error) {
+  //             setError(error);
+  //         }
+  //     };
 
-//     fetchCities(); 
-// }, []); 
+  //     fetchCities();
+  // }, []);
 
   const [userAccount, setUserAccount] = useState({
     firstName: "",
@@ -111,6 +112,7 @@ export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
   }
 
   return (
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -160,22 +162,6 @@ export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
               error={error?.lastName}
             />
           </Grid>
-          {/* <Grid item xs={12} sm={6}>
-                        <KeyboardDatePicker
-                            autoOk
-                            required
-                            variant="inline"
-                            inputVariant="standard"
-                            label="Date of birth"
-                            format="MM/dd/yyyy"
-                            value={userAccount.dateOfBirth}
-                            InputAdornmentProps={{position: "start"}}
-                            onChange={date => setUserAccount(prev => ({...prev, dateOfBirth: date}))}
-                            error={!!error?.dateOfBirth}
-                            helperText={error?.dateOfBirth?.message}
-                            maxDate={new Date(Date.now())}
-                        />
-                    </Grid> */}
           <Grid item xs={12}>
             <ValidTextField
               variant="standard"
@@ -210,6 +196,24 @@ export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
                 }))
               }
               error={error?.password}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <KeyboardDatePicker
+              autoOk
+              required
+              variant="inline"
+              inputVariant="standard"
+              label="Date of birth"
+              format="MM/dd/yyyy"
+              value={userAccount.birthDate}
+              InputAdornmentProps={{ position: "start" }}
+              onChange={(date) =>
+                setUserAccount((prev) => ({ ...prev, birthDate: date }))
+              }
+              error={!!error?.birthDate}
+              helperText={error?.birthDate?.message}
+              maxDate={new Date(Date.now())}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -268,5 +272,6 @@ export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
         </Grid>
       </div>
     </Container>
+    </MuiPickersUtilsProvider>
   );
 }

@@ -15,7 +15,7 @@ export const DateTextFieldCell = ({ value, onChange }) => {
     <TextField
       type="date"
       value={formattedDate}
-      onChange={handleDateChange}
+      onChange={handleDateChange} 
       InputLabelProps={{
         shrink: true,
       }}

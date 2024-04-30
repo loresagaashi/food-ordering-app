@@ -36,7 +36,10 @@ public class CustomerService extends BasicServiceOperations<CustomerRepository,C
 
   @Override
   protected void validateEntity(Customer entity) throws EntityValidationException {
-    if (repository.existsByEmail(entity.getEmail())) {
+
+    Customer existingCustomer = repository.findByEmail(entity.getEmail()).orElse(null);
+
+    if (existingCustomer != null && !existingCustomer.getId().equals(entity.getId())) {
       throw new EntityValidationException(ExceptionPayload.builder()
           .code("DuplicateEmail")
           .fieldName("email")
