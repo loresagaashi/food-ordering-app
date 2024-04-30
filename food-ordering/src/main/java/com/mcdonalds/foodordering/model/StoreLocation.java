@@ -1,9 +1,6 @@
 package com.mcdonalds.foodordering.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,7 +18,7 @@ public class StoreLocation extends BaseEntity {
     // @JoinColumn
     // private Address address;
 
-    @OneToMany(orphanRemoval = true, cascade = ALL)
-    @JoinColumn
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "store_location_id", foreignKey = @ForeignKey(name = "fk_store_hours_store_location", foreignKeyDefinition = "FOREIGN KEY (store_location_id) REFERENCES StoreLocation(id) ON DELETE RESTRICT"))
     private List<StoreHours> workingHours;
 }

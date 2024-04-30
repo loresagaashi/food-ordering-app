@@ -1,8 +1,6 @@
 package com.mcdonalds.foodordering.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,6 +18,6 @@ public class Employee extends BaseEntity {
     private String jobPosition;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "store_location_id", nullable = false, foreignKey = @ForeignKey(name = "fk_employee_store_location", foreignKeyDefinition = "FOREIGN KEY (store_location_id) REFERENCES StoreLocation(id) ON DELETE RESTRICT"))
     private StoreLocation storeLocation;
 }

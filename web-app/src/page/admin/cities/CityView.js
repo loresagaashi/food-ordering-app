@@ -24,7 +24,7 @@ export default function CityView({}) {
       service={cityService}
       queryKey={QueryKeys.CITY}
       errorRef={errorRef}
-      disableDeleteAction
+      // disableDeleteAction
     />
   );
 }

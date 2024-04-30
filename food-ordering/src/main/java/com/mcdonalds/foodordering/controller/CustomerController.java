@@ -28,11 +28,11 @@ public class CustomerController extends BasicControllerOperations<CustomerServic
     public Customer login(@RequestBody @Validated LoginPayload login) {
         return this.service.login(login.getEmail(), login.getPassword());
     }
-  @PostMapping("/customers")
-    public void saveOrUpdateCustomer(@RequestBody CustomerPayload requestPayload) {
-        LocalDate birthDate = requestPayload.getBirthDate();
+//   @PostMapping("/customers")
+//     public void saveOrUpdateCustomer(@RequestBody CustomerPayload requestPayload) {
+//         LocalDate birthDate = requestPayload.getBirthDate();
 
-        System.out.println("Received birth date: " + birthDate);
-    }
+//         System.out.println("Received birth date: " + birthDate);
+//     }
     
 }

@@ -24,7 +24,7 @@ export default function CategoriesView({}) {
       service={categoriesService}
       queryKey={QueryKeys.CATEGORIES}
       errorRef={errorRef}
-      disableDeleteAction
+      // disableDeleteAction
     />
   );
 }

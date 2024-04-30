@@ -1,8 +1,6 @@
 package com.mcdonalds.foodordering.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,7 +17,7 @@ public class Product extends BaseEntity {
     private BigDecimal price;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "category_id", nullable = false, foreignKey = @ForeignKey(name = "fk_product_category", foreignKeyDefinition = "FOREIGN KEY (category_id) REFERENCES Category(id) ON DELETE RESTRICT"))
     private Category category;
 
     private Integer bonusPoints;

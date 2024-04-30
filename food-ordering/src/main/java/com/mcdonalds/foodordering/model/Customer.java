@@ -24,7 +24,7 @@ public class Customer extends UserAccount {
     // private Address address;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "city_id", nullable = false, foreignKey = @ForeignKey(name = "fk_customer_city", foreignKeyDefinition = "FOREIGN KEY (city_id) REFERENCES City(id) ON DELETE RESTRICT"))
     private City city;
 
     @Transient
