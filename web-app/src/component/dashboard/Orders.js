@@ -9,12 +9,12 @@ import Title from './Title';
 
 // Generate Order Data
 function createData(
-  id: number,
-  date: string,
-  name: string,
-  shipTo: string,
-  paymentMethod: string,
-  amount: number,
+  id,
+  date,
+  name,
+  shipTo,
+  paymentMethod,
+  amount,
 ) {
   return { id, date, name, shipTo, paymentMethod, amount };
 }
@@ -22,40 +22,40 @@ function createData(
 const rows = [
   createData(
     0,
-    '16 Mar, 2019',
+    '16 Mar, 2024',
     'Elvis Presley',
-    'Tupelo, MS',
+    'Prishtina, KS',
     'VISA ⠀•••• 3719',
     312.44,
   ),
   createData(
     1,
-    '16 Mar, 2019',
+    '16 Mar, 2024',
     'Paul McCartney',
-    'London, UK',
+    'Peja, KS',
     'VISA ⠀•••• 2574',
     866.99,
   ),
-  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
+  createData(2, '16 Mar, 2024', 'Tom Scholz', 'Prizren, KS', 'MC ⠀•••• 1253', 100.81),
   createData(
     3,
     '16 Mar, 2019',
     'Michael Jackson',
-    'Gary, IN',
+    'Prishtina, KS',
     'AMEX ⠀•••• 2000',
     654.39,
   ),
   createData(
     4,
-    '15 Mar, 2019',
+    '15 Mar, 2024',
     'Bruce Springsteen',
-    'Long Branch, NJ',
+    'Peja, KS',
     'VISA ⠀•••• 5919',
     212.79,
   ),
 ];
 
-function preventDefault(event: React.MouseEvent) {
+function preventDefault(event) {
   event.preventDefault();
 }
 

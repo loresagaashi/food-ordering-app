@@ -5,13 +5,16 @@ import { SelectTableCell, TextFieldTableCell } from "../../../component/TableCel
 import { QueryKeys } from "../../../service/QueryKeys";
 import { EmployeeService } from "../../../service/EmployeeService";
 import { StoreLocationService } from "../../../service/StoreLocationService";
+import { JobPositionService } from "../../../service/JobPositionService";
 
 const employeeService = new EmployeeService();
 const storeLocationService = new StoreLocationService();
+const jobPositionService = new JobPositionService();
 
 export default function EmployeeView({}) {
     const errorRef = useRef();
     const {data: allstoreLocations} = useQuery(QueryKeys.STORELOCATION, () => storeLocationService.findAll());
+    const {data: alljobPositionName} = useQuery(QueryKeys.JOBPOSITION, () => jobPositionService.findAll());
     const columns = [
         {
           title: "First Name",
@@ -24,9 +27,10 @@ export default function EmployeeView({}) {
           editComponent: (props) => TextFieldTableCell(props, errorRef),
         },
         {
-          title: "Job Position",
-          field: "jobPosition",
-          editComponent: (props) => TextFieldTableCell(props, errorRef),
+          title: 'Job Position',
+          field: 'jobPosition',
+          render: rowData => rowData.jobPosition?.name,
+          editComponent: props => SelectTableCell(props, errorRef, alljobPositionName?.map(x => ({value: x, label: x.name})) || [], "id")
         },
         {
           title: 'Store Location',

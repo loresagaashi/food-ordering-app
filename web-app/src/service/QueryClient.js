@@ -7,6 +7,8 @@ import { CityService } from "./CityService";
 import { ProductService } from "./ProductService";
 import { EmployeeService } from "./EmployeeService";
 import { StoreLocationService } from "./StoreLocationService";
+import { JobPositionService } from "./JobPositionService";
+import { OfferService } from "./OfferService";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,6 +30,8 @@ export const setQueryDefaults = () => {
   const productService = new ProductService();
   const employeeService = new EmployeeService();
   const storeLocationService = new StoreLocationService();
+  const jobPositionService = new JobPositionService();
+  const offerService = new OfferService();
 
   queryClient.setQueryDefaults(QueryKeys.CATEGORIES, {
     queryFn: () => categoriesService.findAll(),
@@ -49,5 +53,11 @@ export const setQueryDefaults = () => {
   });
   queryClient.setQueryDefaults(QueryKeys.EMPLOYEE, {
     queryFn: () => employeeService.findAll(),
+  });
+  queryClient.setQueryDefaults(QueryKeys.JOBPOSITION, {
+    queryFn: () => jobPositionService.findAll(),
+  });
+  queryClient.setQueryDefaults(QueryKeys.OFFER, {
+    queryFn: () => offerService.findAll(),
   });
 };

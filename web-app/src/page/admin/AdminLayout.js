@@ -30,6 +30,8 @@ import CustomersView from "./customers/CustomersView";
 import AdminsView from "./admins/AdminsView";
 import CityView from "./cities/CityView";
 import EmployeeView from "./employee/EmployeeView";
+import JobPositionView from "./jobPositions/JobPositionView";
+import OffersView from "./offers/OffersView";
 
 const drawerWidth = 240;
 
@@ -190,6 +192,8 @@ export default function AdminLayout({}) {
           <Route path="/admins" element={<AdminsView />} />
           <Route path="/city" element={<CityView />} />
           <Route path="/employees" element={<EmployeeView />} />
+          <Route path="/job/positions" element={<JobPositionView />} />
+          <Route path="/offers" element={<OffersView />} />
         </Routes>
       </main>
     </div>

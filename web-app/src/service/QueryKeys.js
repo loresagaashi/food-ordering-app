@@ -6,5 +6,7 @@ export const QueryKeys = {
   PRODUCTS: "PRODUCTS",
   EMPLOYEE: "EMPLOYEE",
   STORELOCATION: "STORELOCATION",
+  JOBPOSITION: "JOBPOSITION",
+  OFFER: "OFFER",
   USER_BY_EMAIL: (email) => "USER_" + email,
 };

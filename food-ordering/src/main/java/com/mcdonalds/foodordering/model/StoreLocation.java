@@ -19,6 +19,6 @@ public class StoreLocation extends BaseEntity {
     // private Address address;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "store_location_id", foreignKey = @ForeignKey(name = "fk_store_hours_store_location", foreignKeyDefinition = "FOREIGN KEY (store_location_id) REFERENCES StoreLocation(id) ON DELETE RESTRICT"))
+    // @JoinColumn(name = "store_location_id", foreignKey = @ForeignKey(name = "fk_store_hours_store_location", foreignKeyDefinition = "FOREIGN KEY (store_location_id) REFERENCES StoreLocation(id) ON DELETE RESTRICT"))
     private List<StoreHours> workingHours;
 }

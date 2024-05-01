@@ -19,6 +19,8 @@ import "simplebar/dist/simplebar.min.css";
 import LocationCityIcon from '@material-ui/icons/LocationCity';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
+import WorkIcon from '@material-ui/icons/Work';
+import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu';
 
 const appMenuItems = [
   {
@@ -42,9 +44,19 @@ const appMenuItems = [
     link: "/admin/employees",
   },
   {
+    name: "Job Positions",
+    Icon: WorkIcon,
+    link: "/admin/job/positions",
+  },
+  {
     name: "Products",
     Icon: FastfoodIcon,
     link: "/admin/products",
+  },
+  {
+    name: "Offers",
+    Icon: RestaurantMenuIcon,
+    link: "/admin/offers",
   },
   {
     name: "Categories",

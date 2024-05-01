@@ -28,9 +28,9 @@ public abstract class UserAccount extends BaseEntity {
     @NotEmpty
     private String password;
 
-    @NotEmpty
-    // private LocalDate birthDate;
-    private String birthDate;
+    // @NotEmpty
+    private LocalDate birthDate;
+    // private String birthDate;
 
     private String phoneNumber;
 

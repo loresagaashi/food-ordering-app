@@ -1,8 +1,6 @@
 package com.mcdonalds.foodordering.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,7 +23,7 @@ public class Offer extends BaseAuditEntity {
     private boolean disabled;
 
     @OneToMany
-    @JoinColumn
+    @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "fk_offer_product", foreignKeyDefinition = "FOREIGN KEY (product_id) REFERENCES Product(id) ON DELETE RESTRICT"))
     private List<Product> products;
 
     private Integer bonusPoints;

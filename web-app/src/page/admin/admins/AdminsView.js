@@ -3,7 +3,8 @@ import { useRef } from "react";
 import { TextFieldTableCell } from "../../../component/TableCells";
 import { QueryKeys } from "../../../service/QueryKeys";
 import { AdminService } from "../../../service/AdminService";
-import { DateTextFieldCell } from "../../../component/DateTextFieldCell ";
+import DateFnsUtils from "@date-io/date-fns";
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 
 const adminsService = new AdminService();
 
@@ -35,7 +36,17 @@ export default function AdminsView({}) {
             title: "Birth Date",
             type:"date",
             field: "birthDate",
-            editComponent: (props) => DateTextFieldCell(props, errorRef),
+            editComponent: (props) => (
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DatePicker
+                  value={props.value}
+                  onChange={(date) => props.onChange(date)}
+                  format="yyyy-MM-dd"
+                  inputVariant="outlined"
+                  fullWidth
+                />
+              </MuiPickersUtilsProvider>
+            ),
           },
           {
             title: "Phone Number",

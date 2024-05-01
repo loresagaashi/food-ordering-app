@@ -99,6 +99,8 @@ export const MultipleCheckboxTableCell = (props, allItems, renderLabel) => {
   const values = props.value || [];
   const valueIds = values.map((x) => x.id);
 
+  
+
   return (
     <FormGroup row>
       {allItems.map((item) => (

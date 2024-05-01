@@ -1,7 +1,7 @@
 import { CustomerService } from "../../../service/CustomerService";
 import { CityService } from "../../../service/CityService";
 import CustomMaterialTable from "../../../component/dashboard/CustomMaterialTable";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useQuery } from "react-query";
 import {
   NumberFieldTableCell,
@@ -9,11 +9,8 @@ import {
   TextFieldTableCell,
 } from "../../../component/TableCells";
 import { QueryKeys } from "../../../service/QueryKeys";
-import { DateTextFieldCell } from "../../../component/DateTextFieldCell ";
-import DateFilter from "../../../component/DateFilter";
 import DateFnsUtils from "@date-io/date-fns";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DatePickers from "../../../component/DatePickers";
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 
 const customersService = new CustomerService();
 const cityService = new CityService();
@@ -22,38 +19,6 @@ export default function CustomersView({}) {
   const { data: allCities } = useQuery(QueryKeys.CITY, () =>
     cityService.findAll(),
   );
-
-  const [birthDate, setBirthDate] = useState(new Date());
-
-  const handleBirthDateChange = (date) => {
-    setBirthDate(date);
-  };
-  const handleSaveOrUpdate = (newData, oldData) => {
-    const dataToSend = { ...newData };
-    dataToSend.birthDate = birthDate.toISOString().split('T')[0]; // Format birth date as YYYY-MM-DD
-  
-    // Make your request to the backend with dataToSend
-    console.log('Data to send:', dataToSend);
-  
-    // Placeholder for making the request to the backend
-    fetch('/api/customers', {
-      method: 'POST', // Adjust method according to your backend API
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dataToSend),
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to save/update customer data');
-      }
-      // Handle successful response
-      console.log('Customer data saved/updated successfully');
-    })
-    .catch(error => {
-      console.error('Error saving/updating customer data:', error);
-    });
-  };
 
   const columns = [
     {
@@ -80,14 +45,18 @@ export default function CustomersView({}) {
       title: "Birth Date",
       type:"date",
       field: "birthDate",
-      // editComponent: (props) => (
-      //   <DatePickers
-      //     value={birthDate}
-      //     onChange={handleBirthDateChange}
-      //     {...props}
-      //   />
-      // ),
-      editComponent: (props) => DateTextFieldCell(props, errorRef),
+      editComponent: (props) => (
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <DatePicker
+            value={props.value}
+            onChange={(date) => props.onChange(date)}
+            format="yyyy-MM-dd"
+            inputVariant="outlined"
+            fullWidth
+          />
+        </MuiPickersUtilsProvider>
+      ),
+    
     },
     {
       title: "Phone Number",
@@ -114,16 +83,12 @@ export default function CustomersView({}) {
   ];
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      {/* <DateFilter rangeRef={errorRef} /> */}
       <CustomMaterialTable
         title="Manage Customers"
         columns={columns}
         service={customersService}
         queryKey={QueryKeys.CUSTOMERS}
         errorRef={errorRef}
-        handleSaveOrUpdate={handleSaveOrUpdate}
       />
-    </MuiPickersUtilsProvider>
   );
 }
