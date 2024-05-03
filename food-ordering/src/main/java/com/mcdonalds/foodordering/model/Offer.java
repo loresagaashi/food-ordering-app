@@ -22,8 +22,14 @@ public class Offer extends BaseAuditEntity {
 
     private boolean disabled;
 
-    @OneToMany
-    @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "fk_offer_product", foreignKeyDefinition = "FOREIGN KEY (product_id) REFERENCES Product(id) ON DELETE RESTRICT"))
+    @ManyToMany
+    @JoinTable(name = "offer_product",
+               joinColumns = @JoinColumn(name = "offer_id"),
+               inverseJoinColumns = @JoinColumn(name = "product_id"),
+               foreignKey = @ForeignKey(name = "fk_offer_product_offer", 
+               foreignKeyDefinition = "FOREIGN KEY (offer_id) REFERENCES Offer(id) ON DELETE RESTRICT"),
+               inverseForeignKey = @ForeignKey(name = "fk_offer_product_product", 
+               foreignKeyDefinition = "FOREIGN KEY (product_id) REFERENCES Product(id) ON DELETE RESTRICT"))
     private List<Product> products;
 
     private Integer bonusPoints;

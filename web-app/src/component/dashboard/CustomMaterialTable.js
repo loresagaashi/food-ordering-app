@@ -59,8 +59,10 @@ export default function CustomMaterialTable({
     try {
       await deleteRecord(selectedItemId);
       setSelectedItemId(null);
+      return true;
     } catch (error) {
       console.error("Error deleting record:", error);
+      return false;
     }
   };
 
