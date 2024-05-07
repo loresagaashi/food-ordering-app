@@ -7,7 +7,6 @@ import com.mcdonalds.foodordering.service.AdminService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/admins")
 public class AdminController extends BasicControllerOperations<AdminService, Admin> {

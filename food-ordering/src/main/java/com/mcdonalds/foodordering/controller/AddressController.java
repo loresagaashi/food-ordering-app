@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import com.mcdonalds.foodordering.model.Address;
 import com.mcdonalds.foodordering.service.AddressService;
 
-@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/addresses")
 public class AddressController extends BasicControllerOperations<AddressService,Address>{

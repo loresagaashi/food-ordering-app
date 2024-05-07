@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mcdonalds.foodordering.model.City;
 import com.mcdonalds.foodordering.service.CityService;
 
-@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/city")
 public class CityController extends BasicControllerOperations<CityService, City> {

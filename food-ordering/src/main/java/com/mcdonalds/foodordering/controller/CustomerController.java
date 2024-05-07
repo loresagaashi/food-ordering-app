@@ -17,7 +17,6 @@ import com.mcdonalds.foodordering.model.Customer;
 import com.mcdonalds.foodordering.service.CustomerService;
 
 
-@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/customers")
 public class CustomerController extends BasicControllerOperations<CustomerService, Customer>{

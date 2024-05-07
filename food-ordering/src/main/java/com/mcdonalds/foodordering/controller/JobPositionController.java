@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mcdonalds.foodordering.model.JobPosition;
 import com.mcdonalds.foodordering.service.JobPositionService;
 
-@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/job/positions")
 public class JobPositionController extends BasicControllerOperations<JobPositionService, JobPosition>{
