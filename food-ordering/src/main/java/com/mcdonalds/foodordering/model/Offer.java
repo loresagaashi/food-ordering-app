@@ -33,4 +33,8 @@ public class Offer extends BaseAuditEntity {
     private List<Product> products;
 
     private Integer bonusPoints;
+
+    private String imageUrl;
+
+    private String description;
 }

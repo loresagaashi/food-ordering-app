@@ -44,6 +44,16 @@ export default function ProductsView({}) {
           field: "bonusPoints",
           editComponent: (props) => NumberFieldTableCell(props, errorRef),
         },
+        {
+          title: 'Image Url',
+          field: 'imageUrl',
+          editComponent: props => (
+            <input
+              type={"file"}
+              onChange={event => props.onChange(event.target.files[0].name)}
+            />
+          )
+        },
       ];
 
       return (

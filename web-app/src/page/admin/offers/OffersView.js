@@ -24,6 +24,11 @@ export default function OffersView({}) {
           editComponent: (props) => TextFieldTableCell(props, errorRef),
         },
         {
+          title: "Description",
+          field: "description",
+          editComponent: (props) => TextFieldTableCell(props, errorRef),
+        },
+        {
             title: "Price",
             field: "price",
             render: rowData => `${rowData.price.toFixed(2)}$`,
@@ -66,6 +71,16 @@ export default function OffersView({}) {
             field: 'products',
             render: rowData => rowData.products?.map(x => x.name).join(", "),
             editComponent: props => MultipleCheckboxTableCell(props, allProducts, item => item.name)
+        },
+        {
+          title: "Image Url",
+          field: "imageUrl",
+          editComponent: (props) => (
+            <input
+              type={"file"}
+              onChange={(event) => props.onChange(event.target.files[0].name)}
+            />
+          ),
         },
         {
             title: "Bonus Points",
