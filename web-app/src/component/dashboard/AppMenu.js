@@ -23,6 +23,7 @@ import WorkIcon from '@material-ui/icons/Work';
 import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 const appMenuItems = [
   {
@@ -80,6 +81,11 @@ const appMenuItems = [
     Icon:  AllInboxIcon ,
     link: "/admin/deliveryHours",
    },
+   {
+    name:" Store Locations ",
+     Icon:  LocationOnIcon ,
+     link: "/admin/storeLocations",
+    },
 ];
 
 export default function AppMenu({}) {
