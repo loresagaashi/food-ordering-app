@@ -9,6 +9,8 @@ import { EmployeeService } from "./EmployeeService";
 import { StoreLocationService } from "./StoreLocationService";
 import { JobPositionService } from "./JobPositionService";
 import { OfferService } from "./OfferService";
+import { StoreHoursService } from "./StoreHoursService";
+import { DeliveryHoursService } from "./DeliveryHoursService";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,6 +34,8 @@ export const setQueryDefaults = () => {
   const storeLocationService = new StoreLocationService();
   const jobPositionService = new JobPositionService();
   const offerService = new OfferService();
+  const storeHoursService = new StoreHoursService();
+  const deliveryHoursService = new DeliveryHoursService();
 
   queryClient.setQueryDefaults(QueryKeys.CATEGORIES, {
     queryFn: () => categoriesService.findAll(),
@@ -59,5 +63,11 @@ export const setQueryDefaults = () => {
   });
   queryClient.setQueryDefaults(QueryKeys.OFFER, {
     queryFn: () => offerService.findAll(),
+  });
+  queryClient.setQueryDefaults(QueryKeys.STOREHOURS, {
+    queryFn: () => storeHoursService.findAll(),
+  });
+  queryClient.setQueryDefaults(QueryKeys.DELIVERYHOURS, {
+    queryFn: () => deliveryHoursService.findAll(),
   });
 };

@@ -21,6 +21,8 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import WorkIcon from '@material-ui/icons/Work';
 import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu';
+import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
+import AllInboxIcon from '@material-ui/icons/AllInbox';
 
 const appMenuItems = [
   {
@@ -67,10 +69,17 @@ const appMenuItems = [
     name: "Cities",
     Icon: LocationCityIcon,
     link: "/admin/city",
-  },
-
-  
-
+  }, 
+   {
+  name: "Store Hours",
+    Icon:  QueryBuilderIcon,
+    link: "/admin/storeHours",
+   },
+   {
+   name:" Delivery Hours",
+    Icon:  AllInboxIcon ,
+    link: "/admin/deliveryHours",
+   },
 ];
 
 export default function AppMenu({}) {
