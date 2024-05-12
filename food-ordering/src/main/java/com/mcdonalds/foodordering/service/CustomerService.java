@@ -7,12 +7,11 @@ import org.springframework.stereotype.Service;
 
 
 import com.mcdonalds.foodordering.model.Customer;
-import com.mcdonalds.foodordering.model.UserAccount;
+// import com.mcdonalds.foodordering.model.UserAccount;
 import com.mcdonalds.foodordering.repository.CustomerRepository;
 // import org.springframework.security.crypto.password.PasswordEncoder;
 
 import jakarta.persistence.EntityNotFoundException;
-
 
 @Service
 public class CustomerService extends BasicServiceOperations<CustomerRepository,Customer>{

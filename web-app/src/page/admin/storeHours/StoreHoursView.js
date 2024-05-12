@@ -2,9 +2,8 @@ import CustomMaterialTable from "../../../component/dashboard/CustomMaterialTabl
 import { useRef } from "react";
 import {useQuery} from "react-query";
 import { 
-
   TextFieldTableCell, 
- 
+  DayOfWeekTableCell
 } from "../../../component/TableCells";
 import { QueryKeys } from "../../../service/QueryKeys";
 
@@ -19,7 +18,7 @@ export default function StoreHoursView({}) {
       {
         title: "Day Of Week",
         field: "dayOfWeek",
-        editComponent: (props) => TextFieldTableCell(props, errorRef),
+        editComponent: (props) => DayOfWeekTableCell(props, errorRef),
       },
     
       {
@@ -34,22 +33,16 @@ export default function StoreHoursView({}) {
         field: "endTime",
         editComponent: (props) => TextFieldTableCell(props, errorRef),
       },
-    
-    
-    
-    
-    
-    
+
     ];
   
     return (
       <CustomMaterialTable
         title="Manage Store Hours"
         columns={columns}
-        service={storeHoursServiceService}
+        service={storeHoursService}
         queryKey={QueryKeys.STOREHOURS}
         errorRef={errorRef}
-        // disableDeleteAction
       />
     );
   }

@@ -71,21 +71,21 @@ const appMenuItems = [
     Icon: LocationCityIcon,
     link: "/admin/city",
   }, 
-   {
-  name: "Store Hours",
+  {
+    name: "Store Hours",
     Icon:  QueryBuilderIcon,
     link: "/admin/storeHours",
-   },
-   {
-   name:" Delivery Hours",
+  },
+  {
+    name:" Delivery Hours",
     Icon:  AllInboxIcon ,
     link: "/admin/deliveryHours",
-   },
-   {
+  },
+  {
     name:" Store Locations ",
-     Icon:  LocationOnIcon ,
-     link: "/admin/storeLocations",
-    },
+    Icon:  LocationOnIcon ,
+    link: "/admin/storeLocations",
+  },
 ];
 
 export default function AppMenu({}) {

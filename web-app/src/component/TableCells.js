@@ -176,3 +176,33 @@ export const PriceFieldTableCell = (props, errorRef, textFieldProps = {}) => {
     />
   );
 };
+
+export const DayOfWeekTableCell = (props, errorRef) => {
+  const daysOfWeek = [
+    { value: "MONDAY", label: "Monday" },
+    { value: "TUESDAY", label: "Tuesday" },
+    { value: "WEDNESDAY", label: "Wednesday" },
+    { value: "THURSDAY", label: "Thursday" },
+    { value: "FRIDAY", label: "Friday" },
+    { value: "SATURDAY", label: "Saturday" },
+    { value: "SUNDAY", label: "Sunday" },
+  ];
+
+  return (
+    <ValidTextField
+      select
+      fullWidth
+      sx={{ m: 1, minWidth: 120 }}
+      error={errorRef.current && errorRef.current[props.columnDef.field]}
+      value={props.value || ""}
+      onChange={(e) => props.onChange(e.target.value)}
+      label={props.columnDef.title}
+    >
+      {daysOfWeek.map((day, index) => (
+        <MenuItem key={index} value={day.value}>
+          {day.label}
+        </MenuItem>
+      ))}
+    </ValidTextField>
+  );
+};

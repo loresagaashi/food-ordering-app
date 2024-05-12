@@ -7,7 +7,7 @@ import com.mcdonalds.foodordering.model.OrderDetail;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Date;
+// import java.util.Date;
 
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long>{
     @Query(

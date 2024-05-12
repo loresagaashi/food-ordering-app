@@ -9,8 +9,6 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 
-
-
 public interface DeliveryHoursRepository extends JpaRepository<DeliveryHours, Long> {
     // List<DeliveryHours> findByStoreId(Long storeHoursId);
     

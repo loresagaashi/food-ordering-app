@@ -1,13 +1,12 @@
 package com.mcdonalds.foodordering.controller;
 
-
-import com.mcdonalds.foodordering.payload.CustomerPayload;
+// import com.mcdonalds.foodordering.payload.CustomerPayload;
 import com.mcdonalds.foodordering.payload.LoginPayload;
 
-import java.time.LocalDate;
+// import java.time.LocalDate;
 
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
+// import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -4,13 +4,12 @@ import com.mcdonalds.foodordering.model.DeliveryHours;
 import com.mcdonalds.foodordering.service.DeliveryHoursService;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
-@RequestMapping("/delivery-hours")
+@RequestMapping("/deliveryHours")
 public class DeliveryHoursController extends BasicControllerOperations<DeliveryHoursService, DeliveryHours>{
 
-    public DeliveryHoursController(DeliveryHoursService deliveryHoursServiceservice) {
-        super(deliveryHoursServiceservice);
+    public DeliveryHoursController(DeliveryHoursService service) {
+        super(service);
         
     }
 
