@@ -1,4 +1,4 @@
-import { Backdrop, Fade, makeStyles, Modal, Paper, Tab, Tabs } from "@material-ui/core";
+import { Backdrop, Fade, makeStyles, Modal, Paper, Tab, Tabs, Button } from "@material-ui/core";
 import { useQuery } from "react-query";
 import { QueryKeys } from "../../service/QueryKeys";
 import { useState } from "react";
@@ -43,9 +43,24 @@ const useStyles = makeStyles((theme) => ({
 
 function ProductPopup({ product, handleClose }) {
   const classes = useStyles();
+  const [quantity, setQuantity] = useState(1); 
 
   const popupWidth = 700;
-  const popupHeight = 700;
+  const popupHeight = 450;
+
+  const handleAddToCart = () => {
+    console.log("Product added to cart:", product);
+  };
+
+  const handleIncreaseQuantity = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const handleDecreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
 
   return (
     <Modal
@@ -62,6 +77,11 @@ function ProductPopup({ product, handleClose }) {
     >
       <Fade in={true}>
         <div className={classes.modalContent} style={{ width: popupWidth, height: popupHeight }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button onClick={handleClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', marginTop: '7px'}}>
+              &#10006;
+            </button>
+          </div>
           <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
             <div style={{ flex: '1' }}>
               <img
@@ -73,16 +93,29 @@ function ProductPopup({ product, handleClose }) {
               />
             </div>
             <div style={{ flex: '2', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <Typography variant="h4" id="transition-modal-title" style={{ marginBottom: '10px' }}>
+              <Typography variant="h4" id="transition-modal-title" style={{ marginBottom: '20px' , fontWeight: 'bold'}}>
                 {product.name}
               </Typography>
-              <Typography variant="body1" id="transition-modal-description" style={{ marginBottom: '10px' }}>
+              <Typography variant="body1" id="transition-modal-description" style={{ marginBottom: '20px' }}>
                 {product.description}
               </Typography>
-              <Typography variant="body1" style={{ marginBottom: '10px' }}>
-                Price: {product.price} €
+              <Typography variant="body1" style={{ marginBottom: '10px', marginRight: 12, color: '#FFAC1C', fontWeight: 'bold' }}>
+                Price: {product.price} $
               </Typography>
-              {/* more product info */}
+              <div style={{ display: 'flex', alignItems: 'center', marginTop: 20 }}>
+                <Button variant="outlined" onClick={handleDecreaseQuantity} style={{ marginRight: 10, width: 30, height: 30 }}>
+                  -
+                </Button>
+                <Typography variant="body1" style={{ marginRight: 10, fontWeight: 'bold' }}>
+                  {quantity}
+                </Typography>
+                <Button variant="outlined" onClick={handleIncreaseQuantity} style={{ width: 30, height: 30, marginRight: 15 }}>
+                  +
+                </Button>
+                <button onClick={() => handleAddToCart()} style={{ padding: '8px 16px', background: '#FFAC1C', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '4px'}}>
+                  Add to Cart
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -147,6 +180,7 @@ export default function ProductList({}) {
                         textAlign: "center",
                         position: "relative",
                         width: "100%",
+                        cursor: "pointer",
                       }}
                     >
                       <img
@@ -168,7 +202,7 @@ export default function ProductList({}) {
                         <div>
                           <Typography>{product?.name}</Typography>
                           <Typography style={{ fontWeight: "bold" }}>
-                            {product?.price} €
+                            {product?.price} $
                           </Typography>
                         </div>
                       </div>
