@@ -13,7 +13,7 @@ const storeHoursService = new StoreHoursService();
 
 export default function StoreHoursView({}) {
     const errorRef = useRef();
-
+    
     const columns = [
       {
         title: "Day Of Week",

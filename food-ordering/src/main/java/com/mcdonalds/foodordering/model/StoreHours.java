@@ -1,8 +1,6 @@
 package com.mcdonalds.foodordering.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,4 +17,8 @@ public class StoreHours extends BaseEntity {
     private LocalTime startTime;
 
     private LocalTime endTime;
+
+    @ManyToOne
+    @JoinColumn(name = "deliveryHours_id", nullable = false, foreignKey = @ForeignKey(name = "fk_storeHours_deliveryHours", foreignKeyDefinition = "FOREIGN KEY (deliveryHours_id) REFERENCES deliveryHours(id) ON DELETE RESTRICT"))
+    private DeliveryHours deliveryHours;
 }

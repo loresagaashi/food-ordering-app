@@ -13,6 +13,7 @@ import {
 import { KeyboardTimePicker } from "@material-ui/pickers";
 import { isValid } from "date-fns";
 import { useState } from "react";
+import { makeStyles } from '@material-ui/core/styles';
 
 export const TextFieldTableCell = (
   props,
@@ -176,6 +177,47 @@ export const PriceFieldTableCell = (props, errorRef, textFieldProps = {}) => {
     />
   );
 };
+const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200,
+  },
+}));
+
+export default function TimePickers({ value, onChange }) {
+  const classes = useStyles();
+  const [timeValue, setTimeValue] = useState(value || "07:30");
+
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    setTimeValue(newValue);
+    onChange(newValue);
+  };
+
+  return (
+    <form className={classes.container} noValidate>
+      <TextField
+        id="time"
+        label="Change time"
+        type="time"
+        defaultValue="07:30"
+        className={classes.textField}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        inputProps={{
+          step: 300, // 5 min
+        }}
+        onChange={handleChange}
+      />
+    </form>
+  );
+}
 
 export const DayOfWeekTableCell = (props, errorRef) => {
   const daysOfWeek = [
