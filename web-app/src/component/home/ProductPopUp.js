@@ -63,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
             <Typography variant="body1">
               Price: {product.price} $
             </Typography>
+            <Typography variant="body1">
+              Bonus points: {product.bonusPoints}
+            </Typography>
             {/* Add more product information here */}
           </div>
         </Fade>

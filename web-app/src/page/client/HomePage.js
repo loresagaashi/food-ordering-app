@@ -1,5 +1,5 @@
-import { Button, Box, makeStyles } from "@material-ui/core";
-import { Link as RouterLink } from "react-router-dom";
+import React, { useState } from "react";
+import { Button, Box, makeStyles, Drawer, List, ListItem, ListItemText } from "@material-ui/core";
 import Carousel from "react-material-ui-carousel";
 import ProductList from "../../component/home/ProductList";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
@@ -18,10 +18,15 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "20px",
     marginRight: "20px"
   },
+  drawer: {
+    width: "400px",
+  },
 }));
 
 export default function HomePage() {
   const classes = useStyles();
+  const [cartItems, setCartItems] = useState([]);
+  const [showCart, setShowCart] = useState(false);
 
   const items = [
     {
@@ -41,6 +46,22 @@ export default function HomePage() {
     },
   ];
 
+  const handleAddToCart = (product) => {
+    const existingItemIndex = cartItems.findIndex((item) => item.id === product.id);
+
+    if (existingItemIndex !== -1) {
+      const updatedCartItems = [...cartItems];
+      updatedCartItems[existingItemIndex].quantity++;
+      setCartItems(updatedCartItems);
+    } else {
+      setCartItems([...cartItems, { ...product }]);
+    }
+  };
+
+  const toggleCartDrawer = () => {
+    setShowCart(!showCart);
+  };
+
   return (
     <Box
       display="flex"
@@ -57,8 +78,7 @@ export default function HomePage() {
         <Button
           color="primary"
           variant="contained"
-          className={classes.link}
-          component={RouterLink}
+          onClick={toggleCartDrawer}
         >
           <ShoppingCartIcon />
         </Button>
@@ -70,7 +90,22 @@ export default function HomePage() {
           ))}
         </Carousel>
       </Box>
-      <ProductList />
+      <ProductList onAddToCart={handleAddToCart} />
+      <Drawer
+        anchor="right"
+        open={showCart}
+        onClose={toggleCartDrawer}
+        classes={{ paper: classes.drawer }}
+      >
+        <List>
+          {cartItems.map((item, index) => (
+            <ListItem key={index}>
+              <img src={item.image} alt={item.name} style={{ height: 50, width: 50, marginRight: 10 }} />
+              <ListItemText primary={item.name} secondary={`$${item.price} - Quantity: ${item.quantity}`} />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
     </Box>
   );
 }

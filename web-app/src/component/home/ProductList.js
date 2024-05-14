@@ -49,8 +49,16 @@ function ProductPopup({ product, handleClose }) {
   const popupHeight = 450;
 
   const handleAddToCart = () => {
-    console.log("Product added to cart:", product);
-  };
+      const itemToAdd = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        bonusPoints: product.bonusPoints,
+        quantity: quantity,
+      };
+  
+      console.log("Product added to cart:", itemToAdd);
+    };
 
   const handleIncreaseQuantity = () => {
     setQuantity(quantity + 1);
@@ -101,6 +109,9 @@ function ProductPopup({ product, handleClose }) {
               </Typography>
               <Typography variant="body1" style={{ marginBottom: '10px', marginRight: 12, color: '#FFAC1C', fontWeight: 'bold' }}>
                 Price: {product.price} $
+              </Typography>
+              <Typography variant="body1" style={{ marginBottom: '10px', marginRight: 12, color: 'green' }}>
+                Bonus points: {product.bonusPoints}
               </Typography>
               <div style={{ display: 'flex', alignItems: 'center', marginTop: 20 }}>
                 <Button variant="outlined" onClick={handleDecreaseQuantity} style={{ marginRight: 10, width: 30, height: 30 }}>
@@ -218,6 +229,7 @@ export default function ProductList({}) {
         <ProductPopup
           product={selectedProduct}
           handleClose={handleClosePopup}
+          // handleAddToCart={handleAddToCart}
           classes={classes}
         />
       )}
