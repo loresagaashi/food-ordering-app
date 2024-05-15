@@ -8,6 +8,7 @@ import image2 from "../../images/home/2.png";
 import image3 from "../../images/home/3.png";
 import image4 from "../../images/home/4.png";
 import image5 from "../../images/home/5.png";
+import ProductPopup from "../../component/home/ProductPopUp";
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -27,6 +28,7 @@ export default function HomePage() {
   const classes = useStyles();
   const [cartItems, setCartItems] = useState([]);
   const [showCart, setShowCart] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const items = [
     {
@@ -48,10 +50,10 @@ export default function HomePage() {
 
   const handleAddToCart = (product) => {
     const existingItemIndex = cartItems.findIndex((item) => item.id === product.id);
-
+  
     if (existingItemIndex !== -1) {
       const updatedCartItems = [...cartItems];
-      updatedCartItems[existingItemIndex].quantity++;
+      updatedCartItems[existingItemIndex].quantity += 1; 
       setCartItems(updatedCartItems);
     } else {
       setCartItems([...cartItems, { ...product }]);
@@ -61,7 +63,6 @@ export default function HomePage() {
   const toggleCartDrawer = () => {
     setShowCart(!showCart);
   };
-
   return (
     <Box
       display="flex"
@@ -90,7 +91,7 @@ export default function HomePage() {
           ))}
         </Carousel>
       </Box>
-      <ProductList onAddToCart={handleAddToCart} />
+      <ProductList onAddToCart={handleAddToCart} cartItems={cartItems} setCartItems={setCartItems} products={items}/>
       <Drawer
         anchor="right"
         open={showCart}
@@ -100,12 +101,18 @@ export default function HomePage() {
         <List>
           {cartItems.map((item, index) => (
             <ListItem key={index}>
-              <img src={item.image} alt={item.name} style={{ height: 50, width: 50, marginRight: 10 }} />
-              <ListItemText primary={item.name} secondary={`$${item.price} - Quantity: ${item.quantity}`} />
-            </ListItem>
+            <img src={item.image} alt={item.name} style={{ height: 50, width: 50, marginRight: 10 }} />
+            <ListItemText primary={item.name} secondary={`Price: $${item.price} - Quantity: ${item.quantity}`} />
+          </ListItem>
           ))}
         </List>
       </Drawer>
+      {selectedProduct && (
+        <ProductPopup
+          product={selectedProduct}
+          handleAddToCart={handleAddToCart} 
+        />
+      )}
     </Box>
   );
 }

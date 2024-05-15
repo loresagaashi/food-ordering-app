@@ -1,10 +1,12 @@
-import { Backdrop, Fade, makeStyles, Modal, Paper, Tab, Tabs, Button } from "@material-ui/core";
+import { Backdrop, Fade, makeStyles, Modal, Paper, Tab, Tabs, Button, Snackbar } from "@material-ui/core";
 import { useQuery } from "react-query";
 import { QueryKeys } from "../../service/QueryKeys";
 import { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { useTheme } from '@mui/material/styles';
+import MuiAlert from '@material-ui/lab/Alert';
+import ProductPopup from "./ProductPopUp";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,106 +43,16 @@ const useStyles = makeStyles((theme) => ({
   );
 }
 
-function ProductPopup({ product, handleClose }) {
-  const classes = useStyles();
-  const [quantity, setQuantity] = useState(1); 
-
-  const popupWidth = 700;
-  const popupHeight = 450;
-
-  const handleAddToCart = () => {
-      const itemToAdd = {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        bonusPoints: product.bonusPoints,
-        quantity: quantity,
-      };
-  
-      console.log("Product added to cart:", itemToAdd);
-    };
-
-  const handleIncreaseQuantity = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const handleDecreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
-
-  return (
-    <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      className={classes.modal}
-      open={true}
-      onClose={handleClose}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
-    >
-      <Fade in={true}>
-        <div className={classes.modalContent} style={{ width: popupWidth, height: popupHeight }}>
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button onClick={handleClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', marginTop: '7px'}}>
-              &#10006;
-            </button>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-            <div style={{ flex: '1' }}>
-              <img
-                src={`../../../products/${product.imageUrl}`}
-                alt={product.name}
-                width={300}
-                height={150}
-                style={{ marginRight: '20px' }}
-              />
-            </div>
-            <div style={{ flex: '2', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <Typography variant="h4" id="transition-modal-title" style={{ marginBottom: '20px' , fontWeight: 'bold'}}>
-                {product.name}
-              </Typography>
-              <Typography variant="body1" id="transition-modal-description" style={{ marginBottom: '20px' }}>
-                {product.description}
-              </Typography>
-              <Typography variant="body1" style={{ marginBottom: '10px', marginRight: 12, color: '#FFAC1C', fontWeight: 'bold' }}>
-                Price: {product.price} $
-              </Typography>
-              <Typography variant="body1" style={{ marginBottom: '10px', marginRight: 12, color: 'green' }}>
-                Bonus points: {product.bonusPoints}
-              </Typography>
-              <div style={{ display: 'flex', alignItems: 'center', marginTop: 20 }}>
-                <Button variant="outlined" onClick={handleDecreaseQuantity} style={{ marginRight: 10, width: 30, height: 30 }}>
-                  -
-                </Button>
-                <Typography variant="body1" style={{ marginRight: 10, fontWeight: 'bold' }}>
-                  {quantity}
-                </Typography>
-                <Button variant="outlined" onClick={handleIncreaseQuantity} style={{ width: 30, height: 30, marginRight: 15 }}>
-                  +
-                </Button>
-                <button onClick={() => handleAddToCart()} style={{ padding: '8px 16px', background: '#FFAC1C', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '4px'}}>
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Fade>
-    </Modal>
-  );
-}
-
 export default function ProductList({}) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const { data: categories } = useQuery(QueryKeys.CATEGORIES);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const theme = useTheme();
+
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
   function handleChange(event, newValue) {
     setValue(newValue);
   }
@@ -151,7 +63,17 @@ export default function ProductList({}) {
   const handleClosePopup = () => {
     setSelectedProduct(null);
   };
+  const handleAddToCart = (itemToAdd) => {
+    setSnackbarMessage(`Item ${itemToAdd.name} successfully added to cart!`);
+    setShowSuccess(true);
+  };
 
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setShowSuccess(false);
+  };
   return (
     <Paper className={classes.root}>
       <Tabs
@@ -186,6 +108,7 @@ export default function ProductList({}) {
                     }}
                     onClick={() => handleProductClick(product)}
                   >
+                    
                     <div
                       style={{
                         textAlign: "center",
@@ -230,9 +153,25 @@ export default function ProductList({}) {
           product={selectedProduct}
           handleClose={handleClosePopup}
           // handleAddToCart={handleAddToCart}
+          handleAddToCart={handleAddToCart}
           classes={classes}
         />
       )}
+      <Snackbar
+        open={showSuccess}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackbarClose}
+          severity="success"
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </Paper>
   );
+  
 }

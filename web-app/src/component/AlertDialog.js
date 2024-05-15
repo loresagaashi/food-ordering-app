@@ -126,6 +126,14 @@ export default function AlertDialog({ open, onClose, onConfirmDelete }) {
         >
           Item successfully deleted!
         </MuiAlert>
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackbarClose}
+          severity="success"
+        >
+          Item successfully added to cart!
+        </MuiAlert>
       </Snackbar>
       <Snackbar
         open={showError && !showSuccess}
