@@ -35,26 +35,28 @@ const useStyles = makeStyles((theme) => ({
     </Grid>
   );
 }
-function ProductPopup({ product, handleClose, handleAddToCart  }) {
+
+function ProductPopUp({ product, handleClose, handleAddToCart }) {
   const classes = useStyles();
-  const [quantity, setQuantity] = useState(1); 
+  const [quantity, setQuantity] = useState(1);
 
   const popupWidth = 700;
   const popupHeight = 450;
 
   const onAddToCart = () => {
-      const itemToAdd = {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        bonusPoints: product.bonusPoints,
-        quantity: quantity,
-      };
-  
-      console.log("Product added to cart:", itemToAdd);
-      handleAddToCart(itemToAdd);
+    const itemToAdd = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      imageUrl: product.imageUrl,
+      bonusPoints: product.bonusPoints,
+      quantity: quantity,
     };
+
+    console.log("Product added to cart:", itemToAdd);
+    handleAddToCart(itemToAdd);
+    handleClose();
+  };
 
   const handleIncreaseQuantity = () => {
     setQuantity(quantity + 1);
@@ -119,9 +121,9 @@ function ProductPopup({ product, handleClose, handleAddToCart  }) {
                 <Button variant="outlined" onClick={handleIncreaseQuantity} style={{ width: 30, height: 30, marginRight: 15 }}>
                   +
                 </Button>
-                <button onClick={() => onAddToCart()} style={{ padding: '8px 16px', background: '#FFAC1C', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '4px'}}>
+                <Button onClick={() => onAddToCart()} style={{ padding: '4px 13px', background: '#FFAC1C', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '4px', fontSize: '12px'}}>
                   Add to Cart
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -131,4 +133,4 @@ function ProductPopup({ product, handleClose, handleAddToCart  }) {
   );
 }
 
-export default ProductPopup;
+export default ProductPopUp;

@@ -1,12 +1,10 @@
-import { Backdrop, Fade, makeStyles, Modal, Paper, Tab, Tabs, Button, Snackbar } from "@material-ui/core";
+import React, { useState } from "react";
+import { makeStyles, Paper, Tab, Tabs, Snackbar, Grid, Typography } from "@material-ui/core";
 import { useQuery } from "react-query";
 import { QueryKeys } from "../../service/QueryKeys";
-import { useState } from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { useTheme } from '@mui/material/styles';
 import MuiAlert from '@material-ui/lab/Alert';
-import ProductPopup from "./ProductPopUp";
+import ProductPopUp from "./ProductPopUp";
+import { useTheme } from '@mui/material/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-  function TabPanel(props) {
+function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -43,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   );
 }
 
-export default function ProductList({}) {
+export default function ProductList({ products, onAddToCart }) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const { data: categories } = useQuery(QueryKeys.CATEGORIES);
@@ -53,7 +51,7 @@ export default function ProductList({}) {
   const [showSuccess, setShowSuccess] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
-  function handleChange(event, newValue) {
+  const handleChange = (event, newValue) => {
     setValue(newValue);
   }
   const handleProductClick = (product) => {
@@ -63,9 +61,11 @@ export default function ProductList({}) {
   const handleClosePopup = () => {
     setSelectedProduct(null);
   };
+
   const handleAddToCart = (itemToAdd) => {
     setSnackbarMessage(`Item ${itemToAdd.name} successfully added to cart!`);
     setShowSuccess(true);
+    onAddToCart(itemToAdd); 
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -74,31 +74,32 @@ export default function ProductList({}) {
     }
     setShowSuccess(false);
   };
+
   return (
-    <Paper className={classes.root}>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        indicatorColor="primary"
-        textColor="primary"
-        centered
-      >
-        {categories?.map((category, index) => (
-          <Tab key={index} label={category.name} />
-        ))}
-      </Tabs>
-      <div>
-        {categories?.map((category, index) => (
-          <TabPanel key={index} value={value} index={index}>
-            <Grid
-              container
-              spacing={2}
-              style={{ marginTop: "80px", marginBottom: "40px" }}
-            >
-              {category?.products?.map((product) => {
-                return (
+    <div className={classes.root}>
+      <Paper>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          {categories?.map((category, index) => (
+            <Tab key={index} label={category.name} />
+          ))}
+        </Tabs>
+        <div>
+          {categories?.map((category, index) => (
+            <TabPanel key={index} value={value} index={index}>
+              <Grid
+                container
+                spacing={2}
+                style={{ marginTop: "80px", marginBottom: "40px" }}
+              >
+                {category?.products?.map((product) => (
                   <Grid
-                    key={product?.id}
+                    key={product.id}
                     item
                     xs={4}
                     style={{
@@ -119,7 +120,7 @@ export default function ProductList({}) {
                     >
                       <img
                         src={`../../../products/${product.imageUrl}`}
-                        alt={"product"}
+                        alt={product.name}
                         width={"250px"}
                         height={"150px"}
                       />
@@ -134,44 +135,43 @@ export default function ProductList({}) {
                         }}
                       >
                         <div>
-                          <Typography>{product?.name}</Typography>
+                          <Typography>{product.name}</Typography>
                           <Typography style={{ fontWeight: "bold" }}>
-                            {product?.price} $
+                            {product.price} $
                           </Typography>
                         </div>
                       </div>
                     </div>
                   </Grid>
-                );
-              })}
-            </Grid>
-          </TabPanel>
-        ))}
-      </div>
-      {selectedProduct && (
-        <ProductPopup
-          product={selectedProduct}
-          handleClose={handleClosePopup}
-          // handleAddToCart={handleAddToCart}
-          handleAddToCart={handleAddToCart}
-          classes={classes}
-        />
-      )}
-      <Snackbar
-        open={showSuccess}
-        autoHideDuration={4000}
-        onClose={handleSnackbarClose}
-      >
-        <MuiAlert
-          elevation={6}
-          variant="filled"
+                ))}
+              </Grid>
+            </TabPanel>
+          ))}
+        </div>
+        {selectedProduct && (
+          <ProductPopUp
+            product={selectedProduct}
+            handleClose={handleClosePopup}
+            handleAddToCart={handleAddToCart}
+            classes={classes}
+          />
+        )}
+        <Snackbar
+          open={showSuccess}
+          autoHideDuration={4000}
           onClose={handleSnackbarClose}
-          severity="success"
         >
-          {snackbarMessage}
-        </MuiAlert>
-      </Snackbar>
-    </Paper>
+          <MuiAlert
+            elevation={6}
+            variant="filled"
+            onClose={handleSnackbarClose}
+            severity="success"
+          >
+            {snackbarMessage}
+          </MuiAlert>
+        </Snackbar>
+      </Paper>
+    </div>
   );
   
 }
