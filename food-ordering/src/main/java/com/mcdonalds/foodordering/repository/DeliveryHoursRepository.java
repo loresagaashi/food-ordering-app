@@ -18,16 +18,16 @@ public interface DeliveryHoursRepository extends JpaRepository<DeliveryHours, Lo
         return findById(id)
                 .orElseThrow(() -> new RuntimeException("Delivery hours not found with id: " + id));
     }
-    @Query("SELECT dh FROM DeliveryHours dh " +
-           "JOIN dh.storeHours sh " +
-           "WHERE dh.dayOfWeek = :dayOfWeek " +
-           "AND sh.Id = :Id " +
-           "AND :currentTime BETWEEN dh.startTime AND dh.endTime")
-    List<DeliveryHours> findDeliveryHoursByDayOfWeekAndStoreId(
-        @Param("dayOfWeek") DayOfWeek dayOfWeek,
-        @Param("Id") Long Id,
-        @Param("currentTime") LocalTime currentTime
-    );
+    // @Query("SELECT dh FROM DeliveryHours dh " +
+    //        "JOIN dh.storeHours sh " +
+    //        "WHERE dh.dayOfWeek = :dayOfWeek " +
+    //        "AND sh.Id = :Id " +
+    //        "AND :currentTime BETWEEN dh.startTime AND dh.endTime")
+    // List<DeliveryHours> findDeliveryHoursByDayOfWeekAndStoreId(
+    //     @Param("dayOfWeek") DayOfWeek dayOfWeek,
+    //     @Param("Id") Long Id,
+    //     @Param("currentTime") LocalTime currentTime
+    // );
     
   
 }

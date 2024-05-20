@@ -14,11 +14,7 @@ import java.util.List;
 public class StoreLocation extends BaseEntity {
     private String nameOfLocation;
 
-    // @OneToOne
-    // @JoinColumn
-    // private Address address;
-
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "store_location_id", foreignKey = @ForeignKey(name = "fk_store_hours_store_location", foreignKeyDefinition = "FOREIGN KEY (store_location_id) REFERENCES StoreLocation(id) ON DELETE RESTRICT"))
-    private List<StoreHours> workingHours;
+    @ManyToOne
+    @JoinColumn(name = "store_hours_id", foreignKey = @ForeignKey(name = "fk_store_hours_store_location", foreignKeyDefinition = "FOREIGN KEY (store_hours_id) REFERENCES storeHours(id) ON DELETE RESTRICT"))
+    private StoreHours storeHours;
 }

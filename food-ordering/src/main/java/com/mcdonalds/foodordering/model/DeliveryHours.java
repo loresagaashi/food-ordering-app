@@ -15,19 +15,10 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 public class DeliveryHours extends BaseEntity {
-    @Enumerated(EnumType.STRING)
-    private DayOfWeek dayOfWeek;
+    // @Enumerated(EnumType.STRING)
+    // private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
 
    
-    @OneToOne
-    @JoinColumn(name = "store_hours_id")
-    private StoreHours storeHours;
-
-    // public void setStoreHours(StoreHours storeHours) {
-    //     super.setId(storeHours.getId()); 
-      
-    // }
-
 }

@@ -21,4 +21,5 @@ public class StoreHours extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "deliveryHours_id", nullable = false, foreignKey = @ForeignKey(name = "fk_storeHours_deliveryHours", foreignKeyDefinition = "FOREIGN KEY (deliveryHours_id) REFERENCES deliveryHours(id) ON DELETE RESTRICT"))
     private DeliveryHours deliveryHours;
+    
 }

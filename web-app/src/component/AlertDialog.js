@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -16,16 +16,13 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     height: '100%',
   },
-
   alertIcon: {
     color: 'red',
     fontSize: 90,
   },
-
   dialogActions: {
     justifyContent: 'space-evenly',
   },
-
   cancelButton: {
     '&:hover': {
       backgroundColor: '#B03A2E',
@@ -33,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#E9967A', 
     color: 'white',
   },
-
   confirmButton: {
     '&:hover': {
       backgroundColor: '#388E3C',
@@ -41,14 +37,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#17B169', 
     color: 'white',
   },
-
 }));
 
-export default function AlertDialog({ open, onClose, onConfirmDelete }) {
+function AlertDialog({ open, onClose, onConfirmDelete }) {
   const classes = useStyles();
-
   const [showSuccess, setShowSuccess] = useState(false);
-  
   const [showError, setShowError] = useState(false);
 
   const handleClose = () => {
@@ -57,7 +50,7 @@ export default function AlertDialog({ open, onClose, onConfirmDelete }) {
 
   const handleConfirmDelete = async () => {
     try {
-      const deletionSuccessful = await onConfirmDelete(); 
+      const deletionSuccessful = await onConfirmDelete();
       if (deletionSuccessful) {
         setShowSuccess(true);
       } else {
@@ -75,14 +68,11 @@ export default function AlertDialog({ open, onClose, onConfirmDelete }) {
     }
     setShowSuccess(false);
     setShowError(false);
-    onClose(); 
+    onClose();
   };
 
   return (
     <div>
-      {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open alert dialog
-      </Button> */}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -114,7 +104,7 @@ export default function AlertDialog({ open, onClose, onConfirmDelete }) {
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={showSuccess && !showError}
+        open={showSuccess}
         autoHideDuration={4000}
         onClose={handleSnackbarClose}
       >
@@ -126,17 +116,9 @@ export default function AlertDialog({ open, onClose, onConfirmDelete }) {
         >
           Item successfully deleted!
         </MuiAlert>
-        <MuiAlert
-          elevation={6}
-          variant="filled"
-          onClose={handleSnackbarClose}
-          severity="success"
-        >
-          Item successfully added to cart!
-        </MuiAlert>
       </Snackbar>
       <Snackbar
-        open={showError && !showSuccess}
+        open={showError}
         autoHideDuration={4000}
         onClose={handleSnackbarClose}
       >
@@ -152,3 +134,5 @@ export default function AlertDialog({ open, onClose, onConfirmDelete }) {
     </div>
   );
 }
+
+export default AlertDialog;

@@ -8,7 +8,7 @@ import com.mcdonalds.foodordering.model.JobPosition;
 import com.mcdonalds.foodordering.service.JobPositionService;
 
 @RestController
-@RequestMapping("/job/positions")
+@RequestMapping("/jobPositions")
 public class JobPositionController extends BasicControllerOperations<JobPositionService, JobPosition>{
 
     public JobPositionController(JobPositionService service) {

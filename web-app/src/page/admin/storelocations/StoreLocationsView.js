@@ -22,10 +22,10 @@ export default function StoreLocationsView({}) {
           editComponent: (props) => TextFieldTableCell(props, errorRef),
         },
         {
-          title: "Working Hours",
-          field: "workingHours",
-          render: rowData => `${rowData.workingHours?.startTime}-${rowData.workingHours?.endTime}`,
-          editComponent: props => SelectTableCell(props, errorRef, allStoreHours?.map(x => ({ value: x.id, label: `${x.startTime} - ${x.endTime}` })) || [], "id")
+          title: "Store Hours",
+          field: "storeHours",
+          render: rowData => `${rowData.storeHours?.startTime}-${rowData.storeHours?.endTime}`,
+          editComponent: props => SelectTableCell(props, errorRef, allStoreHours?.map(x => ({ value: x, label: `${x.startTime} - ${x.endTime}` })) || [], "id")
         },
     ];
 

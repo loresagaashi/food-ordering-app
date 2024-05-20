@@ -49,7 +49,7 @@ const appMenuItems = [
   {
     name: "Job Positions",
     Icon: WorkIcon,
-    link: "/admin/job/positions",
+    link: "/admin/jobPositions",
   },
   {
     name: "Products",
