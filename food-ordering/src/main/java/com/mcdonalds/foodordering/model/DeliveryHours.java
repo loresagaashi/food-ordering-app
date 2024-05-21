@@ -1,13 +1,13 @@
 package com.mcdonalds.foodordering.model;
 
-import java.time.DayOfWeek;
+// import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+// import jakarta.persistence.EnumType;
+// import jakarta.persistence.Enumerated;
+// import jakarta.persistence.JoinColumn;
+// import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

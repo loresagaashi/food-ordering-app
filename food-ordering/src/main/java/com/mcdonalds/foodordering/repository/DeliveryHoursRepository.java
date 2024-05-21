@@ -1,13 +1,13 @@
 package com.mcdonalds.foodordering.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+// import org.springframework.data.jpa.repository.Query;
+// import org.springframework.data.repository.query.Param;
 
 import com.mcdonalds.foodordering.model.DeliveryHours;
-import java.time.DayOfWeek;
-import java.time.LocalTime;
-import java.util.List;
+// import java.time.DayOfWeek;
+// import java.time.LocalTime;
+// import java.util.List;
 
 public interface DeliveryHoursRepository extends JpaRepository<DeliveryHours, Long> {
     // List<DeliveryHours> findByStoreId(Long storeHoursId);
