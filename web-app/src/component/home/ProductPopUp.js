@@ -14,6 +14,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
+    border: '4px solid red', 
+  },
+  productName: {
+    marginBottom: '25px' , 
+    marginBottom: theme.spacing(2),
+    fontWeight: 'bold',
+    fontFamily: "'Roboto Slab', serif",
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
   },
 }));
 
@@ -41,7 +49,7 @@ function ProductPopUp({ product, handleClose, handleAddToCart }) {
   const [quantity, setQuantity] = useState(1);
 
   const popupWidth = 700;
-  const popupHeight = 450;
+  const popupHeight = 500;
 
   const onAddToCart = () => {
     const itemToAdd = {
@@ -88,7 +96,7 @@ function ProductPopUp({ product, handleClose, handleAddToCart }) {
               &#10006;
             </button>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+          <div style={{ display: 'flex', alignItems: 'center', height: '85%' }}>
             <div style={{ flex: '1' }}>
               <img
                 src={`../../../products/${product.imageUrl}`}
@@ -99,16 +107,16 @@ function ProductPopUp({ product, handleClose, handleAddToCart }) {
               />
             </div>
             <div style={{ flex: '2', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <Typography variant="h4" id="transition-modal-title" style={{ marginBottom: '20px' , fontWeight: 'bold'}}>
+              <Typography variant="h4" id="transition-modal-title" className={classes.productName}>
                 {product.name}
               </Typography>
               <Typography variant="body1" id="transition-modal-description" style={{ marginBottom: '20px' }}>
                 {product.description}
               </Typography>
-              <Typography variant="body1" style={{ marginBottom: '10px', marginRight: 12, color: '#FFAC1C', fontWeight: 'bold' }}>
+              <Typography variant="body1" style={{ marginRight: 12, color: '#FFAC1C', fontWeight: 'bold' }}>
                 Price: {product.price} $
               </Typography>
-              <Typography variant="body1" style={{ marginBottom: '10px', marginRight: 12, color: 'green' }}>
+              <Typography variant="body1" style={{ marginBottom: '5px', marginRight: 12, color: 'green' }}>
                 Bonus points: {product.bonusPoints}
               </Typography>
               <div style={{ display: 'flex', alignItems: 'center', marginTop: 20 }}>

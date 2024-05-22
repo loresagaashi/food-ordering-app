@@ -135,9 +135,11 @@ export default function ProductList({ products, onAddToCart }) {
                         }}
                       >
                         <div>
-                          <Typography>{product.name}</Typography>
                           <Typography style={{ fontWeight: "bold" }}>
-                            {product.price} $
+                            {product.name}
+                          </Typography>
+                          <Typography>
+                            {product.price}$
                           </Typography>
                         </div>
                       </div>
