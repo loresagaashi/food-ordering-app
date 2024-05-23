@@ -1,14 +1,13 @@
 import {
   AppBar,
   Button,
-  CssBaseline,
   Link,
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { Link as RouterLink, Routes } from "react-router-dom";
-import AppRoutes from "../../routes/Routes";
+import { Link as RouterLink, useNavigate  } from "react-router-dom";
 import HomePage from "./HomePage";
+import useUser from "../../hooks/useUser";
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -76,6 +75,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ClientLayout() {
   const classes = useStyles();
+  const { user, setUser } = useUser();
+  const navigate = useNavigate();
+
+  function handleLogOut() {
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/client/home");
+  }
 
   return (
     <>
@@ -99,15 +106,27 @@ export default function ClientLayout() {
             Home
           </Link>
         </nav>
-        <Button
-          color="primary"
-          variant="contained"
-          className={classes.link}
-          component={RouterLink}
-          to={"/client/sign-in"}
-        >
-          Sign In
-        </Button>
+        {user ? (
+          <Button
+            color="primary"
+            variant="contained"
+            className={classes.link}
+            component={RouterLink}
+            onClick={() => handleLogOut()}
+          >
+            Log out
+          </Button>
+        ) : (
+          <Button
+            color="primary"
+            variant="contained"
+            className={classes.link}
+            component={RouterLink}
+            to={"/client/sign-in"}
+          >
+            Sign In
+          </Button>
+        )}
       </AppBar>
       <HomePage />
     </>
