@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, makeStyles, Button } from "@material-ui/core";
+import { Box, makeStyles, Button, Typography } from "@material-ui/core";
 import Carousel from "react-material-ui-carousel";
 import ProductList from "../../component/home/ProductList";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
@@ -20,12 +20,26 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "20px",
     marginRight: "20px",
   },
+  cartButton: {
+    display: "flex",
+    alignItems: "center",
+  },
+  totalPrice: {
+    marginLeft: theme.spacing(1),
+    color: theme.palette.common.white,
+  },
 }));
 
 export default function HomePage() {
   const classes = useStyles();
-  const { cartItems, handleAddToCart, handleRemoveFromCart, 
-          handleIncreaseQuantity, handleDecreaseQuantity, total } = useCart();
+  const {
+    cartItems,
+    handleAddToCart,
+    handleRemoveFromCart,
+    handleIncreaseQuantity,
+    handleDecreaseQuantity,
+    total,
+  } = useCart();
   const [showCart, setShowCart] = useState(false);
 
   const items = [
@@ -49,12 +63,15 @@ export default function HomePage() {
   const toggleCartDrawer = () => {
     setShowCart(!showCart);
   };
-  
+
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
       <Box className={classes.buttonContainer} display="flex" justifyContent="flex-end" width="100%">
-        <Button color="primary" variant="contained" onClick={toggleCartDrawer}>
+        <Button color="primary" variant="contained" onClick={toggleCartDrawer} className={classes.cartButton}>
           <ShoppingCartIcon />
+          <Typography variant="body1" className={classes.totalPrice}>
+            {total.toFixed(2)}$
+          </Typography>
         </Button>
       </Box>
       <Box style={{ margin: "60px", borderRadius: "20px", width: "80%" }}>

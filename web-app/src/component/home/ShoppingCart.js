@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { makeStyles, Drawer, List, ListItem, ListItemText, Typography, IconButton, Snackbar, Button } from '@material-ui/core';
+import { makeStyles, Drawer, List, ListItem, ListItemText, Typography, IconButton, Snackbar, Button, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import AlertDialog from '../AlertDialog';
 import MuiAlert from '@material-ui/lab/Alert';
+import OrderDetails from './OrderDetails';
+import useCart from './useCart';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -61,6 +63,9 @@ export default function ShoppingCart({
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
   const [deletedProductName, setDeletedProductName] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showOrderDetails, setShowOrderDetails] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(null);
+  const [orderLines, setOrderLines] = useState([]);
 
   const handleDelete = async (productId, productName) => {
     try {
@@ -79,7 +84,25 @@ export default function ShoppingCart({
     setShowSuccess(false);
   };
 
+  const handleOrder = () => {
+    const orderDetailsData = {
+       total: total.toFixed(2),
+       status: 'Pending',
+       dateTime: new Date().toLocaleString(),
+    };
+    const orderLinesData = cartItems.map(item => ({
+       product: { name: item.name },
+       quantity: item.quantity,
+       price: item.price,
+       amount: (item.price * item.quantity).toFixed(2),
+    }));
+    setOrderDetails(orderDetailsData);
+    setOrderLines(orderLinesData);
+    setShowOrderDetails(true);
+  };
+
   return (
+    <>
     <Drawer
       anchor="right"
       open={showCart}
@@ -153,7 +176,7 @@ export default function ShoppingCart({
       <Typography variant="h6" style={{ textAlign: 'center', backgroundColor: '#FFF5EE' }}>
         <b>Total:</b> {total.toFixed(2)}$
       </Typography>
-      <Button variant="contained" color="primary" className={classes.orderButton}>
+      <Button variant="contained" color="primary" className={classes.orderButton} onClick={handleOrder}>
         <b>Order</b>
       </Button>
       <Snackbar 
@@ -177,5 +200,19 @@ export default function ShoppingCart({
         onConfirmDelete={handleDelete}
       />
     </Drawer>
+
+    <Dialog open={showOrderDetails} onClose={() => setShowOrderDetails(false)} maxWidth="md" fullWidth>
+      <DialogTitle style={{ textAlign: 'center' }}>
+        <b>Order Details</b>
+      </DialogTitle>
+      <DialogContent>
+        <OrderDetails 
+          total={total.toFixed(2)}$
+          orderDetails={orderDetails}
+          orderLines={orderLines}
+        />
+      </DialogContent>
+    </Dialog>
+  </>
   );
 }

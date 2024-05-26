@@ -7,7 +7,7 @@ import com.mcdonalds.foodordering.model.OrderLine;
 import com.mcdonalds.foodordering.service.OrderLineService;
 
 @RestController
-@RequestMapping("/order/line")
+@RequestMapping("/orderLine")
 public class OrderLineController extends BasicControllerOperations<OrderLineService, OrderLine>{
 
     public OrderLineController(OrderLineService service) {
