@@ -9,6 +9,11 @@ import { useTheme } from '@mui/material/styles';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  paper: {
+    maxWidth: '90%'
   },
   modal: {
     display: 'flex',
@@ -63,7 +68,7 @@ export default function ProductList({ products, onAddToCart }) {
   };
 
   const handleAddToCart = (itemToAdd) => {
-    setSnackbarMessage(`Item ${itemToAdd.name} successfully added to cart!`);
+    setSnackbarMessage(`${itemToAdd.name} successfully added to cart!`);
     setShowSuccess(true);
     onAddToCart(itemToAdd); 
   };
@@ -77,7 +82,7 @@ export default function ProductList({ products, onAddToCart }) {
 
   return (
     <div className={classes.root}>
-      <Paper>
+      <Paper className={classes.paper}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -135,7 +140,7 @@ export default function ProductList({ products, onAddToCart }) {
                         }}
                       >
                         <div>
-                          <Typography style={{ fontWeight: "bold" }}>
+                          <Typography style={{ fontWeight: "bold", marginTop: '15px' }}>
                             {product.name}
                           </Typography>
                           <Typography>
@@ -175,5 +180,5 @@ export default function ProductList({ products, onAddToCart }) {
       </Paper>
     </div>
   );
-  
+
 }

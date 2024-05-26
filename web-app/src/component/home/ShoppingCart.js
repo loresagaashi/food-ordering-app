@@ -6,7 +6,6 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import AlertDialog from '../AlertDialog';
 import MuiAlert from '@material-ui/lab/Alert';
 import OrderDetails from './OrderDetails';
-import useCart from './useCart';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -66,6 +65,7 @@ export default function ShoppingCart({
   const [showOrderDetails, setShowOrderDetails] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
   const [orderLines, setOrderLines] = useState([]);
+  const [showEmptyCartWarning, setShowEmptyCartWarning] = useState(false);
 
   const handleDelete = async (productId, productName) => {
     try {
@@ -85,6 +85,10 @@ export default function ShoppingCart({
   };
 
   const handleOrder = () => {
+    if (cartItems.length === 0) {
+      setShowEmptyCartWarning(true);
+      return;
+    }
     const orderDetailsData = {
        total: total.toFixed(2),
        status: 'Pending',
@@ -194,6 +198,21 @@ export default function ShoppingCart({
           {`${deletedProductName} successfully removed from cart!`}
         </MuiAlert>
       </Snackbar>
+      <Snackbar
+          open={showEmptyCartWarning}
+          autoHideDuration={4000}
+          onClose={() => setShowEmptyCartWarning(false)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        >
+          <MuiAlert
+            elevation={6}
+            variant="filled"
+            onClose={() => setShowEmptyCartWarning(false)}
+            severity="warning"
+          >
+            Your shopping cart is empty! Add items to place an order.
+          </MuiAlert>
+        </Snackbar>
       <AlertDialog
         open={openDeleteAlert}
         onClose={() => setOpenDeleteAlert(false)}
