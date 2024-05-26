@@ -4,12 +4,32 @@ import com.mcdonalds.foodordering.exception.EntityValidationException;
 import com.mcdonalds.foodordering.exception.ExceptionPayload;
 import com.mcdonalds.foodordering.model.Admin;
 import com.mcdonalds.foodordering.repository.AdminRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AdminService extends BasicServiceOperations<AdminRepository, Admin> {
-    public AdminService(AdminRepository repository) {
+
+    private final PasswordEncoder passwordEncoder;
+
+    public AdminService(AdminRepository repository, PasswordEncoder passwordEncoder) {
         super(repository);
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public Optional<Admin> findByEmail(String email) {
+        return this.repository.findByEmail(email);
+    }
+
+    @Override
+    public Admin save(Admin entity) {
+        if (entity.getId() == null) {
+            entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        }
+
+        return super.save(entity);
     }
 
     public Admin login(String email, String password) {

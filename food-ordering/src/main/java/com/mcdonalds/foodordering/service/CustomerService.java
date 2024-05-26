@@ -1,29 +1,24 @@
 package com.mcdonalds.foodordering.service;
-
-
 import com.mcdonalds.foodordering.exception.EntityValidationException;
 import com.mcdonalds.foodordering.exception.ExceptionPayload;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-
 import com.mcdonalds.foodordering.model.Customer;
-// import com.mcdonalds.foodordering.model.UserAccount;
 import com.mcdonalds.foodordering.repository.CustomerRepository;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class CustomerService extends BasicServiceOperations<CustomerRepository,Customer>{
-    public CustomerService(CustomerRepository repository) {
-        super(repository);
-    }
+    private final PasswordEncoder passwordEncoder;
 
-     @Override
+    public CustomerService(CustomerRepository repository, PasswordEncoder passwordEncoder) {
+        super(repository);
+        this.passwordEncoder = passwordEncoder;
+    }
+    @Override
   public Customer save(Customer entity) {
     if (entity.getId() == null) {
-    //   entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-        entity.setPassword(entity.getPassword());
+       entity.setPassword(passwordEncoder.encode(entity.getPassword()));
     } else {
         Customer user = repository.findById(entity.getId())
           .orElseThrow(() -> new EntityNotFoundException("No entity found with id: " + entity.getId()));

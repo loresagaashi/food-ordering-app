@@ -7,9 +7,9 @@ export class UserService extends BaseService {
   }
 
   adminLogIn(body) {
-    return axiosInstance.post(`/admins/login`, body);
+    return axiosInstance.post(`/auth/login`, body);
   }
   clientLogIn(body) {
-    return axiosInstance.post(`/customers/login`, body);
+    return axiosInstance.post(`/auth/login`, body);
   }
 }

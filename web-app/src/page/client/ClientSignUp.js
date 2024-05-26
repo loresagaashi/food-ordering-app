@@ -64,7 +64,6 @@ export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
   // const [fetchError, setError] = useState(null);
   const classes = useStyles();
   let navigate = useNavigate();
-  const { setUser } = useUser();
 
   //   useEffect(() => {
   //     const fetchCities = async () => {
@@ -87,7 +86,7 @@ export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
     lastName: "",
     email: "",
     password: "",
-    dateOfBirth: new Date(),
+    birthDate: new Date(),
     phoneNumber: "",
   });
 
@@ -101,8 +100,7 @@ export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
     (user) => customerService.create(user),
     {
       onSuccess: (data) => {
-        setUser(data);
-        !!onSuccess ? onSuccess(data) : navigate("/client/home");
+        !!onSuccess ? onSuccess(data) : navigate("/client/sign-in");
       },
     },
   );

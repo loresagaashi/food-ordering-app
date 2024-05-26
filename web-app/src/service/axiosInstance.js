@@ -8,3 +8,14 @@ axiosInstance.interceptors.response.use(
   (x) => Promise.resolve(x.data),
   (x) => Promise.reject(x.response?.data),
 );
+
+axiosInstance.interceptors.request.use(
+  config => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      config.headers.Authorization = "Bearer " + JSON.parse(user)?.accessToken;
+    }
+
+    return config;
+  }
+)
