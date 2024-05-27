@@ -76,6 +76,8 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [notes, setNotes] = useState('');
+  const [paymentType, setPaymentType] = useState('');
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState('');
@@ -94,7 +96,7 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
   }, []);
 
   const handleSubmit = () => {
-    if (name && email && address && phoneNumber && selectedCity) {
+    if (name && email && address && phoneNumber && selectedCity && paymentType) {
       setMessage('Order submitted successfully!');
       setOpen(true);
       setError(false);
@@ -104,8 +106,8 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
       setAddress('');
       setPhoneNumber('');
       setSelectedCity('');
-      
-      
+      setNotes('');
+      setPaymentType(''); 
     } else {
       setMessage('Please fill in all the fields.');
       setOpen(true);
@@ -188,11 +190,21 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
             aria-label="order-notes"
             minRows={3}
             placeholder="Enter notes here"
-            value={orderDetails.notes}
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
             className={classes.notes}
          />
          
-         <RadioGroup aria-label="payment-type" name="payment-type" value={orderDetails.paymentType} className={classes.radioGroup}>
+         <Typography variant="body1" style={{ marginTop: '16px' }}>
+            Choose payment method
+         </Typography>
+         <RadioGroup
+            aria-label="payment-type"
+            name="payment-type"
+            value={paymentType}
+            onChange={(e) => setPaymentType(e.target.value)}
+            className={classes.radioGroup}
+         >
             <FormControlLabel value="CASH" control={<Radio />} label="Cash" className={classes.formControlLabel} />
             <FormControlLabel value="CARD" control={<Radio />} label="Card" className={classes.formControlLabel} />
          </RadioGroup>

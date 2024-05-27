@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   paper: {
-    maxWidth: '90%'
+    width: '95%'
   },
   modal: {
     display: 'flex',

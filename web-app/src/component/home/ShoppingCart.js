@@ -47,6 +47,11 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#CD7F32',
     },
   },
+  orderDetails: {
+    textAlign: 'center', 
+    fontFamily: "'Roboto Slab', serif",
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+  },
 }));
 
 export default function ShoppingCart({
@@ -221,8 +226,10 @@ export default function ShoppingCart({
     </Drawer>
 
     <Dialog open={showOrderDetails} onClose={() => setShowOrderDetails(false)} maxWidth="md" fullWidth>
-      <DialogTitle style={{ textAlign: 'center' }}>
-        <b>Order Details</b>
+      <DialogTitle>
+        <Typography variant='h5' className={classes.orderDetails}>
+          <b>Order Details</b>
+        </Typography>
       </DialogTitle>
       <DialogContent>
         <OrderDetails 
