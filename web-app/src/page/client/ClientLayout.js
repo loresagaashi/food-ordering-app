@@ -8,6 +8,7 @@ import {
 import { Link as RouterLink, useNavigate  } from "react-router-dom";
 import HomePage from "./HomePage";
 import useUser from "../../hooks/useUser";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -77,12 +78,21 @@ export default function ClientLayout() {
   const classes = useStyles();
   const { user, setUser } = useUser();
   const navigate = useNavigate();
+  const [orderLines, setOrderLines] = useState([]); // Add shopping cart state here
 
   function handleLogOut() {
     localStorage.removeItem("user");
     setUser(null);
     navigate("/client/home");
+
+    setOrderLines([]);
   }
+  function handleLogOut() {
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/client/home");
+  }
+  
 
   return (
     <>
