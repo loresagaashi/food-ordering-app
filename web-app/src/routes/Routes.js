@@ -4,6 +4,7 @@ import ClientSignIn from "../page/client/ClientSignIn";
 import AdminLayout from "../page/admin/AdminLayout";
 import ClientLayout from "../page/client/ClientLayout";
 import ClientSignUp from "../page/client/ClientSignUp";
+import PrivateRoute from "../component/PrivateRoute";
 
 const AppRoutes = [
   // Client routes
@@ -15,7 +16,7 @@ const AppRoutes = [
   />,
   <Route key={2} path="/client/home" element={<ClientLayout />} />,
   // Admin routes
-  <Route key={11} path="/admin/*" element={<AdminLayout />} />,
+  <Route key={11} path="/admin/*" element={<PrivateRoute element={AdminLayout}/>} />,
   // // Other routes
   <Route key={11} path="/admin/sign-in" element={<AdminSignIn />} />,
   <Route key={11} path="/client/sign-in" element={<ClientSignIn />} />,

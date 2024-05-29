@@ -15,7 +15,8 @@ axiosInstance.interceptors.request.use(
     if (user) {
       config.headers.Authorization = "Bearer " + JSON.parse(user)?.accessToken;
     }
-
-    return config;
+      return config;
+    },(error) => {
+    return Promise.reject(error);
   }
 )

@@ -37,13 +37,14 @@ import "./App.css";
 // import AddCity from "./component/city/AddCity";
 // import EditCity from "./component/city/EditCity";
 // import CityProfile from "./component/city/CityProfile";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
 import { queryClient, setQueryDefaults } from "./service/QueryClient";
 import { QueryClientProvider } from "react-query";
 import UserContext from "./context/UserContext";
 import AppRoutes from "./routes/Routes";
 import { Routes } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
 
 const customTheme = {
   overrides: {
@@ -91,16 +92,16 @@ setQueryDefaults();
 
 function App() {
   const [theme, setTheme] = useState(customTheme);
-  const [user, setUser] = useState();
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={createTheme(theme)}>
-          <CssBaseline />
-          <Routes>{AppRoutes}</Routes>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </UserContext.Provider>
+    <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={createTheme(theme)}>
+            <CssBaseline />
+            <Routes>{AppRoutes}</Routes>
+          </ThemeProvider>
+        </QueryClientProvider>
+    </AuthProvider>
   );
 }
 

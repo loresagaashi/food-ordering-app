@@ -6,10 +6,21 @@ export class UserService extends BaseService {
     super("/users");
   }
 
-  adminLogIn(body) {
-    return axiosInstance.post(`/auth/login`, body);
+  async adminLogIn(body){
+    try {
+      return await axiosInstance.post('/auth/login', body);
+    } catch (error) {
+      throw { message: error }
+      }
   }
-  clientLogIn(body) {
-    return axiosInstance.post(`/auth/login`, body);
+  async clientLogIn(body){
+    try {
+      return await axiosInstance.post('/auth/login', body);
+    } catch (error) {
+      throw { message: error }
+    }
+  }
+  refreshToken(body) {
+    return axiosInstance.post(`/auth/refresh`, body);
   }
 }

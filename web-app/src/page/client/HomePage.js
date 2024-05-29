@@ -10,6 +10,7 @@ import image4 from "../../images/home/4.png";
 import image5 from "../../images/home/5.png";
 import ShoppingCart from "../../component/home/ShoppingCart";
 import useCart from "../../component/home/useCart";
+import OfferList from "../../component/home/OfferList";
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -28,6 +29,10 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1),
     color: theme.palette.common.white,
   },
+  showOffersButton: {
+    marginTop: "50px",
+    marginBottom: "50px",
+  },
 }));
 
 export default function HomePage() {
@@ -41,6 +46,7 @@ export default function HomePage() {
     total,
   } = useCart();
   const [showCart, setShowCart] = useState(false);
+  const [showOffers, setShowOffers] = useState(false);
 
   const items = [
     {
@@ -64,6 +70,10 @@ export default function HomePage() {
     setShowCart(!showCart);
   };
 
+  const toggleShowOffers = () => {
+    setShowOffers(!showOffers);
+  };
+
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
       <Box className={classes.buttonContainer} display="flex" justifyContent="flex-end" width="100%">
@@ -81,14 +91,16 @@ export default function HomePage() {
           ))}
         </Carousel>
       </Box>
+      
       <ProductList onAddToCart={handleAddToCart} products={items} />
+     
       <ShoppingCart
         cartItems={cartItems}
         showCart={showCart}
         toggleCartDrawer={toggleCartDrawer}
         total={total}
-        handleRemoveFromCart={handleRemoveFromCart} 
-        handleIncreaseQuantity={handleIncreaseQuantity} 
+        handleRemoveFromCart={handleRemoveFromCart}
+        handleIncreaseQuantity={handleIncreaseQuantity}
         handleDecreaseQuantity={handleDecreaseQuantity}
       />
     </Box>

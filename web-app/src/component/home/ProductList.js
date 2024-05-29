@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { QueryKeys } from "../../service/QueryKeys";
 import MuiAlert from '@material-ui/lab/Alert';
 import ProductPopUp from "./ProductPopUp";
+import OfferList from "../../component/home/OfferList"; // Import OfferList component
 import { useTheme } from '@mui/material/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -93,6 +94,7 @@ export default function ProductList({ products, onAddToCart }) {
           {categories?.map((category, index) => (
             <Tab key={index} label={category.name} />
           ))}
+          <Tab label="Offers" /> {/* Add a tab for Offers */}
         </Tabs>
         <div>
           {categories?.map((category, index) => (
@@ -154,6 +156,9 @@ export default function ProductList({ products, onAddToCart }) {
               </Grid>
             </TabPanel>
           ))}
+          {/* <TabPanel value={value} index={categories.length}>
+            <OfferList onAddToCart={handleAddToCart} /> 
+          </TabPanel> */}
         </div>
         {selectedProduct && (
           <ProductPopUp

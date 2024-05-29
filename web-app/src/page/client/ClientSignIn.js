@@ -100,7 +100,7 @@ export default function AdminSignIn({ onSuccess, hideSignUpLink, isLoading }) {
           }
           autoComplete="email"
           autoFocus
-          error={error?.email}
+          error={error}
         />
         <ValidTextField
           variant="standard"
@@ -117,7 +117,7 @@ export default function AdminSignIn({ onSuccess, hideSignUpLink, isLoading }) {
           }
           onKeyDown={handleKeyPress}
           autoComplete="current-password"
-          error={error?.password}
+          error={error}
         />
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}

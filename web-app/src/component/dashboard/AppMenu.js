@@ -24,6 +24,7 @@ import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import useUser from "../../hooks/useUser";
 
 const appMenuItems = [
   {
@@ -70,7 +71,7 @@ const appMenuItems = [
     name: "Cities",
     Icon: LocationCityIcon,
     link: "/admin/city",
-  }, 
+  },
   {
     name: "Store Hours",
     Icon:  QueryBuilderIcon,
@@ -91,8 +92,11 @@ const appMenuItems = [
 export default function AppMenu({}) {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   function handleLogOut() {
+    setUser(null)
+    localStorage.removeItem('user')
     navigate("/client/home", { replace: true });
   }
 
