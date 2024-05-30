@@ -80,8 +80,8 @@ const fetchCities = async () => {
 const OrderDetails = ({ orderDetails, orderLines, total }) => {
   const classes = useStyles();
   const {user} = useUser();
-  const [selectedCity, setSelectedCity] = useState('');
-  const { data: cities } = useQuery(QueryKeys.CITY, fetchCities()); 
+  const [city, setCity] = useState('');
+  const { data: cities } = useQuery(QueryKeys.CITY, fetchCities); 
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
@@ -97,11 +97,12 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
       setFirstName(user.user.firstName); 
       setEmail(user.user.email); 
       setPhoneNumber(user.user.phoneNumber);
+      setCity(user.user.city.name);
     }
-  }, [user]);
+  }, [user]);  
   
   const handleSubmit = () => {
-    if (firstName && email && address && phoneNumber && selectedCity && paymentType) {
+    if (firstName && email && address && phoneNumber && city && paymentType) {
       setMessage('Order submitted successfully!');
       setOpen(true);
       setError(false);
@@ -110,7 +111,7 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
       setEmail('');
       setAddress('');
       setPhoneNumber('');
-      setSelectedCity('');
+      setCity('');
       setNotes('');
       setPaymentType(''); 
     } else {
@@ -177,17 +178,17 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
 
          <FormControl className={classes.formControl}>
            <InputLabel id="city-select-label">Select City</InputLabel>
-            <Select
-               labelId="city-select-label"
-               id="city-select"
-               value={selectedCity}
-               onChange={(event) => setSelectedCity(event.target.value)}
+           <Select
+              labelId="city-select-label"
+              id="city-select"
+              value={city}
+              onChange={(event) => setCity(event.target.value)}
             >
-               {cities && cities.map((city, index) => ( 
-                  <MenuItem key={index} value={city.id}>
-                     {city.name}
-                  </MenuItem>
-               ))}
+              {cities && cities.map((city) => (
+                <MenuItem key={city.id} value={city.name}>
+                  {city.name}
+                </MenuItem>
+              ))}
             </Select>
          </FormControl>
          
