@@ -4,6 +4,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import axios from 'axios'; 
 import { useQuery } from "react-query";
 import { QueryKeys } from "../../service/QueryKeys";
+import useUser from '../../hooks/useUser';
 
 const useStyles = makeStyles((theme) => ({
    container: {
@@ -67,12 +68,21 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+const fetchCities = async () => {
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/city/all`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching cities:', error);
+  }
+};
+
 const OrderDetails = ({ orderDetails, orderLines, total }) => {
   const classes = useStyles();
-  const [cities, setCities] = useState([]); 
+  const {user} = useUser();
   const [selectedCity, setSelectedCity] = useState('');
-  const { data: cityData } = useQuery(QueryKeys.CITY); 
-  const [name, setName] = useState('');
+  const { data: cities } = useQuery(QueryKeys.CITY, fetchCities()); 
+  const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -82,26 +92,21 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState('');
 
-  const fetchCities = async () => {
-    try {
-      const response = await axios.get('/city'); 
-      setCities(response.data); 
-    } catch (error) {
-      console.error('Error fetching cities:', error);
-    }
-  };
-
   useEffect(() => {
-    fetchCities();
-  }, []);
-
+    if (user) {
+      setFirstName(user.user.firstName); 
+      setEmail(user.user.email); 
+      setPhoneNumber(user.user.phoneNumber);
+    }
+  }, [user]);
+  
   const handleSubmit = () => {
-    if (name && email && address && phoneNumber && selectedCity && paymentType) {
+    if (firstName && email && address && phoneNumber && selectedCity && paymentType) {
       setMessage('Order submitted successfully!');
       setOpen(true);
       setError(false);
 
-      setName('');
+      setFirstName('');
       setEmail('');
       setAddress('');
       setPhoneNumber('');
@@ -140,8 +145,8 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
 
          <TextField
             label="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             fullWidth
             className={classes.input}
          />
@@ -178,7 +183,7 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
                value={selectedCity}
                onChange={(event) => setSelectedCity(event.target.value)}
             >
-               {cityData && cityData.map((city, index) => ( 
+               {cities && cities.map((city, index) => ( 
                   <MenuItem key={index} value={city.id}>
                      {city.name}
                   </MenuItem>

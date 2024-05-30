@@ -62,6 +62,7 @@ export default function ShoppingCart({
   handleRemoveFromCart,
   handleIncreaseQuantity,
   handleDecreaseQuantity,
+  user
 }) {
   const classes = useStyles();
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
@@ -226,16 +227,15 @@ export default function ShoppingCart({
     </Drawer>
 
     <Dialog open={showOrderDetails} onClose={() => setShowOrderDetails(false)} maxWidth="md" fullWidth>
-      <DialogTitle>
-        <Typography variant='h5' className={classes.orderDetails}>
+      <DialogTitle className={classes.orderDetails}>
           <b>Order Details</b>
-        </Typography>
       </DialogTitle>
       <DialogContent>
         <OrderDetails 
           total={total.toFixed(2)}$
           orderDetails={orderDetails}
           orderLines={orderLines}
+          user={user}
         />
       </DialogContent>
     </Dialog>

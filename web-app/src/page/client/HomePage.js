@@ -11,6 +11,7 @@ import image5 from "../../images/home/5.png";
 import ShoppingCart from "../../component/home/ShoppingCart";
 import useCart from "../../component/home/useCart";
 import OfferList from "../../component/home/OfferList";
+import useUser from "../../hooks/useUser";
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -47,6 +48,7 @@ export default function HomePage() {
   } = useCart();
   const [showCart, setShowCart] = useState(false);
   const [showOffers, setShowOffers] = useState(false);
+  const {user} = useUser();
 
   const items = [
     {
@@ -99,6 +101,7 @@ export default function HomePage() {
         showCart={showCart}
         toggleCartDrawer={toggleCartDrawer}
         total={total}
+        user={user}
         handleRemoveFromCart={handleRemoveFromCart}
         handleIncreaseQuantity={handleIncreaseQuantity}
         handleDecreaseQuantity={handleDecreaseQuantity}
