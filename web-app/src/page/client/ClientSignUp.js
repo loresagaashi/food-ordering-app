@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,18 +10,20 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { KeyboardDatePicker, MuiPickersUtilsProvider  } from "@material-ui/pickers";
-import { useMutation } from "react-query";
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { useMutation, useQuery } from "react-query";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
 import { QueryKeys } from "../../service/QueryKeys";
 import ValidTextField from "../../component/common/ValidTextField";
 import useUser from "../../hooks/useUser";
 import { red } from "@material-ui/core/colors";
 import { CustomerService } from "../../service/CustomerService";
-import { UserService } from "../../service/UserService";
-import { SelectTableCell } from "../../component/TableCells";
 import { CityService } from "../../service/CityService";
-import { useEffect } from "react";
 import DateFnsUtils from '@date-io/date-fns';
+import axios from "axios";
 
 function Copyright() {
   return (
@@ -57,29 +59,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const customerService = new CustomerService();
-const cityService = new CityService();
+
+const fetchCities = async () => {
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/city/all`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching cities:', error);
+  }
+};
 
 export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
-  // const [cityOptions, setCityOptions] = useState([]);
-  // const [fetchError, setError] = useState(null);
   const classes = useStyles();
   let navigate = useNavigate();
-
-  //   useEffect(() => {
-  //     const fetchCities = async () => {
-  //         try {
-  //             const cityService = new CityService();
-  //             const cities = await cityService.getAll();
-  //
-  //             const cityOptions = cities.map(city => ({ value: city.id, label: city.name }));
-  //             setCityOptions(cityOptions);
-  //         } catch (error) {
-  //             setError(error);
-  //         }
-  //     };
-
-  //     fetchCities();
-  // }, []);
+  const { data: cities } = useQuery(QueryKeys.CITY, fetchCities);
 
   const [userAccount, setUserAccount] = useState({
     firstName: "",
@@ -88,6 +81,7 @@ export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
     password: "",
     birthDate: new Date(),
     phoneNumber: "",
+    city: "",
   });
 
   // use this to insert data to database
@@ -104,10 +98,11 @@ export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
       },
     },
   );
-
-  function handleSubmit() {
-    createUser(userAccount);
-  }
+  
+  const handleSubmit = () => {
+    const selectedCity = cities.find(city => city.name === userAccount.city);
+    createUser({ ...userAccount, city: selectedCity });
+  };
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -196,6 +191,28 @@ export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
               error={error?.password}
             />
           </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth variant="standard">
+              <InputLabel id="city-label">Select City</InputLabel>
+                <Select
+                  labelId="city-label"
+                  id="city"
+                  value={userAccount.city}
+                  onChange={(e) =>
+                    setUserAccount((prev) => ({
+                      ...prev,
+                      city: e.target.value,
+                    }))
+                  }
+                >
+                  {cities && cities.map((city) => (
+                    <MenuItem key={city.id} value={city.name}>
+                      {city.name}
+                    </MenuItem>
+                  ))}
+               </Select>
+            </FormControl>
+          </Grid>
           <Grid item xs={12} sm={6}>
             <KeyboardDatePicker
               autoOk
@@ -231,22 +248,6 @@ export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
               }
             />
           </Grid>
-          {/* <Grid item xs={12} sm={6}>
-            <SelectTableCell
-              errorRef={error}
-              menuItems={cityOptions}
-              onChange={(selectedCity) =>
-                setUserAccount((prev) => ({ ...prev, city: selectedCity }))
-              }
-              columnDef={{ title: "City" }} // Sigurohuni që props.columnDef të jetë një objekt i plotë
-            />
-          </Grid> */}
-          {/*<Grid item xs={12}>*/}
-          {/*    <FormControlLabel*/}
-          {/*        control={<Checkbox value="allowExtraEmails" color="primary"/>}*/}
-          {/*        label="I want to receive inspiration, marketing promotions and updates via email."*/}
-          {/*    />*/}
-          {/*</Grid>*/}
         </Grid>
         <Button
           type="submit"
