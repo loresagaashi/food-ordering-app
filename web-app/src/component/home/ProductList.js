@@ -14,7 +14,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   paper: {
-    width: '95%'
+    width: '95%',
+    marginBottom:"100px",
+    marginTop:"40px"
   },
   modal: {
     display: 'flex',
@@ -39,7 +41,7 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
-      style={{ margin: 0, width: "100%" }}
+      style={{ marginTop: "40px",marginBottom: "40px", width: "100%" }}
       {...other}
     >
       {value === index && children}
@@ -50,7 +52,7 @@ function TabPanel(props) {
 export default function ProductList({ products, onAddToCart }) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const { data: categories } = useQuery(QueryKeys.CATEGORIES);
+  const { data: categories, isLoading } = useQuery(QueryKeys.CATEGORIES); // Destructure isLoading
   const [selectedProduct, setSelectedProduct] = useState(null);
   const theme = useTheme();
 
@@ -59,7 +61,8 @@ export default function ProductList({ products, onAddToCart }) {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  }
+  };
+
   const handleProductClick = (product) => {
     setSelectedProduct(product);
   };
@@ -81,6 +84,11 @@ export default function ProductList({ products, onAddToCart }) {
     setShowSuccess(false);
   };
 
+  // Check if categories is undefined or loading
+  if (isLoading || !categories) {
+    return <div>Loading...</div>; // or some loading indicator
+  }
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -94,16 +102,12 @@ export default function ProductList({ products, onAddToCart }) {
           {categories?.map((category, index) => (
             <Tab key={index} label={category.name} />
           ))}
-          <Tab label="Offers" /> {/* Add a tab for Offers */}
+          <Tab label="Offers" />
         </Tabs>
         <div>
-          {categories?.map((category, index) => (
-            <TabPanel key={index} value={value} index={index}>
-              <Grid
-                container
-                spacing={2}
-                style={{ marginTop: "80px", marginBottom: "40px" }}
-              >
+          <Grid container spacing={2}>
+            {categories.map((category, index) => (
+              <TabPanel key={index} value={value} index={index}>
                 {category?.products?.map((product) => (
                   <Grid
                     key={product.id}
@@ -116,7 +120,6 @@ export default function ProductList({ products, onAddToCart }) {
                     }}
                     onClick={() => handleProductClick(product)}
                   >
-                    
                     <div
                       style={{
                         textAlign: "center",
@@ -153,12 +156,12 @@ export default function ProductList({ products, onAddToCart }) {
                     </div>
                   </Grid>
                 ))}
-              </Grid>
+              </TabPanel>
+            ))}
+            <TabPanel value={value} index={categories.length}>
+              <OfferList onAddToCart={handleAddToCart} /> 
             </TabPanel>
-          ))}
-          {/* <TabPanel value={value} index={categories.length}>
-            <OfferList onAddToCart={handleAddToCart} /> 
-          </TabPanel> */}
+          </Grid>
         </div>
         {selectedProduct && (
           <ProductPopUp
@@ -185,5 +188,4 @@ export default function ProductList({ products, onAddToCart }) {
       </Paper>
     </div>
   );
-
 }

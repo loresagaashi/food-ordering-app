@@ -1,50 +1,16 @@
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "/node_modules/bootstrap/dist/js/bootstrap.min.js";
 import "./App.css";
-// import AdminsView from "./component/admin/AdminsView";
-// import Home from "./Home";
-// import { Routes, Route } from "react-router-dom";
-// import AddAdmin from "./component/admin/AddAdmin";
-// import EditAdmin from "./component/admin/EditAdmin";
-// import AdminProfile from "./component/admin/AdminProfile";
-//
-// import AddCustomer from "./component/customer/AddCustomer";
-// import EditCustomer from "./component/customer/EditCustomer";
-// import CustomersView from "./component/customer/CustomersView";
-// import CustomerProfile from "./component/customer/CustomerProfile";
-//
-// import AddProduct from "./component/product/AddProduct";
-// import ProductsView from "./component/product/ProductsView";
-// import EditProduct from "./component/product/EditProduct";
-// import ProductProfile from "./component/product/ProductProfile";
-//
-// import AddressView from "./component/address/AddressView";
-// import AddAddress from "./component/address/AddAddress";
-// import EditAddress from "./component/address/EditAddress";
-// import AddressProfile from "./component/address/AddressProfile";
-//
-// import StoreHoursViews from "./component/storeHours/StoreHoursViews";
-// import AddStoreHours from "./component/storeHours/AddStoreHours";
-// import EditStoreHours from "./component/storeHours/EditStoreHours";
-//
-// import AddCategory from "./component/category/AddCategory";
-// import CategoriesView from "./component/category/CategoriesView";
-// import EditCategory from "./component/category/EditCategory";
-// import CategoryProfile from "./component/category/CategoryProfile";
-// import StoreHoursProfile from "./component/storeHours/StoreHoursProfile";
-//
-// import CitiesView from "./component/city/CitiesView";
-// import AddCity from "./component/city/AddCity";
-// import EditCity from "./component/city/EditCity";
-// import CityProfile from "./component/city/CityProfile";
 import { useContext, useState } from "react";
 import { createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
 import { queryClient, setQueryDefaults } from "./service/QueryClient";
 import { QueryClientProvider } from "react-query";
 import UserContext from "./context/UserContext";
 import AppRoutes from "./routes/Routes";
+import DateFnsUtils from '@date-io/date-fns';
 import { Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 
 const customTheme = {
   overrides: {
@@ -96,10 +62,12 @@ function App() {
   return (
     <AuthProvider>
         <QueryClientProvider client={queryClient}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <ThemeProvider theme={createTheme(theme)}>
             <CssBaseline />
             <Routes>{AppRoutes}</Routes>
           </ThemeProvider>
+          </MuiPickersUtilsProvider>
         </QueryClientProvider>
     </AuthProvider>
   );

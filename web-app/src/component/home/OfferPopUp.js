@@ -1,6 +1,5 @@
 import { Backdrop, Button, Fade, Grid, Modal, Typography, makeStyles } from "@material-ui/core";
 import { useState } from "react";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -12,9 +11,9 @@ const useStyles = makeStyles((theme) => ({
   },
   modalContent: {
     backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
+    boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.75)',
     padding: theme.spacing(2, 4, 3),
-    border: '4px solid red', 
+    borderRadius: '20px',
   },
   productName: {
     marginBottom: '25px' , 
@@ -23,9 +22,10 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "'Roboto Slab', serif",
     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
   },
+  
 }));
 
-function TabPanel(props) {
+  function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -61,7 +61,7 @@ function OfferPopUp({ offer, handleClose, handleAddToCart }) {
       quantity: quantity,
     };
 
-    console.log("offer added to cart:", itemToAdd);
+    console.log("Offer added to cart:", itemToAdd);
     handleAddToCart(itemToAdd);
     handleClose();
   };
@@ -75,9 +75,6 @@ function OfferPopUp({ offer, handleClose, handleAddToCart }) {
       setQuantity(quantity - 1);
     }
   };
-
-  const imageUrl = `../../../offers/${offer.imageUrl}`;
-  console.log("Image URL:", imageUrl);
 
   return (
     <Modal
@@ -102,8 +99,8 @@ function OfferPopUp({ offer, handleClose, handleAddToCart }) {
           <div style={{ display: 'flex', alignItems: 'center', height: '85%' }}>
             <div style={{ flex: '1' }}>
               <img
-                src={imageUrl}
-                alt={offer.name}
+              src={`../../../products/${offer.imageUrl}`}
+              alt={offer.name}
                 width={300}
                 height={150}
                 style={{ marginRight: '20px' }}
@@ -122,6 +119,16 @@ function OfferPopUp({ offer, handleClose, handleAddToCart }) {
               <Typography variant="body1" style={{ marginBottom: '5px', marginRight: 12, color: 'green' }}>
                 Bonus points: {offer.bonusPoints}
               </Typography>
+              <Typography variant="body1" style={{ marginBottom: '10px', fontWeight: 'bold' }}>
+                Products in this offer:
+              </Typography>
+              {offer.products.map((product, index) => (
+                <div key={index}>
+                  <Typography variant="body1" style={{ marginRight: 12 }}>
+                    {product.name} - {product.price} $
+                  </Typography>
+                </div>
+              ))}
               <div style={{ display: 'flex', alignItems: 'center', marginTop: 20 }}>
                 <Button variant="outlined" onClick={handleDecreaseQuantity} style={{ marginRight: 10, width: 30, height: 30 }}>
                   -

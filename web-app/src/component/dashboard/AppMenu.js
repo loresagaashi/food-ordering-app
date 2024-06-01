@@ -87,6 +87,11 @@ const appMenuItems = [
     Icon:  LocationOnIcon ,
     link: "/admin/storeLocations",
   },
+  {
+    name:" Orders ",
+    Icon:  LocationOnIcon ,
+    link: "/admin/orderDetails",
+  },
 ];
 
 export default function AppMenu({}) {

@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles, Typography, List, ListItem, ListItemText, RadioGroup, Radio, FormControlLabel, TextareaAutosize, MenuItem, Select, InputLabel, FormControl, TextField, Button, Snackbar } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import axios from 'axios'; 
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { QueryKeys } from "../../service/QueryKeys";
 import useUser from '../../hooks/useUser';
-
+import {useNavigate} from "react-router-dom";
+import UserAccountDialog from './UserAccountDialog';
+import { OrderDetailService } from '../../service/OrderDetailService';
 const useStyles = makeStyles((theme) => ({
    container: {
      display: 'flex',
@@ -77,9 +79,15 @@ const fetchCities = async () => {
   }
 };
 
-const OrderDetails = ({ orderDetails, orderLines, total }) => {
+const orderDetailService = new OrderDetailService();
+
+export default function OrderDetails ({ orderDetails, orderLines,total }) {
+
+  const initialOrderLines = JSON.parse(localStorage.getItem("lines")) || [];
+
   const classes = useStyles();
   const {user} = useUser();
+  const dateTime = useRef();
   const [selectedCity, setSelectedCity] = useState('');
   const { data: cities } = useQuery(QueryKeys.CITY, fetchCities()); 
   const [firstName, setFirstName] = useState('');
@@ -91,8 +99,12 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState('');
+  const [ setOrderLines] = useState(initialOrderLines);
+  const navigate = useNavigate();
+  const {mutateAsync: createOrder, isLoading} = useMutation(orderDetails => orderDetailService.createOrder(orderDetails));
 
   useEffect(() => {
+    localStorage.setItem("lines", JSON.stringify(orderLines));
     if (user) {
       setFirstName(user.user.firstName); 
       setEmail(user.user.email); 
@@ -100,12 +112,54 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
     }
   }, [user]);
   
+  function handleFinish() {
+    if(!user) {
+      setOpen(true);
+      return;
+    }
+    return saveOrder(user);
+  }
+
+  function saveOrder(customer) {
+    const order = {
+      status: "PENDING",
+      dateTime: dateTime.current,
+      total: total,
+      lines: orderLines,
+      customer: customer
+    }
+    return createOrder("Order: ", order)
+    .then(saveOrder => {
+      console.log("SavedOrdeR: ", saveOrder);
+      localStorage.removeItem("orderLines");
+      navigate('./client/home', saveOrder);
+    });
+  }
   const handleSubmit = () => {
     if (firstName && email && address && phoneNumber && selectedCity && paymentType) {
+      const orderData = {
+        firstName,
+        email,
+        address,
+        phoneNumber,
+        city: selectedCity,
+        notes,
+        paymentType,
+        orderDetails,
+        orderLines,
+        total,
+        user: {
+          id: user.user.id,
+          name: user.user.firstName,
+          email: user.user.email,
+        },
+      };
+  
+  
       setMessage('Order submitted successfully!');
       setOpen(true);
       setError(false);
-
+  
       setFirstName('');
       setEmail('');
       setAddress('');
@@ -113,12 +167,15 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
       setSelectedCity('');
       setNotes('');
       setPaymentType(''); 
+  
+
     } else {
       setMessage('Please fill in all the fields.');
       setOpen(true);
       setError(true);
     }
   };
+  
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -192,13 +249,16 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
          </FormControl>
          
          <TextareaAutosize
-            aria-label="order-notes"
-            minRows={3}
-            placeholder="Enter notes here"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            className={classes.notes}
-         />
+    aria-label="order-notes"
+    minRows={3}
+    placeholder="Enter notes here"
+    style={{ marginTop: '10px' }}
+    value={notes}
+    onChange={(e) => setNotes(e.target.value)}
+  />
+  <Typography variant="body2" color="textSecondary">
+    Like: Add pickles for extra flavor!
+  </Typography>
          
          <Typography variant="body1" style={{ marginTop: '16px' }}>
             Choose payment method
@@ -258,4 +318,3 @@ const OrderDetails = ({ orderDetails, orderLines, total }) => {
   );
 };
 
-export default OrderDetails;

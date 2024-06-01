@@ -3,7 +3,7 @@ import { makeStyles, Paper, Snackbar, Grid, Typography } from "@material-ui/core
 import { useQuery } from "react-query";
 import { QueryKeys } from "../../service/QueryKeys";
 import MuiAlert from "@material-ui/lab/Alert";
-import ProductPopUp from "./ProductPopUp";
+import OfferPopUp from "./OfferPopUp";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,14 +15,12 @@ const useStyles = makeStyles((theme) => ({
     width: '95%',
     padding: theme.spacing(4),
     marginTop: "20px",
-    marginBottom: "40px"
+    marginBottom: "40px",
   },
   gridItem: {
     marginBottom: "60px",
     display: "flex",
     justifyContent: "center",
-  },
-  imageContainer: {
     textAlign: "center",
     position: "relative",
     width: "100%",
@@ -49,16 +47,16 @@ const useStyles = makeStyles((theme) => ({
 export default function OfferList({ onAddToCart }) {
   const classes = useStyles();
   const { data: offers } = useQuery(QueryKeys.OFFER);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedOffer, setSelectedOffer] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  const handleProductClick = (offer) => {
-    setSelectedProduct(offer);
+  const handleOfferClick = (offers) => {
+    setSelectedOffer(offers);
   };
 
   const handleClosePopup = () => {
-    setSelectedProduct(null);
+    setSelectedOffer(null);
   };
 
   const handleAddToCart = (itemToAdd) => {
@@ -77,32 +75,30 @@ export default function OfferList({ onAddToCart }) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <Grid container spacing={4} style={{ marginTop: "80px", marginBottom: "40px" }}>
-          {offers?.map((offer) => (
+        <Grid container spacing={2} style={{ marginTop: "80px", marginBottom: "40px" }}>
+          {offers?.map((offers) => (
             <Grid
-              key={offer.id}
+              key={offers.id}
               item
               xs={12} sm={6} md={4}
               className={classes.gridItem}
-              onClick={() => handleProductClick(offer)}
+              onClick={() => handleOfferClick(offers)}
             >
-              <div className={classes.imageContainer}>
-                <img
-                  src={`../../../offers/${offer.imageUrl}`}
-                  alt={offer.name}
-                  className={classes.image}
-                />
-                <div className={classes.infoContainer}>
-                  <Typography className={classes.name}>{offer.name}</Typography>
-                  <Typography>{offer.price}$</Typography>
-                </div>
+              <img
+                src={`../../../products/${offers.imageUrl}`}
+                alt={offers.name}
+                className={classes.image}
+              />
+              <div className={classes.infoContainer}>
+                <Typography className={classes.name}>{offers.name}</Typography>
+                <Typography>{offers.price}$</Typography>
               </div>
             </Grid>
           ))}
         </Grid>
-        {selectedProduct && (
-          <ProductPopUp
-            product={selectedProduct}
+        {selectedOffer && (
+          <OfferPopUp
+            offer={selectedOffer}
             handleClose={handleClosePopup}
             handleAddToCart={handleAddToCart}
             classes={classes}

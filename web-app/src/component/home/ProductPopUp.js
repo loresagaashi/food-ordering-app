@@ -12,9 +12,9 @@ const useStyles = makeStyles((theme) => ({
   },
   modalContent: {
     backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
+    boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.75)',
     padding: theme.spacing(2, 4, 3),
-    border: '4px solid red', 
+    borderRadius: '20px',
   },
   productName: {
     marginBottom: '25px' , 
