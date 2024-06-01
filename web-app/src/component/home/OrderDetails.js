@@ -87,17 +87,12 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
 
   const classes = useStyles();
   const {user} = useUser();
-<<<<<<< HEAD
-  const dateTime = useRef();
-  const [selectedCity, setSelectedCity] = useState('');
-  const { data: cities } = useQuery(QueryKeys.CITY, fetchCities()); 
-=======
   const [city, setCity] = useState('');
   const { data: cities } = useQuery(QueryKeys.CITY, fetchCities); 
->>>>>>> 3c9df06a939770afe13da9932a0d840101933d6e
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
+  const dateTime = useRef();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [notes, setNotes] = useState('');
   const [paymentType, setPaymentType] = useState('');
@@ -142,30 +137,7 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
     });
   }
   const handleSubmit = () => {
-<<<<<<< HEAD
-    if (firstName && email && address && phoneNumber && selectedCity && paymentType) {
-      const orderData = {
-        firstName,
-        email,
-        address,
-        phoneNumber,
-        city: selectedCity,
-        notes,
-        paymentType,
-        orderDetails,
-        orderLines,
-        total,
-        user: {
-          id: user.user.id,
-          name: user.user.firstName,
-          email: user.user.email,
-        },
-      };
-  
-  
-=======
     if (firstName && email && address && phoneNumber && city && paymentType) {
->>>>>>> 3c9df06a939770afe13da9932a0d840101933d6e
       setMessage('Order submitted successfully!');
       setOpen(true);
       setError(false);
