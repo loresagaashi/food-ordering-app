@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     AppBar,
     Button,
@@ -7,7 +8,7 @@ import {
     Typography,
   } from "@material-ui/core";
   import { Link as RouterLink, Routes } from "react-router-dom";
-  import AppRoutes from "../../routes/Routes";
+import useUser from '../hooks/useUser';
   
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -72,8 +73,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
 export default function MuiAppBar() {
     const classes = useStyles();
+    const { user, setUser } = useUser();
+
     return (
         <>
     <AppBar  position={"static"} elevation={0} className={classes.appBar}>
@@ -96,15 +100,41 @@ export default function MuiAppBar() {
         Home
       </Link>
     </nav>
-    <Button
-      color="primary"
-      variant="contained"
-      className={classes.link}
-      component={RouterLink}
-      to={"/client/sign-in"}
-    >
-      Sign In
-    </Button>
+    <nav>
+      <Link
+        variant="button"
+        to="/client/profile"
+        component={RouterLink}
+        className={classes.link}
+      >
+        Profile
+      </Link>
+    </nav>
+    {user ? (
+      <Button
+        color="primary"
+        variant="contained"
+        className={classes.link}
+        component={RouterLink}
+        to={"/client/home"}
+        onClick={() => {
+        localStorage.removeItem("user");
+          setUser(null);
+        }}
+      >
+        Log out
+      </Button>
+      ) : (
+        <Button
+          color="primary"
+          variant="contained"
+          className={classes.link}
+          component={RouterLink}
+          to={"/client/sign-in"}
+        >
+          Sign In
+        </Button>
+      )}
     </AppBar>
     </>
     );

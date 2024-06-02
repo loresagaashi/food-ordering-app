@@ -8,6 +8,8 @@ import useUser from '../../hooks/useUser';
 import {useNavigate} from "react-router-dom";
 import UserAccountDialog from './UserAccountDialog';
 import { OrderDetailService } from '../../service/OrderDetailService';
+import useCities from '../../hooks/useCities';
+
 const useStyles = makeStyles((theme) => ({
    container: {
      display: 'flex',
@@ -64,20 +66,15 @@ const useStyles = makeStyles((theme) => ({
      color: theme.palette.secondary.main,
      marginTop: theme.spacing(2),
    },
+   errorMessage: {
+    color: 'red',
+    marginTop: theme.spacing(1),
+  },
 }));
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-
-const fetchCities = async () => {
-  try {
-    const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/city/all`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching cities:', error);
-  }
-};
 
 const orderDetailService = new OrderDetailService();
 
@@ -88,12 +85,14 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
   const classes = useStyles();
   const {user} = useUser();
   const [city, setCity] = useState('');
-  const { data: cities } = useQuery(QueryKeys.CITY, fetchCities); 
+  const { cities, loading, citiesError } = useCities();  
   const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const dateTime = useRef();
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [nameError, setNameError] = useState('');
   const [notes, setNotes] = useState('');
   const [paymentType, setPaymentType] = useState('');
   const [open, setOpen] = useState(false);
@@ -107,6 +106,7 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
     localStorage.setItem("lines", JSON.stringify(orderLines));
     if (user) {
       setFirstName(user.user.firstName); 
+      setLastName(user.user.lastName); 
       setEmail(user.user.email); 
       setPhoneNumber(user.user.phoneNumber);
       setCity(user.user.city.name);
@@ -137,12 +137,13 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
     });
   }
   const handleSubmit = () => {
-    if (firstName && email && address && phoneNumber && city && paymentType) {
+    if (firstName && lastName && email && address && phoneNumber && city && paymentType) {
       setMessage('Order submitted successfully!');
       setOpen(true);
       setError(false);
   
       setFirstName('');
+      setLastName('');
       setEmail('');
       setAddress('');
       setPhoneNumber('');
@@ -158,7 +159,18 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
     }
   };
   
-
+  const handleNameChange = (e) => {
+    const value = e.target.value.trim();
+    const [first, last] = value.split(" ");
+    setFirstName(first || '');
+    setLastName(last || '');
+    if (!first || !last) {
+      setNameError('Please provide both first name and last name.');
+    } else {
+      setNameError('');
+    }
+  };
+  
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -182,13 +194,19 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
             </div>
          </div>
 
-         <TextField
-            label="Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+          <TextField
+            label="Name and Last Name"
+            value={`${firstName} ${lastName}`}
+            onChange={handleNameChange}
             fullWidth
             className={classes.input}
-         />
+            error={!!nameError}
+          />
+          {nameError && (
+            <Typography variant="body2" className={classes.errorMessage}>
+              {nameError}
+            </Typography>
+          )}
 
          <TextField
             label="Email"
@@ -230,17 +248,17 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
             </Select>
          </FormControl>
          
-         <TextareaAutosize
-    aria-label="order-notes"
-    minRows={3}
-    placeholder="Enter notes here"
-    style={{ marginTop: '10px' }}
-    value={notes}
-    onChange={(e) => setNotes(e.target.value)}
-  />
-  <Typography variant="body2" color="textSecondary">
-    Like: Add pickles for extra flavor!
-  </Typography>
+          <TextareaAutosize
+            aria-label="order-notes"
+            minRows={3}
+            placeholder="Enter notes here"
+            style={{ marginTop: '10px' }}
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          />
+          <Typography variant="body2" color="textSecondary">
+            Like: Add pickles for extra flavor!
+          </Typography>
          
          <Typography variant="body1" style={{ marginTop: '16px' }}>
             Choose payment method

@@ -21,9 +21,9 @@ import ValidTextField from "../../component/common/ValidTextField";
 import useUser from "../../hooks/useUser";
 import { red } from "@material-ui/core/colors";
 import { CustomerService } from "../../service/CustomerService";
-import { CityService } from "../../service/CityService";
 import DateFnsUtils from '@date-io/date-fns';
 import axios from "axios";
+import useCities from '../../hooks/useCities';
 
 function Copyright() {
   return (
@@ -60,19 +60,10 @@ const useStyles = makeStyles((theme) => ({
 
 const customerService = new CustomerService();
 
-const fetchCities = async () => {
-  try {
-    const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/city/all`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching cities:', error);
-  }
-};
-
 export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
   const classes = useStyles();
   let navigate = useNavigate();
-  const { data: cities } = useQuery(QueryKeys.CITY, fetchCities);
+  const { cities, loading, error: citiesError } = useCities();  
 
   const [userAccount, setUserAccount] = useState({
     firstName: "",

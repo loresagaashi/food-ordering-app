@@ -107,6 +107,18 @@ export default function ClientLayout() {
             Home
           </Link>
         </nav>
+        {user && (
+          <nav>
+            <Link
+              variant="button"
+              to="/client/profile"
+              component={RouterLink}
+              className={classes.link}
+            >
+              Profile
+            </Link>
+          </nav>
+        )}
         {user ? (
           <Button
             color="primary"

@@ -25,6 +25,7 @@ import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import AllInboxIcon from '@material-ui/icons/AllInbox';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import useUser from "../../hooks/useUser";
+import ListAltIcon from '@material-ui/icons/ListAlt';
 
 const appMenuItems = [
   {
@@ -89,7 +90,7 @@ const appMenuItems = [
   },
   {
     name:" Orders ",
-    Icon:  LocationOnIcon ,
+    Icon:  ListAltIcon ,
     link: "/admin/orderDetails",
   },
 ];
