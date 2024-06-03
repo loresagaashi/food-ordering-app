@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { makeStyles, Typography, List, ListItem, ListItemText, RadioGroup, Radio, FormControlLabel, TextareaAutosize, MenuItem, Select, InputLabel, FormControl, TextField, Button, Snackbar } from '@material-ui/core';
+import { makeStyles, Typography, List, ListItem, ListItemText, RadioGroup, Radio, FormControlLabel, TextareaAutosize, MenuItem, Select, InputLabel, FormControl, TextField, Button, Snackbar, Checkbox } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import axios from 'axios';
 import { useMutation, useQuery } from "react-query";
@@ -9,6 +9,8 @@ import {useNavigate} from "react-router-dom";
 import UserAccountDialog from './UserAccountDialog';
 import { OrderDetailService } from '../../service/OrderDetailService';
 import useCart from "./useCart";
+import useCities from '../../hooks/useCities';
+
 const useStyles = makeStyles((theme) => ({
    container: {
      display: 'flex',
@@ -65,20 +67,25 @@ const useStyles = makeStyles((theme) => ({
      color: theme.palette.secondary.main,
      marginTop: theme.spacing(2),
    },
+   errorMessage: {
+    color: 'red',
+    marginTop: theme.spacing(1),
+  },
+
 }));
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const fetchCities = async () => {
-  try {
-    const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/city/all`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching cities:', error);
-  }
-};
+// const fetchCities = async () => {
+//   try {
+//     const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/city/all`);
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error fetching cities:', error);
+//   }
+// };
 
 const orderDetailService = new OrderDetailService();
 
@@ -89,8 +96,11 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
   const classes = useStyles();
   const {user} = useUser();
   const [city, setCity] = useState('');
-  const { data: cities } = useQuery(QueryKeys.CITY, fetchCities);
+  // const { data: cities } = useQuery(QueryKeys.CITY, fetchCities);
+  const {cities} = useCities();
   const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [nameError, setNameError] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const dateTime = useRef();
@@ -102,10 +112,13 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const {mutateAsync: createOrder, isLoading} = useMutation(orderDetails => orderDetailService.create(orderDetails));
+  const [checklist, setChecklist] = useState([]);
+  const [checklistValues, setChecklistValues] = useState([]);
 
   useEffect(() => {
     if (user) {
       setFirstName(user?.user?.firstName);
+      setLastName(user.user.lastName); 
       setEmail(user?.user?.email);
       setPhoneNumber(user?.user?.phoneNumber);
       setCity(user?.user?.city?.name);
@@ -131,16 +144,17 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
     .then(() => {
       localStorage.removeItem("lines");
       handleOrderIsDone();
-      setMessage('Order submitted successfully!');
       setShowModal(false);
       setError(false);
       setNotes('');
       setPaymentType('');
     });
   }
-  const handleSubmit = () => {
-    if (firstName && email && address && phoneNumber && city && paymentType) {
-      saveOrder();
+  const handleSubmit = async () => {
+    if (firstName && lastName && email && address && phoneNumber && city && paymentType) {
+        setMessage('Order submitted successfully!');
+        setOpen(true);
+        await saveOrder();
     } else {
       setMessage('Please fill in all the fields.');
       setOpen(true);
@@ -148,7 +162,35 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
     }
   };
 
+  const handleNameChange = (e) => {
+    const value = e.target.value.trim();
+    const [first, last] = value.split(" ");
+    setFirstName(first || '');
+    setLastName(last || '');
+    if (!first || !last) {
+      setNameError('Please provide both first name and last name.');
+    } else {
+      setNameError('');
+    }
+  };
 
+  const handleItemChange = (value, index) => {
+    const newChecklist = [...checklist];
+    newChecklist[index] = value;
+    setChecklist(newChecklist);
+  };
+  
+  const handleChecklistChange = (value, index) => {
+    const newChecklistValues = [...checklistValues];
+    newChecklistValues[index] = value;
+    setChecklistValues(newChecklistValues);
+  };
+
+  const handleAddItem = () => {
+    setChecklist([...checklist, '']); 
+    setChecklistValues([...checklistValues, false]);
+  };
+  
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -173,12 +215,18 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
          </div>
 
          <TextField
-            label="Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            label="Name and Last Name"
+            value={`${firstName} ${lastName}`}
+            onChange={handleNameChange}
             fullWidth
             className={classes.input}
-         />
+            error={!!nameError}
+          />
+          {nameError && (
+            <Typography variant="body2" className={classes.errorMessage}>
+              {nameError}
+            </Typography>
+          )}
 
          <TextField
             label="Email"
@@ -220,17 +268,46 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
             </Select>
          </FormControl>
 
-         <TextareaAutosize
-    aria-label="order-notes"
-    minRows={3}
-    placeholder="Enter notes here"
-    style={{ marginTop: '10px' }}
-    value={notes}
-    onChange={(e) => setNotes(e.target.value)}
-  />
-  <Typography variant="body2" color="textSecondary">
-    Like: Add pickles for extra flavor!
-  </Typography>
+          <TextareaAutosize
+            aria-label="order-notes"
+            minRows={3}
+            placeholder="Enter notes here"
+            style={{ marginTop: '10px' }}
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          />
+          <Typography variant="body2" color="textSecondary">
+            Like: Add pickles for extra flavor!
+          </Typography>
+
+          <div>
+            <Typography variant="body1" style={{ marginTop: '15px' }}>Checklist:</Typography>
+            <List>
+              {checklist.map((item, index) => (
+                <ListItem key={index}>
+                  <Checkbox
+                    checked={checklistValues[index]}
+                    onChange={(e) => handleChecklistChange(e.target.checked, index)}
+                    color="primary"
+                    disabled={!item}
+                  />
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    value={item}
+                    onChange={(e) => handleItemChange(e.target.value, index)} // Separate handler for TextField
+                    placeholder="Enter name"
+                    size = "small"
+                  />
+                </ListItem>
+              ))}
+              <ListItem>
+                <Button variant="outlined" color="primary" onClick={handleAddItem}>
+                  Add People
+                </Button>
+              </ListItem>
+            </List>
+          </div>
 
          <Typography variant="body1" style={{ marginTop: '16px' }}>
             Choose payment method
