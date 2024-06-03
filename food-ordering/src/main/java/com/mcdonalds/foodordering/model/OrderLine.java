@@ -2,6 +2,7 @@ package com.mcdonalds.foodordering.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,7 +13,8 @@ import java.math.BigDecimal;
 @Data
 @Entity
 public class OrderLine extends BaseEntity {
-    @OneToOne
+
+    @ManyToOne
     @JoinColumn
     private Product product;
 

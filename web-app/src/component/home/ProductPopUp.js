@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '20px',
   },
   productName: {
-    marginBottom: '25px' , 
+    marginBottom: '25px' ,
     marginBottom: theme.spacing(2),
     fontWeight: 'bold',
     fontFamily: "'Roboto Slab', serif",
@@ -61,7 +61,6 @@ function ProductPopUp({ product, handleClose, handleAddToCart }) {
       quantity: quantity,
     };
 
-    console.log("Product added to cart:", itemToAdd);
     handleAddToCart(itemToAdd);
     handleClose();
   };

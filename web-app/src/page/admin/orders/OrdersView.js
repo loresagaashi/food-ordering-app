@@ -75,8 +75,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const statusByIndex = new Map([
-  [0, 'PENDING'],
-  [1, 'IN_PROGRESS'],
+  [0, 'IN_PROGRESS'],
+  [1, 'PROCESSING'],
   [2, 'DELIVERING'],
   [3, 'COMPLETED'],
 ]);
@@ -172,8 +172,8 @@ export default function OrdersView({}) {
             TabIndicatorProps={{ className: classes.tabIndicator }}
             className={classes.tabHeader}
           >
-            <Tab label="Pending" icon={<PendingIcon />} {...a11yProps(0)} />
-            <Tab label="In Progress" icon={<InProgressIcon />} {...a11yProps(1)} />
+            <Tab label="In progress" icon={<PendingIcon />} {...a11yProps(0)} />
+            <Tab label="Processing" icon={<InProgressIcon />} {...a11yProps(1)} />
             <Tab label="Delivering" icon={<InProgressIcon />} {...a11yProps(2)} />
             <Tab label="Completed" icon={<CompletedIcon />} {...a11yProps(3)} />
           </Tabs>
@@ -186,7 +186,7 @@ export default function OrdersView({}) {
         >
           <OrderTab
             index={0}
-            label="Pending"
+            label="In progress"
             value={value}
             rangeRef={rangeRef}
             data={data}
@@ -200,7 +200,7 @@ export default function OrdersView({}) {
           />
           <OrderTab
             index={1}
-            label="In Progress"
+            label="Processing"
             value={value}
             rangeRef={rangeRef}
             data={data}

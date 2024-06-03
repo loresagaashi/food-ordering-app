@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import com.mcdonalds.foodordering.model.Customer;
+import com.mcdonalds.foodordering.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import com.mcdonalds.foodordering.model.OrderDetail;
@@ -16,9 +19,28 @@ import com.mcdonalds.foodordering.repository.OrderDetailRepository;
 @Service
 public class OrderDetailService extends BasicServiceOperations<OrderDetailRepository, OrderDetail>{
 
-    public OrderDetailService(OrderDetailRepository orderDetailRepository){
+    private final CustomerRepository customerRepository;
+
+    public OrderDetailService(OrderDetailRepository orderDetailRepository, CustomerRepository customerRepository){
         super(orderDetailRepository);
+        this.customerRepository = customerRepository;
     }
+
+    @Override
+    public OrderDetail save(OrderDetail orderDetail) {
+        int totalBonusPoints = orderDetail.getLines().stream()
+                .mapToInt(line -> Optional.ofNullable(line.getProduct().getBonusPoints()).orElse(0) * line.getQuantity().intValue())
+                .sum();
+
+        Customer customer = orderDetail.getCustomer();
+
+        customer.setTotalBonusPoints(customer.getTotalBonusPoints() + totalBonusPoints);
+
+        customerRepository.save(customer);
+
+        return super.save(orderDetail);
+    }
+
 
     public OrderDetail moveToProgress(OrderDetail orderDetail) {
         orderDetail.setStatus(OrderStatus.IN_PROGRESS);

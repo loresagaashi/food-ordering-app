@@ -44,6 +44,7 @@ export default function HomePage() {
     handleRemoveFromCart,
     handleIncreaseQuantity,
     handleDecreaseQuantity,
+    deleteItemsFromCart,
     total,
   } = useCart();
   const [showCart, setShowCart] = useState(false);
@@ -93,9 +94,9 @@ export default function HomePage() {
           ))}
         </Carousel>
       </Box>
-      
+
       <ProductList onAddToCart={handleAddToCart} products={items} />
-     
+
       <ShoppingCart
         cartItems={cartItems}
         showCart={showCart}
@@ -105,6 +106,7 @@ export default function HomePage() {
         handleRemoveFromCart={handleRemoveFromCart}
         handleIncreaseQuantity={handleIncreaseQuantity}
         handleDecreaseQuantity={handleDecreaseQuantity}
+        handleOrderIsDone={deleteItemsFromCart}
       />
     </Box>
   );

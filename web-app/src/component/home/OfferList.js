@@ -106,7 +106,7 @@ export default function OfferList({ onAddToCart }) {
         )}
         <Snackbar
           open={showSuccess}
-          autoHideDuration={4000}
+          autoHideDuration={1000}
           onClose={handleSnackbarClose}
         >
           <MuiAlert

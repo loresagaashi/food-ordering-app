@@ -16,13 +16,13 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '20px',
   },
   productName: {
-    marginBottom: '25px' , 
+    marginBottom: '25px' ,
     marginBottom: theme.spacing(2),
     fontWeight: 'bold',
     fontFamily: "'Roboto Slab', serif",
     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
   },
-  
+
 }));
 
   function TabPanel(props) {
@@ -61,7 +61,6 @@ function OfferPopUp({ offer, handleClose, handleAddToCart }) {
       quantity: quantity,
     };
 
-    console.log("Offer added to cart:", itemToAdd);
     handleAddToCart(itemToAdd);
     handleClose();
   };

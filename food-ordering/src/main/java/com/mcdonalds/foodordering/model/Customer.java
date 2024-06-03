@@ -11,7 +11,8 @@ import java.util.List;
 @Entity
 public class Customer extends UserAccount {
 
-    private Integer totalBonusPoints;
+    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
+    private Integer totalBonusPoints = 0;
 
     @ManyToMany
     @JoinTable(name = "customer_products",

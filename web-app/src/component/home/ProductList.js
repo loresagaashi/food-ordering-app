@@ -74,7 +74,7 @@ export default function ProductList({ products, onAddToCart }) {
   const handleAddToCart = (itemToAdd) => {
     setSnackbarMessage(`${itemToAdd.name} successfully added to cart!`);
     setShowSuccess(true);
-    onAddToCart(itemToAdd); 
+    onAddToCart(itemToAdd);
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -159,7 +159,7 @@ export default function ProductList({ products, onAddToCart }) {
               </TabPanel>
             ))}
             <TabPanel value={value} index={categories.length}>
-              <OfferList onAddToCart={handleAddToCart} /> 
+              <OfferList onAddToCart={handleAddToCart} />
             </TabPanel>
           </Grid>
         </div>
@@ -173,7 +173,7 @@ export default function ProductList({ products, onAddToCart }) {
         )}
         <Snackbar
           open={showSuccess}
-          autoHideDuration={4000}
+          autoHideDuration={1000}
           onClose={handleSnackbarClose}
         >
           <MuiAlert

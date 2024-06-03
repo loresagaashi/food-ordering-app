@@ -1,6 +1,10 @@
 package com.mcdonalds.foodordering.model;
 
+import com.mcdonalds.foodordering.validation.group.Update;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.groups.ConvertGroup;
+import jakarta.validation.groups.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,7 +18,7 @@ import static jakarta.persistence.FetchType.EAGER;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-public class OrderDetail extends BaseAuditEntity {
+public class OrderDetail extends BaseEntity {
     private String notes;
 
     private BigDecimal total;
@@ -31,15 +35,17 @@ public class OrderDetail extends BaseAuditEntity {
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 
+    @Valid
+    @ConvertGroup(from = Update.class, to = Default.class)
     @OneToMany(orphanRemoval = true, cascade = ALL, fetch = EAGER)
-    @JoinColumn(name = "ticket_id", nullable = false)
+    @JoinColumn(name = "order_detail_id", nullable = false)
     private List<OrderLine> lines;
 
     @ManyToOne
     @JoinColumn
     private Customer customer;
 
-    @OneToOne
-    @JoinColumn
-    private Address address;
+    private String address;
+
+    private String city;
 }

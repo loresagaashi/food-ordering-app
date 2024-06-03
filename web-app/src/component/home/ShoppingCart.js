@@ -6,6 +6,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import AlertDialog from '../AlertDialog';
 import MuiAlert from '@material-ui/lab/Alert';
 import OrderDetails from './OrderDetails';
+import useCart from "./useCart";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   orderDetails: {
-    textAlign: 'center', 
+    textAlign: 'center',
     fontFamily: "'Roboto Slab', serif",
     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
   },
@@ -62,6 +63,7 @@ export default function ShoppingCart({
   handleRemoveFromCart,
   handleIncreaseQuantity,
   handleDecreaseQuantity,
+  handleOrderIsDone,
   user
 }) {
   const classes = useStyles();
@@ -70,7 +72,6 @@ export default function ShoppingCart({
   const [showSuccess, setShowSuccess] = useState(false);
   const [showOrderDetails, setShowOrderDetails] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
-  const [orderLines, setOrderLines] = useState([]);
   const [showEmptyCartWarning, setShowEmptyCartWarning] = useState(false);
 
   const handleDelete = async (productId, productName) => {
@@ -97,17 +98,17 @@ export default function ShoppingCart({
     }
     const orderDetailsData = {
        total: total.toFixed(2),
-       status: 'Pending',
+       status: 'IN_PROGRESS',
        dateTime: new Date().toLocaleString(),
     };
     const orderLinesData = cartItems.map(item => ({
-       product: { name: item.name },
+       product: { name: item.name, id: item.id, bonusPoints: item.bonusPoints },
        quantity: item.quantity,
        price: item.price,
        amount: (item.price * item.quantity).toFixed(2),
     }));
     setOrderDetails(orderDetailsData);
-    setOrderLines(orderLinesData);
+    localStorage.setItem("lines", JSON.stringify(orderLinesData));
     setShowOrderDetails(true);
   };
 
@@ -189,9 +190,9 @@ export default function ShoppingCart({
       <Button variant="contained" color="primary" className={classes.orderButton} onClick={handleOrder}>
         <b>Order</b>
       </Button>
-      <Snackbar 
-        open={showSuccess} 
-        autoHideDuration={4000} 
+      <Snackbar
+        open={showSuccess}
+        autoHideDuration={4000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
@@ -231,11 +232,12 @@ export default function ShoppingCart({
           <b>Order Details</b>
       </DialogTitle>
       <DialogContent>
-        <OrderDetails 
+        <OrderDetails
           total={total.toFixed(2)}$
           orderDetails={orderDetails}
-          orderLines={orderLines}
           user={user}
+          setShowModal={setShowOrderDetails}
+          handleOrderIsDone={handleOrderIsDone}
         />
       </DialogContent>
     </Dialog>

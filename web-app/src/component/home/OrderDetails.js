@@ -1,15 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles, Typography, List, ListItem, ListItemText, RadioGroup, Radio, FormControlLabel, TextareaAutosize, MenuItem, Select, InputLabel, FormControl, TextField, Button, Snackbar } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
-import axios from 'axios'; 
+import axios from 'axios';
 import { useMutation, useQuery } from "react-query";
 import { QueryKeys } from "../../service/QueryKeys";
 import useUser from '../../hooks/useUser';
 import {useNavigate} from "react-router-dom";
 import UserAccountDialog from './UserAccountDialog';
 import { OrderDetailService } from '../../service/OrderDetailService';
-import useCities from '../../hooks/useCities';
-
+import useCart from "./useCart";
 const useStyles = makeStyles((theme) => ({
    container: {
      display: 'flex',
@@ -66,111 +65,90 @@ const useStyles = makeStyles((theme) => ({
      color: theme.palette.secondary.main,
      marginTop: theme.spacing(2),
    },
-   errorMessage: {
-    color: 'red',
-    marginTop: theme.spacing(1),
-  },
 }));
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+const fetchCities = async () => {
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/city/all`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching cities:', error);
+  }
+};
+
 const orderDetailService = new OrderDetailService();
 
-export default function OrderDetails ({ orderDetails, orderLines,total }) {
+export default function OrderDetails ({ orderDetails,total, setShowModal, handleOrderIsDone }) {
 
   const initialOrderLines = JSON.parse(localStorage.getItem("lines")) || [];
 
   const classes = useStyles();
   const {user} = useUser();
   const [city, setCity] = useState('');
-  const { cities, loading, citiesError } = useCities();  
+  const { data: cities } = useQuery(QueryKeys.CITY, fetchCities);
   const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const dateTime = useRef();
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [nameError, setNameError] = useState('');
   const [notes, setNotes] = useState('');
   const [paymentType, setPaymentType] = useState('');
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState('');
-  const [ setOrderLines] = useState(initialOrderLines);
   const navigate = useNavigate();
-  const {mutateAsync: createOrder, isLoading} = useMutation(orderDetails => orderDetailService.createOrder(orderDetails));
+  const {mutateAsync: createOrder, isLoading} = useMutation(orderDetails => orderDetailService.create(orderDetails));
 
   useEffect(() => {
-    localStorage.setItem("lines", JSON.stringify(orderLines));
     if (user) {
-      setFirstName(user.user.firstName); 
-      setLastName(user.user.lastName); 
-      setEmail(user.user.email); 
-      setPhoneNumber(user.user.phoneNumber);
-      setCity(user.user.city.name);
+      setFirstName(user?.user?.firstName);
+      setEmail(user?.user?.email);
+      setPhoneNumber(user?.user?.phoneNumber);
+      setCity(user?.user?.city?.name);
     }
-  }, [user]);  
-  
-  function handleFinish() {
-    if(!user) {
-      setOpen(true);
-      return;
-    }
-    return saveOrder(user);
-  }
+  }, [user]);
 
-  function saveOrder(customer) {
+  function saveOrder() {
     const order = {
-      status: "PENDING",
-      dateTime: dateTime.current,
+      status: "IN_PROGRESS",
+      dateTime: new Date(),
+      startDateTime: new Date(),
+      endDateTime: null,
       total: total,
-      lines: orderLines,
-      customer: customer
+      lines: initialOrderLines,
+      customer: user?.user,
+      paymentType: paymentType,
+      notes: notes,
+      address: address,
+      city: city
     }
-    return createOrder("Order: ", order)
-    .then(saveOrder => {
-      console.log("SavedOrdeR: ", saveOrder);
-      localStorage.removeItem("orderLines");
-      navigate('./client/home', saveOrder);
+
+    return createOrder(order)
+    .then(() => {
+      localStorage.removeItem("lines");
+      handleOrderIsDone();
+      setMessage('Order submitted successfully!');
+      setShowModal(false);
+      setError(false);
+      setNotes('');
+      setPaymentType('');
     });
   }
   const handleSubmit = () => {
-    if (firstName && lastName && email && address && phoneNumber && city && paymentType) {
-      setMessage('Order submitted successfully!');
-      setOpen(true);
-      setError(false);
-  
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setAddress('');
-      setPhoneNumber('');
-      setCity('');
-      setNotes('');
-      setPaymentType(''); 
-  
-
+    if (firstName && email && address && phoneNumber && city && paymentType) {
+      saveOrder();
     } else {
       setMessage('Please fill in all the fields.');
       setOpen(true);
       setError(true);
     }
   };
-  
-  const handleNameChange = (e) => {
-    const value = e.target.value.trim();
-    const [first, last] = value.split(" ");
-    setFirstName(first || '');
-    setLastName(last || '');
-    if (!first || !last) {
-      setNameError('Please provide both first name and last name.');
-    } else {
-      setNameError('');
-    }
-  };
-  
+
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -194,19 +172,13 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
             </div>
          </div>
 
-          <TextField
-            label="Name and Last Name"
-            value={`${firstName} ${lastName}`}
-            onChange={handleNameChange}
+         <TextField
+            label="Name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             fullWidth
             className={classes.input}
-            error={!!nameError}
-          />
-          {nameError && (
-            <Typography variant="body2" className={classes.errorMessage}>
-              {nameError}
-            </Typography>
-          )}
+         />
 
          <TextField
             label="Email"
@@ -241,25 +213,25 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
               onChange={(event) => setCity(event.target.value)}
             >
               {cities && cities.map((city) => (
-                <MenuItem key={city.id} value={city.name}>
-                  {city.name}
+                <MenuItem key={city.id} value={city?.name}>
+                  {city?.name}
                 </MenuItem>
               ))}
             </Select>
          </FormControl>
-         
-          <TextareaAutosize
-            aria-label="order-notes"
-            minRows={3}
-            placeholder="Enter notes here"
-            style={{ marginTop: '10px' }}
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-          <Typography variant="body2" color="textSecondary">
-            Like: Add pickles for extra flavor!
-          </Typography>
-         
+
+         <TextareaAutosize
+    aria-label="order-notes"
+    minRows={3}
+    placeholder="Enter notes here"
+    style={{ marginTop: '10px' }}
+    value={notes}
+    onChange={(e) => setNotes(e.target.value)}
+  />
+  <Typography variant="body2" color="textSecondary">
+    Like: Add pickles for extra flavor!
+  </Typography>
+
          <Typography variant="body1" style={{ marginTop: '16px' }}>
             Choose payment method
          </Typography>
@@ -273,7 +245,7 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
             <FormControlLabel value="CASH" control={<Radio />} label="Cash" className={classes.formControlLabel} />
             <FormControlLabel value="CARD" control={<Radio />} label="Card" className={classes.formControlLabel} />
          </RadioGroup>
-         
+
          <div className={classes.buttonContainer}>
            <Button className={classes.button} onClick={handleSubmit} >
              Submit
@@ -284,13 +256,13 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
       <div className={classes.section}>
          <Typography variant="h6">Order Lines</Typography>
          <List>
-          {orderLines.map((line, index) => (
+          {initialOrderLines.map((line, index) => (
             <React.Fragment key={index}>
               <ListItem style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <ListItemText
                    primary={
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span>{line.product.name}</span>
+                        <span>{line.product?.name}</span>
                         <span>{`${line.quantity} x ${line.price}$`}</span>
                       </div>
                    }
@@ -303,7 +275,7 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
             </React.Fragment>
           ))}
          </List>
-         
+
          <Typography variant="body1" className={classes.total}>
             Total: {total}$
          </Typography>
@@ -317,4 +289,3 @@ export default function OrderDetails ({ orderDetails, orderLines,total }) {
     </div>
   );
 };
-
