@@ -36,6 +36,7 @@ import StoreHoursView from "./storeHours/StoreHoursView";
 import StoreLocationsView from "./storelocations/StoreLocationsView";
 import DeliveryHoursView from "./deliveryHours/DeliveryHoursView";
 import OrdersView from "./orders/OrdersView";
+import useUser from "../../hooks/useUser";
 
 const drawerWidth = 240;
 
@@ -123,6 +124,7 @@ export default function AdminLayout({}) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const location = useLocation();
+  const { user } = useUser();
 
   function handleDrawerOpen() {
     setOpen(true);
@@ -187,24 +189,25 @@ export default function AdminLayout({}) {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Routes>
-          <Route path="/dashboard" element={<AdminDashboard />} />
-          <Route path="/categories" element={<CategoriesView />} />
-          <Route path="/products" element={<ProductsView />} />
-          <Route path="/users" element={<UsersView />} />
-          <Route path="/customers" element={<CustomersView />} />
-          <Route path="/admins" element={<AdminsView />} />
-          <Route path="/city" element={<CityView />} />
-          <Route path="/employees" element={<EmployeeView />} />
-          <Route path="/jobPositions" element={<JobPositionView />} />
-          <Route path="/offers" element={<OffersView />} />
-          <Route path="/storeHours" element={<StoreHoursView />} />
-          <Route path="/deliveryHours" element={<DeliveryHoursView />} />
-          <Route path="/storeLocations" element={<StoreLocationsView />} />
-          <Route path="/orderDetails" element={<OrdersView />} />
-          
-
-        </Routes>
+        {user?.user?.type === 'Admin' &&
+          <Routes>
+            <Route path="/dashboard" element={<AdminDashboard />} />
+            <Route path="/categories" element={<CategoriesView />} />
+            <Route path="/products" element={<ProductsView />} />
+            <Route path="/users" element={<UsersView />} />
+            <Route path="/customers" element={<CustomersView />} />
+            <Route path="/admins" element={<AdminsView />} />
+            <Route path="/city" element={<CityView />} />
+            <Route path="/employees" element={<EmployeeView />} />
+            <Route path="/jobPositions" element={<JobPositionView />} />
+            <Route path="/offers" element={<OffersView />} />
+            <Route path="/storeHours" element={<StoreHoursView />} />
+            <Route path="/deliveryHours" element={<DeliveryHoursView />} />
+            <Route path="/storeLocations" element={<StoreLocationsView />} />
+            {/*<Route path="/orderDetails" element={<OrdersView />} />*/}
+            <Route path="/orderDetails" element={<OrdersView />} />
+          </Routes>
+        }
       </main>
     </div>
   );

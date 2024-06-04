@@ -16,6 +16,8 @@ import { UserService } from "../../service/UserService";
 import useUser from "../../hooks/useUser";
 import { QueryKeys } from "../../service/QueryKeys";
 import LoadingButton from "../../component/LoadingButton";
+import MuiAlert from "@material-ui/lab/Alert";
+import { Snackbar } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -41,12 +43,13 @@ const userService = new UserService();
 
 export default function AdminSignIn({ onSuccess, hideSignUpLink, isLoading }) {
   const classes = useStyles();
-  const { setUser } = useUser();
+  const { user, setUser } = useUser();
   const navigate = useNavigate();
   const [userAccount, setUserAccount] = useState({
     email: "",
     password: "",
   });
+  const [errorMessage, setErrorMessage] = useState(false);
 
   // useMutation when we need to use it for example when clicking a button
   const {
@@ -58,8 +61,12 @@ export default function AdminSignIn({ onSuccess, hideSignUpLink, isLoading }) {
     (user) => userService.adminLogIn(user),
     {
       onSuccess: (data) => {
-        setUser(data);
-        !!onSuccess ? onSuccess(data) : navigate("/admin/dashboard");
+        if(data?.user?.type === 'Admin') {
+          setUser(data);
+          !!onSuccess ? onSuccess(data) : navigate("/admin/dashboard");
+        } else {
+          setErrorMessage(true);
+        }
       },
     },
   );
@@ -72,6 +79,14 @@ export default function AdminSignIn({ onSuccess, hideSignUpLink, isLoading }) {
     if (event.key === "Enter") {
       handleLogin();
     }
+  }
+
+  const handleSnackbarClose = () => {
+    setErrorMessage(false);
+  };
+
+  if(user) {
+    navigate('/admin/dashboard',  { replace: true })
   }
 
   return (
@@ -147,6 +162,11 @@ export default function AdminSignIn({ onSuccess, hideSignUpLink, isLoading }) {
           )}
         </Grid>
       </div>
+      <Snackbar open={errorMessage} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity="error">
+          Admin role is required to login!
+        </MuiAlert>
+      </Snackbar>
     </Container>
   );
 }

@@ -103,14 +103,12 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
   const [nameError, setNameError] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
-  const dateTime = useRef();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [notes, setNotes] = useState('');
   const [paymentType, setPaymentType] = useState('');
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState('');
-  const navigate = useNavigate();
   const {mutateAsync: createOrder, isLoading} = useMutation(orderDetails => orderDetailService.create(orderDetails));
   const [checklist, setChecklist] = useState([]);
   const [checklistValues, setChecklistValues] = useState([]);
@@ -118,7 +116,7 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
   useEffect(() => {
     if (user) {
       setFirstName(user?.user?.firstName);
-      setLastName(user.user.lastName); 
+      setLastName(user.user.lastName);
       setEmail(user?.user?.email);
       setPhoneNumber(user?.user?.phoneNumber);
       setCity(user?.user?.city?.name);
@@ -179,7 +177,7 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
     newChecklist[index] = value;
     setChecklist(newChecklist);
   };
-  
+
   const handleChecklistChange = (value, index) => {
     const newChecklistValues = [...checklistValues];
     newChecklistValues[index] = value;
@@ -187,10 +185,10 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
   };
 
   const handleAddItem = () => {
-    setChecklist([...checklist, '']); 
+    setChecklist([...checklist, '']);
     setChecklistValues([...checklistValues, false]);
   };
-  
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;

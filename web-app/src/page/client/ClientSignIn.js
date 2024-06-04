@@ -42,7 +42,7 @@ const userService = new UserService();
 
 export default function AdminSignIn({ onSuccess, hideSignUpLink, isLoading }) {
   const classes = useStyles();
-  const { setUser } = useUser();
+  const { user, setUser } = useUser();
   const navigate = useNavigate();
   const [userAccount, setUserAccount] = useState({
     email: "",
@@ -73,6 +73,10 @@ export default function AdminSignIn({ onSuccess, hideSignUpLink, isLoading }) {
     if (event.key === "Enter") {
       handleLogin();
     }
+  }
+
+  if(user) {
+    navigate('/client/home',  { replace: true })
   }
 
   return (

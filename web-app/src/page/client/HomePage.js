@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 export default function HomePage() {
   const classes = useStyles();
   const {
-    cartItems,
+    cart,
     handleAddToCart,
     handleRemoveFromCart,
     handleIncreaseQuantity,
@@ -98,7 +98,7 @@ export default function HomePage() {
       <ProductList onAddToCart={handleAddToCart} products={items} />
 
       <ShoppingCart
-        cartItems={cartItems}
+        cartItems={cart}
         showCart={showCart}
         toggleCartDrawer={toggleCartDrawer}
         total={total}

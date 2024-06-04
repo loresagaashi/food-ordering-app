@@ -8,6 +8,7 @@ import {
 import { Link as RouterLink, useNavigate  } from "react-router-dom";
 import HomePage from "./HomePage";
 import useUser from "../../hooks/useUser";
+import useCart from "../../component/home/useCart";
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -76,11 +77,15 @@ const useStyles = makeStyles((theme) => ({
 export default function ClientLayout() {
   const classes = useStyles();
   const { user, setUser } = useUser();
+  const {deleteItemsFromCart} = useCart();
   const navigate = useNavigate();
 
 
   function handleLogOut() {
     localStorage.removeItem("user");
+    localStorage.removeItem("cartItems");
+    localStorage.removeItem("lines");
+    deleteItemsFromCart();
     setUser(null);
     navigate("/client/home");
   }

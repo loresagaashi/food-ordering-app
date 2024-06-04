@@ -63,7 +63,8 @@ const customerService = new CustomerService();
 export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
   const classes = useStyles();
   let navigate = useNavigate();
-  const { cities, loading, error: citiesError } = useCities();  
+  const {user} = useUser();
+  const { cities, loading, error: citiesError } = useCities();
 
   const [userAccount, setUserAccount] = useState({
     firstName: "",
@@ -89,7 +90,11 @@ export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
       },
     },
   );
-  
+
+  if(user) {
+    navigate('/client/home',  { replace: true })
+  }
+
   const handleSubmit = () => {
     const selectedCity = cities.find(city => city.name === userAccount.city);
     createUser({ ...userAccount, city: selectedCity });

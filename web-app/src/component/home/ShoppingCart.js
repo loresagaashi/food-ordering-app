@@ -133,7 +133,7 @@ export default function ShoppingCart({
         </Typography>
       ) : (
         <List>
-          {cartItems.map((item, index) => (
+          {cartItems?.map((item, index) => (
             <ListItem key={index} className={classes.listItem}>
               <div className={classes.productInfo}>
                 <img

@@ -11,6 +11,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { CartProvider } from "./context/CartContext";
 
 const customTheme = {
   overrides: {
@@ -61,6 +62,7 @@ function App() {
 
   return (
     <AuthProvider>
+      <CartProvider>
         <QueryClientProvider client={queryClient}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <ThemeProvider theme={createTheme(theme)}>
@@ -69,6 +71,7 @@ function App() {
           </ThemeProvider>
           </MuiPickersUtilsProvider>
         </QueryClientProvider>
+      </CartProvider>
     </AuthProvider>
   );
 }

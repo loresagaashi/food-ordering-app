@@ -1,60 +1,63 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { CartContext } from "../../context/CartContext";
 
 export default function useCart() {
-  const [cartItems, setCartItems] = useState(() => {
-    // Retrieve the initial state from local storage if it exists
-    const savedCartItems = localStorage.getItem('cartItems');
-    return savedCartItems ? JSON.parse(savedCartItems) : [];
-  });
+  const { cart, setCart } = useContext(CartContext);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    // Save the cart items to local storage whenever they change
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  }, [cartItems]);
+    const newTotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    setTotal(newTotal);
+
+    if(cart) {
+      // Save the cart items to local storage whenever they change
+      localStorage.setItem('cartItems', JSON.stringify(cart));
+    }
+
+  }, [cart]);
 
   const handleAddToCart = (product) => {
-    const existingItemIndex = cartItems.findIndex((item) => item.id === product.id);
+    const existingItemIndex = cart.findIndex((item) => item.id === product.id);
 
     if (existingItemIndex !== -1) {
-      const updatedCartItems = [...cartItems];
+      const updatedCartItems = [...cart];
       updatedCartItems[existingItemIndex].quantity += product.quantity;
-      setCartItems(updatedCartItems);
+      setCart(updatedCartItems);
     } else {
-      setCartItems([...cartItems, { ...product, quantity: product.quantity }]);
+      setCart([...cart, { ...product, quantity: product.quantity }]);
     }
   };
 
   const handleRemoveFromCart = (productId) => {
-    setCartItems(cartItems.filter(item => item.id !== productId));
+    setCart(cart.filter(item => item.id !== productId));
   };
 
   const handleIncreaseQuantity = (productId) => {
-    const updatedCartItems = cartItems.map(item =>
+    const updatedCartItems = cart?.map(item =>
       item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
     );
-    setCartItems(updatedCartItems);
+    setCart(updatedCartItems);
   };
 
   const handleDecreaseQuantity = (productId) => {
-    const updatedCartItems = cartItems.map(item =>
+    const updatedCartItems = cart.map(item =>
       item.id === productId ? { ...item, quantity: Math.max(item.quantity - 1, 1) } : item
     );
-    setCartItems(updatedCartItems);
+    setCart(updatedCartItems);
   };
 
-  const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-
   const deleteItemsFromCart = () => {
-    setCartItems([])
+    setCart([])
   }
 
   return {
-    cartItems,
+    cart,
     handleAddToCart,
     handleRemoveFromCart,
     handleIncreaseQuantity,
     handleDecreaseQuantity,
     deleteItemsFromCart,
+    setCart,
     total
   };
 }
