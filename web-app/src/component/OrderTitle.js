@@ -5,7 +5,7 @@ import {makeStyles, useTheme} from "@material-ui/core/styles";
 import clsx from "clsx";
 import Box from "@material-ui/core/Box";
 import BasicTable from "./BasicTable";
-import {formatCurrency, getTime} from "../utils/Utils";
+import {formatCurrency, formatName, getTime} from "../utils/Utils";
 import CloseIcon from '@material-ui/icons/Close';
 import EditIcon from '@material-ui/icons/EditRounded';
 import DeleteIcon from '@material-ui/icons/DeleteRounded';
@@ -100,9 +100,10 @@ export default function OrderTitle({order, className, moveLabel, onMoveClick, on
     const classes = useStyles({blur: `blur(${clicked ? "4px" : "0px"})`});
 
     const tableColumns = [
-        {title: "Service", field: "service", renderValue: row => row.name},
-        {title: "Employee", field: "employee.firstName"},
-    ];
+        { title: "Customer", field: "customer", renderValue: row => `${row.customer.firstName} ${row.customer.lastName}` },
+        { title: "OrderDetails", field: "lines", renderValue: row => formatName(row.lines.product, row.lines.price) },
+      ];
+      
 
     function handleMoveClick() {
         onMoveClick(order);

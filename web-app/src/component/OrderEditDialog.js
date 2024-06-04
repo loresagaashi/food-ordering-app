@@ -1,3 +1,4 @@
+// src/components/OrderEditDialog.js
 import React, { useRef, useState } from "react";
 import {
   Dialog,
@@ -12,7 +13,6 @@ import {
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import MaterialTable from "@material-table/core";
-import { formatCurrency, formatName, getCurrency } from "../utils/Utils";
 import { useMutation, useQuery } from "react-query";
 import { QueryKeys } from "../service/QueryKeys";
 import LoadingButton, { SuccessLoadingButton } from "./LoadingButton";
@@ -24,11 +24,7 @@ import CancelIcon from "@material-ui/icons/CancelOutlined";
 import { OrderLineService } from "../service/OrderLineService";
 import { CustomerService } from "../service/CustomerService";
 import { OrderDetailService } from "../service/OrderDetailService";
-import OrderDetails from "./home/OrderDetails";
-
-const orderLineService = new OrderLineService();
-const customerService = new CustomerService();
-const orderDetailService = new OrderDetailService();
+import { formatCurrency, formatName, getCurrency } from "../utils/Utils";
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -47,209 +43,217 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const orderLineService = new OrderLineService();
+const customerService = new CustomerService();
+const orderDetailService = new OrderDetailService();
+
 export default function OrderEditDialog({
-    order,
-    setOrder,
-    open,
-    setOpen,
-    refetch,
-  }) {
-    const errorRef = useRef();
-    const theme = useTheme();
-    const classes = useStyles();
-    const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-    const { data: orderDetails } = useQuery(QueryKeys.ORDERLINE, () =>
-      orderLineService.findAll()
-    );
-    const { data: customers } = useQuery(QueryKeys.CUSTOMERS, () =>
-      customerService.findAll()
-    );
-    const {mutateAsync: validateOrder} = useMutation(order => orderLineService.validateOnCreate(order), {
-      onError: e => errorRef.current = e
-  });
-    const { mutateAsync: updateAppointment } = useMutation(
-      (order) => orderDetailService.update(order),
-      {
-        onSuccess: () => {
-          setOpen(false);
-          refetch();
-        },
-        onError: (e) => (errorRef.current = e),
-      }
-    );
-    const columns = [
-      {
-        title: "Customer",
-        field: "customer",
-        render: (rowData) => rowData.customer?.firstName,
-        editComponent: (props) =>
-          SelectTableCell(
-            props,
-            errorRef,
-            customers?.map((x) => ({ value: x, label: x.firstName })) || [],
-            "id"
-          ),
+  order,
+  setOrder,
+  open,
+  setOpen,
+  refetch,
+}) {
+  const errorRef = useRef();
+  const theme = useTheme();
+  const classes = useStyles();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const { data: orderDetails } = useQuery(QueryKeys.ORDERLINE, () =>
+    orderLineService.findAll()
+  );
+  const { data: customers } = useQuery(QueryKeys.CUSTOMERS, () =>
+    customerService.findAll()
+  );
+  const { mutateAsync: validateOrder } = useMutation(
+    (order) => orderDetailService.validateOnCreate(order),
+    {
+      onError: (e) => (errorRef.current = e),
+    }
+  );
+  const { mutateAsync: updateAppointment } = useMutation(
+    (order) => orderDetailService.update(order),
+    {
+      onSuccess: () => {
+        setOpen(false);
+        refetch();
       },
-      {
-        title: "OrderLine",
-        field: "lines",
-        render: (rowData) =>
-          formatName(rowData.lines.product, rowData.lines.price),
-        editComponent: (props) =>
-          SelectTableCell(
-            props,
-            errorRef,
-            orderDetails?.map((x) => ({ value: x, label: x.product })) || [],
-            "id"
-          ),
-      },
-      {
-        title: "Price",
-        field: "lines.price",
-        render: (rowData) => formatCurrency(rowData.lines.price),
-        editComponent: (props) =>
-          TextFieldTableCell(props, errorRef, "number", {
-            InputProps: {
-              readOnly: true,
-              startAdornment: (
-                <InputAdornment position="start">{getCurrency()}</InputAdornment>
-              ),
-            },
-          }),
-      },
-    ];
-  
-    const [isLoading, setIsLoading] = useState(false);
-  
-    function handleSave() {
-      setIsLoading(true);
-      updateAppointment(order).finally(() => setIsLoading(false));
+      onError: (e) => (errorRef.current = e),
     }
-  
-    function handleUpdate(rowData) {
-      return new Promise((resolve) => {
-        setOrder((prev) => ({
-          ...prev,
-          orderLines: prev.orderLines.map((line) => {
-            if (line.id === rowData.id) {
-              return rowData;
-            }
-            return line;
-          }),
-        }));
-        resolve();
-      });
-    }
-  
-    function handleAdd(rowData) {
-      const orderLine = {...rowData, order: order?.orderLines?.length || 1}
-      return validateOrder(orderLine)
-          .then(() => setOrder(prev => ({
-              ...prev,
-              orderLines: [...prev.orderLines, orderLine]
-          })));
-    }
-  
-    function handleDelete(rowData) {
-      return new Promise((resolve) => {
-        setOrder((prev) => ({
-          ...prev,
-          orderLines: prev.orderLines.filter((x) => x.id !== rowData.id),
-        }));
-        resolve();
-      });
-    }
-  
-    function resetErrors() {
-      errorRef.current = null;
-    }
-  
-    return (
-      <Dialog
-        fullWidth
-        maxWidth="lg"
-        fullScreen={fullScreen}
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title" className={classes.dialogTitle}>
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <EditIcon className={classes.icon} />
-            Edit Order
-          </Box>
-        </DialogTitle>
-        <Divider className={classes.divider} />
-        <DialogContent className={classes.dialogContent}>
-          <MaterialTable
-            style={{
-              margin: theme.spacing(2),
-            }}
-            isLoading={isLoading}
-            localization={{
-              header: {
-                actions: "",
-              },
-            }}
-            title={
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <PersonIcon fontSize={"large"} color={"primary"} />
-                <Typography
-                  variant={"h5"}
-                  style={{
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    padding: "0.5em",
-                  }}
-                >
-                  {`${order.customer.firstName} ${order.customer.lastName}`} {/* Update to order.customer */}
-                </Typography>
-              </Box>
-            }
-            columns={columns}
-            data={order.lines}
-            options={{
-              search: false,
-              paging: false,
-              actionsColumnIndex: -1,
-              minBodyHeight: "50vh",
-              headerStyle: {
-                backgroundColor: "transparent",
-              },
-            }}
-            editable={{
-              onRowAdd: handleAdd,
-              onRowAddCancelled: resetErrors,
-              onRowUpdate: handleUpdate,
-              onRowDelete: handleDelete,
-            }}
-          />
-        </DialogContent>
-        <DialogActions
-          style={{ backgroundColor: theme.palette.background.default, padding: theme.spacing(2, 4) }}
-        >
-          <LoadingButton
-            variant="outlined"
-            color={"primary"}
-            autoFocus
-            onClick={() => setOpen(false)}
-            icon={<CancelIcon />}
-          >
-            Cancel
-          </LoadingButton>
-          <SuccessLoadingButton
-            variant="outlined"
-            onClick={handleSave}
-            autoFocus
-            loading={isLoading}
-            style={{ marginLeft: theme.spacing(2) }}
-            icon={<SaveIcon />}
-          >
-            Save
-          </SuccessLoadingButton>
-        </DialogActions>
-      </Dialog>
+  );
+
+  const columns = [
+    {
+      title: "Product",
+      field: "product.name",
+      render: (rowData) => rowData.product?.name,
+      editComponent: (props) =>
+        SelectTableCell(
+          props,
+          errorRef,
+          orderDetails?.map((x) => ({ value: x, label: x.product.name })) || [],
+          "id"
+        ),
+    },
+    {
+      title: "Quantity",
+      field: "quantity",
+      render: (rowData) => rowData.quantity,
+      editComponent: (props) =>
+        TextFieldTableCell(props, errorRef, "number"),
+    },
+    {
+      title: "Price",
+      field: "price",
+      render: (rowData) => formatCurrency(rowData.price),
+      editComponent: (props) =>
+        TextFieldTableCell(props, errorRef, "number", {
+          InputProps: {
+            readOnly: true,
+            startAdornment: (
+              <InputAdornment position="start">{getCurrency()}</InputAdornment>
+            ),
+          },
+        }),
+    },
+  ];
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  function handleSave() {
+    setIsLoading(true);
+    updateAppointment(order).finally(() => setIsLoading(false));
+  }
+
+  function handleUpdate(rowData) {
+    return new Promise((resolve) => {
+      setOrder((prev) => ({
+        ...prev,
+        lines: prev.lines.map((line) => {
+          if (line.id === rowData.id) {
+            return rowData;
+          }
+          return line;
+        }),
+      }));
+      resolve();
+    });
+  }
+
+  function handleAdd(rowData) {
+    const orderLine = { ...rowData, order: order?.lines?.length || 1 };
+    return validateOrder(orderLine).then(() =>
+      setOrder((prev) => ({
+        ...prev,
+        lines: [...prev.lines, orderLine],
+      }))
     );
   }
-  
+
+  function handleDelete(rowData) {
+    return new Promise((resolve) => {
+      setOrder((prev) => ({
+        ...prev,
+        lines: prev.lines.filter((x) => x.id !== rowData.id),
+      }));
+      resolve();
+    });
+  }
+
+  function resetErrors() {
+    errorRef.current = null;
+  }
+
+  return (
+    <Dialog
+      fullWidth
+      maxWidth="lg"
+      fullScreen={fullScreen}
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="responsive-dialog-title"
+    >
+      <DialogTitle
+        id="responsive-dialog-title"
+        className={classes.dialogTitle}
+      >
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <EditIcon className={classes.icon} />
+          Edit Order
+        </Box>
+      </DialogTitle>
+      <Divider className={classes.divider} />
+      <DialogContent className={classes.dialogContent}>
+        <MaterialTable
+          style={{
+            margin: theme.spacing(2),
+          }}
+          isLoading={isLoading}
+          localization={{
+            header: {
+              actions: "",
+            },
+          }}
+          title={
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <PersonIcon fontSize={"large"} color={"primary"} />
+              <Typography
+                variant={"h5"}
+                style={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  padding: "0.5em",
+                }}
+              >
+                {`${order.customer.firstName} ${order.customer.lastName}`}{" "}
+              </Typography>
+            </Box>
+          }
+          columns={columns}
+          data={order.lines}
+          options={{
+            search: false,
+            paging: false,
+            actionsColumnIndex: -1,
+            minBodyHeight: "50vh",
+            headerStyle: {
+              backgroundColor: "transparent",
+            },
+          }}
+          editable={{
+            onRowAdd: handleAdd,
+            onRowAddCancelled: resetErrors,
+            onRowUpdate: handleUpdate,
+            onRowDelete: handleDelete,
+          }}
+        />
+      </DialogContent>
+      <DialogActions
+        style={{
+          backgroundColor: theme.palette.background.default,
+          padding: theme.spacing(2, 4),
+        }}
+      >
+        <LoadingButton
+          variant="outlined"
+          color={"primary"}
+          autoFocus
+          onClick={() => setOpen(false)}
+          icon={<CancelIcon />}
+        >
+          Cancel
+        </LoadingButton>
+        <SuccessLoadingButton
+          variant="outlined"
+          onClick={handleSave}
+          autoFocus
+          loading={isLoading}
+          style={{ marginLeft: theme.spacing(2) }}
+          icon={<SaveIcon />}
+        >
+          Save
+        </SuccessLoadingButton>
+      </DialogActions>
+    </Dialog>
+  );
+}
