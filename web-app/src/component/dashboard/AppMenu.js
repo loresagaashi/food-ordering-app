@@ -34,6 +34,11 @@ const appMenuItems = [
     link: "/admin/dashboard",
   },
   {
+    name:" Orders ",
+    Icon:  ListAltIcon ,
+    link: "/admin/orderDetails",
+  },
+  {
     name: "Admins",
     Icon: SupervisorAccountIcon,
     link: "/admin/admins",
@@ -87,11 +92,6 @@ const appMenuItems = [
     name:" Store Locations ",
     Icon:  LocationOnIcon ,
     link: "/admin/storeLocations",
-  },
-  {
-    name:" Orders ",
-    Icon:  ListAltIcon ,
-    link: "/admin/orderDetails",
   },
 ];
 

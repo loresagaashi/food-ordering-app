@@ -29,10 +29,10 @@ public class OrderDetailController extends BasicControllerOperations<OrderDetail
 
     @GetMapping("/all/{status}")
     public Map<LocalDate, List<OrderDetail>> findByDateTimeBetweenAndStatus(@PathVariable String status,
-                                                                            @RequestParam(required = false) String costumer,
+                                                                            @RequestParam(required = false) String customer,
                                                                             @RequestParam @DateTimeFormat(iso = DATE_TIME) LocalDateTime from,
                                                                             @RequestParam @DateTimeFormat(iso = DATE_TIME) LocalDateTime to) {
-                    return service.findAllByDateBetweenAndStatus(costumer, from, to, status);
+                    return service.findAllByDateBetweenAndStatus(customer, from, to, status);
                                                                             }
 
     @PutMapping("/in-progress")

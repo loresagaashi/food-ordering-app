@@ -5,7 +5,7 @@ import {makeStyles, useTheme} from "@material-ui/core/styles";
 import clsx from "clsx";
 import Box from "@material-ui/core/Box";
 import BasicTable from "./BasicTable";
-import {formatCurrency, formatName, getTime} from "../utils/Utils";
+import {formatCurrency, getTime} from "../utils/Utils";
 import CloseIcon from '@material-ui/icons/Close';
 import EditIcon from '@material-ui/icons/EditRounded';
 import DeleteIcon from '@material-ui/icons/DeleteRounded';
@@ -100,10 +100,11 @@ export default function OrderTitle({order, className, moveLabel, onMoveClick, on
     const classes = useStyles({blur: `blur(${clicked ? "4px" : "0px"})`});
 
     const tableColumns = [
-        { title: "Customer", field: "customer", renderValue: row => `${row.customer.firstName} ${row.customer.lastName}` },
-        { title: "OrderDetails", field: "lines", renderValue: row => formatName(row.lines.product, row.lines.price) },
+        { title: "Items", field: "product", renderValue: row => row?.name},
+        { title: "Notes", field: "notes", renderValue: row => row?.notes || 'None' },
       ];
-      
+    console.log('order', order)
+
 
     function handleMoveClick() {
         onMoveClick(order);
@@ -132,14 +133,14 @@ export default function OrderTitle({order, className, moveLabel, onMoveClick, on
                 <CardContent>
                     <Box display="flex" className={classes.header}>
                         <Typography variant="h5" component="h2" style={{color: "lightgoldenrodyellow"}}>
-                            {order?.user.firstName + " " + order?.user.lastName}
+                            {order?.customer.firstName + " " + order?.customer.lastName}
                         </Typography>
                         <Typography variant="h5" color="textSecondary" component="h1" style={{color: "darkslategray"}}>
                             {format(new Date(order?.dateTime), 'HH:mm')}
                         </Typography>
                     </Box>
                     <Box display="flex" justifyContent="space-between" className={classes.content}>
-                        <BasicTable data={order.orderLines} columns={tableColumns}/>
+                        <BasicTable data={order?.lines} columns={tableColumns}/>
                         <Box style={{paddingLeft: "1.5em"}} display="flex" flexDirection="column" alignItems="baseline">
                             <Box display="flex" alignItems="baseline">
                                 <Typography noWrap className={classes.label} variant="body2" component="span">From:</Typography>
@@ -154,7 +155,7 @@ export default function OrderTitle({order, className, moveLabel, onMoveClick, on
                             <Box display="flex" alignItems="baseline" className={classes.total}>
                                 <Typography noWrap variant="h6" component="span">Total:</Typography>
                                 <Typography noWrap className={classes.value} variant="h6" component="span"
-                                            color="textPrimary">{formatCurrency(order.total)}</Typography>
+                                            color="textPrimary">{formatCurrency(order?.total)}</Typography>
                             </Box>
                         </Box>
                     </Box>

@@ -11,12 +11,12 @@ export function getTime(date) {
         return "--:--";
     }
 
-    return new Date(date).toLocaleTimeString().substring(0, 5);
+    return new Date(date).toLocaleTimeString().substring(0, 4);
 }
 
 const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'CAD',
+    currency: 'EUR',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
 });

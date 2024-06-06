@@ -1,4 +1,3 @@
-// src/components/OrderEditDialog.js
 import React, { useRef, useState } from "react";
 import {
   Dialog,
@@ -22,7 +21,6 @@ import PersonIcon from "@material-ui/icons/Person";
 import SaveIcon from "@material-ui/icons/CheckCircleOutline";
 import CancelIcon from "@material-ui/icons/CancelOutlined";
 import { OrderLineService } from "../service/OrderLineService";
-import { CustomerService } from "../service/CustomerService";
 import { OrderDetailService } from "../service/OrderDetailService";
 import { formatCurrency, formatName, getCurrency } from "../utils/Utils";
 
@@ -44,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const orderLineService = new OrderLineService();
-const customerService = new CustomerService();
 const orderDetailService = new OrderDetailService();
 
 export default function OrderEditDialog({
@@ -61,16 +58,13 @@ export default function OrderEditDialog({
   const { data: orderDetails } = useQuery(QueryKeys.ORDERLINE, () =>
     orderLineService.findAll()
   );
-  const { data: customers } = useQuery(QueryKeys.CUSTOMERS, () =>
-    customerService.findAll()
-  );
   const { mutateAsync: validateOrder } = useMutation(
     (order) => orderDetailService.validateOnCreate(order),
     {
       onError: (e) => (errorRef.current = e),
     }
   );
-  const { mutateAsync: updateAppointment } = useMutation(
+  const { mutateAsync: updateOrder } = useMutation(
     (order) => orderDetailService.update(order),
     {
       onSuccess: () => {
@@ -80,17 +74,18 @@ export default function OrderEditDialog({
       onError: (e) => (errorRef.current = e),
     }
   );
+  console.log('order', order)
 
   const columns = [
     {
       title: "Product",
-      field: "product.name",
+      field: "product",
       render: (rowData) => rowData.product?.name,
       editComponent: (props) =>
         SelectTableCell(
           props,
           errorRef,
-          orderDetails?.map((x) => ({ value: x, label: x.product.name })) || [],
+          orderDetails?.map((x) => ({ value: x.product, label: x?.product.name })) || [],
           "id"
         ),
     },
@@ -121,7 +116,7 @@ export default function OrderEditDialog({
 
   function handleSave() {
     setIsLoading(true);
-    updateAppointment(order).finally(() => setIsLoading(false));
+    updateOrder(order).finally(() => setIsLoading(false));
   }
 
   function handleUpdate(rowData) {

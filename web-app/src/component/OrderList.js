@@ -45,10 +45,10 @@ export default function OrderList({data, loading, moveLabel, onMoveClick, onEdit
                         {date === 'null' ? <Skeleton width="5%"/> :
                             <Typography className={classes.dateTypography} variant="h6" component="span">{format(parseISO(date), "MMM d")}</Typography>}
                     </Grid>
-                    {orders.map((orders, i) => (orders ?
+                    {orders.map((order, i) => (order ?
                             <Grid key={i} item>
                                 <OrderTitle className={classes.tile}
-                                                 orders={orders}
+                                                 order={order}
                                                  moveLabel={moveLabel}
                                                  onMoveClick={onMoveClick}
                                                  onEditClick={onEditClick}

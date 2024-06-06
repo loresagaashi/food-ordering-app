@@ -22,7 +22,7 @@ export class OrderDetailService extends BaseService {
   findByDateBetweenAndStatusAndUser(status, user, from, to) {
     return axiosInstance.get(`${this.requestMapping}/all/${status}`, {
       params: {
-        user: user,
+        customer: user,
         from: from,
         to: to,
       },

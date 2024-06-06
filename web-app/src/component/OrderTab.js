@@ -32,7 +32,7 @@ export default function OrderTab({index, label, value, data, isLoading, onMoveCl
             <TabPanel value={value} index={index} dir={theme.direction}>
                 <Paper variant="outlined" style={{marginBottom: theme.spacing(2)}}>
                     <Box display="flex" className={classes.filter} flexWrap="wrap">
-                        <TextField value={user} onChange={(e) => setUser(e.target.value)} label="Client" variant="outlined" InputProps={{
+                        <TextField value={user} onChange={(e) => setUser(e.target.value)} label="Customer" variant="standard" InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
                                     <PersonIcon/>
