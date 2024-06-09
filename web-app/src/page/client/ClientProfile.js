@@ -24,9 +24,10 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/picker
 import DateFnsUtils from '@date-io/date-fns';
 import MuiAppBar from '../../component/MuiAppBar';
 import Orders from '../../component/dashboard/Orders';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { QueryKeys } from '../../service/QueryKeys';
 import { OrderDetailService } from '../../service/OrderDetailService';
+import { CustomerService } from "../../service/CustomerService";
 
 const useStyles = makeStyles((theme) => ({
   profileContainer: {
@@ -77,6 +78,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const orderDetailService = new OrderDetailService();
+const customerService = new CustomerService();
 
 const ClientProfile = () => {
   const classes = useStyles();
@@ -91,6 +93,15 @@ const ClientProfile = () => {
   const { data: ordersData, isLoading: ordersLoading } = useQuery(QueryKeys.ORDERDETAIL, () =>
     orderDetailService.findAll()
   );
+  const { mutateAsync: updateCustomer } = useMutation(
+    (cust) => customerService.update(cust),
+    {
+      onSuccess: (data) => {
+        console.log('updated here', data)
+      },
+      onError: (e) => (console.log(e)),
+    }
+  );
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
@@ -98,20 +109,23 @@ const ClientProfile = () => {
 
   const handleSave = async (event) => {
     event.preventDefault();
+    let city = '';
+    if(event.target.city.value){
+      city = cities.find(city => city.name === event.target.city.value)?.id;
+    }
     const updatedUser = {
-      ...user,
-      user: {
         ...user.user,
         firstName: event.target.firstName.value,
         lastName: event.target.lastName.value,
         email: event.target.email.value,
         phoneNumber: event.target.phoneNumber.value,
-        city: { name: event.target.city.value },
+        city: { id: city, name: event.target.city.value },
         birthDate: event.target.birthDate.value,
-      }
     };
     try {
-      await setUser(updatedUser);
+      await updateCustomer(updatedUser);
+      const userLocalStorage = {accessToken: user?.accessToken, refreshToken: user?.refreshToken, user: {...updatedUser}};
+      setUser(userLocalStorage)
       setIsEditing(false);
       setEditedSuccessfully(true);
     } catch (error) {
@@ -153,23 +167,23 @@ const ClientProfile = () => {
       <Grid container spacing={2} className={classes.userInfo}>
         <Grid item xs={6}>
           <Typography variant="subtitle2">Email</Typography>
-          <Typography variant="body2">{user.user.email}</Typography>
+          <Typography variant="body2">{user?.user.email}</Typography>
         </Grid>
         <Grid item xs={6}>
           <Typography variant="subtitle2">Phone</Typography>
-          <Typography variant="body2">{user.user.phoneNumber}</Typography>
+          <Typography variant="body2">{user?.user.phoneNumber}</Typography>
         </Grid>
         <Grid item xs={6}>
           <Typography variant="subtitle2">City</Typography>
-          <Typography variant="body2">{user.user.city.name}</Typography>
+          <Typography variant="body2">{user?.user.city.name}</Typography>
         </Grid>
         <Grid item xs={6}>
           <Typography variant="subtitle2">Birth Date</Typography>
-          <Typography variant="body2">{user.user.birthDate}</Typography>
+          <Typography variant="body2">{user?.user.birthDate}</Typography>
         </Grid>
         <Grid item xs={6}>
           <Typography variant="subtitle2">Bonus Points</Typography>
-          <Typography variant="body2">{user.user.bonusPoints}</Typography>
+          <Typography variant="body2">{user?.user.totalBonusPoints}</Typography>
         </Grid>
         <Grid>
           <Button variant="outlined" color="secondary" style={{marginTop: '16px'}} onClick={handleViewOrdersClick}>
@@ -186,7 +200,7 @@ const ClientProfile = () => {
         fullWidth
         name="firstName"
         label="First Name"
-        defaultValue={user.user.firstName}
+        defaultValue={user?.user.firstName}
         variant="outlined"
         margin="dense"
       />
@@ -194,7 +208,7 @@ const ClientProfile = () => {
         fullWidth
         name="lastName"
         label="Last Name"
-        defaultValue={user.user.lastName}
+        defaultValue={user?.user.lastName}
         variant="outlined"
         margin="dense"
       />
@@ -202,7 +216,7 @@ const ClientProfile = () => {
         fullWidth
         name="email"
         label="Email"
-        defaultValue={user.user.email}
+        defaultValue={user?.user.email}
         variant="outlined"
         margin="dense"
       />
@@ -210,7 +224,7 @@ const ClientProfile = () => {
         fullWidth
         name="phoneNumber"
         label="Phone"
-        defaultValue={user.user.phoneNumber}
+        defaultValue={user?.user.phoneNumber}
         variant="outlined"
         margin="dense"
       />
@@ -219,13 +233,13 @@ const ClientProfile = () => {
         fullWidth
         name="city"
         label="City"
-        defaultValue={user.user.city.name}
+        defaultValue={user?.user?.city.name}
         variant="outlined"
         margin="dense"
       >
-        {cities.map((city) => (
-          <MenuItem key={city.id} value={city.name}>
-            {city.name}
+        {cities?.map((city) => (
+          <MenuItem key={city?.id} value={city?.name}>
+            {city?.name}
           </MenuItem>
         ))}
       </TextField>
@@ -237,7 +251,7 @@ const ClientProfile = () => {
         margin="dense"
         id="birthDate"
         label="Birth Date"
-        value={user.user.birthDate}
+        value={user?.user.birthDate}
         onChange={(date) => {
           const updatedUser = { ...user };
           updatedUser.user.birthDate = date;
@@ -309,4 +323,3 @@ const ClientProfile = () => {
 };
 
 export default ClientProfile;
-

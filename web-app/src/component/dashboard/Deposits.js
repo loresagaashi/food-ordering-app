@@ -20,7 +20,7 @@ export default function Deposits({ totalSalesAmount }) {
     <React.Fragment>
       <Title>Recent Deposits</Title>
       <Typography component="p" variant="h4">
-        ${totalSalesAmount}
+        ${totalSalesAmount.toFixed(2)}
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
         on {getCurrentDate()}

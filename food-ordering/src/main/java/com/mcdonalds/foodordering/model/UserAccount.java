@@ -1,6 +1,7 @@
 package com.mcdonalds.foodordering.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mcdonalds.foodordering.validation.group.Create;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
@@ -32,7 +33,7 @@ public abstract class UserAccount extends BaseEntity implements UserDetails {
     @Email
     protected String email;
 
-    @NotEmpty
+    @NotEmpty(groups = Create.class)
     protected String password;
 
     protected LocalDate birthDate;
