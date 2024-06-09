@@ -216,7 +216,7 @@ export default function ClientSignUp({ onSuccess, hideSignInLink, isLoading }) {
               variant="inline"
               inputVariant="standard"
               label="Date of birth"
-              format="MM/dd/yyyy"
+              format="yyyy-MM-dd"
               value={userAccount.birthDate}
               InputAdornmentProps={{ position: "start" }}
               onChange={(date) =>

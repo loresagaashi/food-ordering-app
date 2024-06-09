@@ -1,15 +1,21 @@
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Chart from "../../../component/dashboard/Chart";
-import Deposits from "../../../component/dashboard/Deposits";
-import Orders from "../../../component/dashboard/Orders";
-import Box from "@material-ui/core/Box";
-import Container from "@material-ui/core/Container";
-import React from "react";
-import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
+import * as React from 'react';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import clsx from 'clsx';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
+import { makeStyles } from '@material-ui/core/styles';
+import Chart from '../../../component/dashboard/Chart';
+import Deposits from '../../../component/dashboard/Deposits';
+import Orders from '../../../component/dashboard/Orders';
+import { OrderDetailService } from '../../../service/OrderDetailService';
+import { QueryKeys } from '../../../service/QueryKeys';
+
+const orderDetailService = new OrderDetailService();
 
 const drawerWidth = 240;
 
@@ -93,9 +99,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AdminDashboard({}) {
+export default function AdminDashboard() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  const { data: orders, isLoading } = useQuery(QueryKeys.ORDERDETAIL, () =>
+    orderDetailService.findAll()
+  );
+  const [visibleOrders, setVisibleOrders] = useState(10);
+
+  const showMoreOrders = () => {
+    setVisibleOrders((prevVisibleOrders) => prevVisibleOrders + 10);
+  };
+
+  const totalSalesAmount = orders
+    ? orders.reduce((sum, order) => sum + order.total, 0)
+    : 0;
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container maxWidth="lg" className={classes.container}>
@@ -107,12 +130,16 @@ export default function AdminDashboard({}) {
         </Grid>
         <Grid item xs={12} md={4} lg={3}>
           <Paper className={fixedHeightPaper}>
-            <Deposits />
+            <Deposits totalSalesAmount={totalSalesAmount} />
           </Paper>
         </Grid>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Orders />
+            <Orders
+              orders={orders}
+              visibleOrders={visibleOrders}
+              showMoreOrders={showMoreOrders}
+            />
           </Paper>
         </Grid>
       </Grid>

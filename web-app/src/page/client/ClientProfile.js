@@ -10,6 +10,10 @@ import {
   Button,
   MenuItem,
   Snackbar,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,6 +23,10 @@ import useCities from '../../hooks/useCities';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 import MuiAppBar from '../../component/MuiAppBar';
+import Orders from '../../component/dashboard/Orders';
+import { useQuery } from 'react-query';
+import { QueryKeys } from '../../service/QueryKeys';
+import { OrderDetailService } from '../../service/OrderDetailService';
 
 const useStyles = makeStyles((theme) => ({
   profileContainer: {
@@ -68,6 +76,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const orderDetailService = new OrderDetailService();
+
 const ClientProfile = () => {
   const classes = useStyles();
   const { user, setUser } = useUser();
@@ -75,6 +85,12 @@ const ClientProfile = () => {
   const { cities, loading, error } = useCities();
   const [editedSuccessfully, setEditedSuccessfully] = useState(false);
   const [editFailed, setEditFailed] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [isOrdersDialogOpen, setIsOrdersDialogOpen] = useState(false);
+  const [visibleOrders, setVisibleOrders] = useState(5);
+  const { data: ordersData, isLoading: ordersLoading } = useQuery(QueryKeys.ORDERDETAIL, () =>
+    orderDetailService.findAll()
+  );
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
@@ -103,6 +119,27 @@ const ClientProfile = () => {
     }
   };
 
+  const handleViewOrdersClick = () => {
+    if (ordersData) {
+      const userOrders = ordersData.filter(order => order.customer.email === user.user.email);
+      setOrders(userOrders);
+      setIsOrdersDialogOpen(true);
+    }
+  };
+
+  const handleCloseOrdersDialog = () => {
+    setIsOrdersDialogOpen(false);
+  };
+
+  const showMoreOrders = () => {
+    setVisibleOrders((prev) => prev + 5);
+  };
+
+  const handleSnackbarClose = () => {
+    setEditedSuccessfully(false);
+    setEditFailed(false);
+  };
+
   if (!user) {
     return (
       <div className={classes.profileContainer}>
@@ -110,11 +147,6 @@ const ClientProfile = () => {
       </div>
     );
   }
-
-  const handleSnackbarClose = () => {
-    setEditedSuccessfully(false);
-    setEditFailed(false);
-  };
 
   const renderUserInfo = () => (
     <>
@@ -140,7 +172,7 @@ const ClientProfile = () => {
           <Typography variant="body2">{user.user.bonusPoints}</Typography>
         </Grid>
         <Grid>
-          <Button variant="outlined" color="secondary" style={{marginTop: '16px'}}>
+          <Button variant="outlined" color="secondary" style={{marginTop: '16px'}} onClick={handleViewOrdersClick}>
             View my orders
           </Button>
         </Grid>
@@ -201,7 +233,7 @@ const ClientProfile = () => {
         autoOk
         variant="inline"
         inputVariant="outlined"
-        format="MM/dd/yyyy"
+        format="yyyy-MM-dd"
         margin="dense"
         id="birthDate"
         label="Birth Date"
@@ -241,7 +273,7 @@ const ClientProfile = () => {
                 <div className={classes.editIconContainer}>
                   <Typography variant="h5"><b>User Profile</b></Typography>
                   <IconButton className={classes.editIcon} onClick={handleEditClick}>
-                  <EditIcon />
+                    <EditIcon />
                   </IconButton>
                 </div>
                 <hr />
@@ -261,6 +293,17 @@ const ClientProfile = () => {
           </Snackbar>
         </section>
       </MuiPickersUtilsProvider>
+      <Dialog open={isOrdersDialogOpen} onClose={handleCloseOrdersDialog} fullWidth maxWidth="md">
+        <DialogTitle>My Orders</DialogTitle>
+        <DialogContent>
+          <Orders orders={orders} visibleOrders={visibleOrders} showMoreOrders={showMoreOrders} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseOrdersDialog} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
