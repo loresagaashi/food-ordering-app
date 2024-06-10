@@ -90,11 +90,31 @@ export default function OrdersPage() {
                                                                        to
                                                                      }) => ordersService.findByDateBetweenAndStatusAndUser(status, user, from, to));
   const {mutate: moveToProgress} = useMutation(order => ordersService.moveToProgress(order), {
-    onSuccess: handleSearch
+    onSuccess: () => {
+      console.log('Moved to Progress');
+      handleSearch();
+    }
+  });
+  const {mutate: moveToProcessing} = useMutation(order => ordersService.moveToProcessing(order), {
+    onSuccess: () => {
+      console.log('Moved to Processing');
+      handleSearch();
+    }
+  });
+  const {mutate: moveToDelivering} = useMutation(order => ordersService.moveToDelivering(order), {
+    onSuccess: () => {
+      console.log('Moved to Delivering');
+      handleSearch();
+    }
   });
   const {mutate: moveToCompleted} = useMutation(order => ordersService.moveToCompleted(order), {
-    onSuccess: handleSearch
+    onSuccess: () => {
+      console.log('Moved to Completed');
+      handleSearch();
+    }
   });
+
+  
   const {mutate: deleteOrder} = useMutation(id => ordersService.delete(id), {
     onSuccess: handleSearch
   });
@@ -107,7 +127,12 @@ export default function OrdersPage() {
   function handleMoveToProgress(appointment) {
     return moveToProgress(appointment);
   }
-
+  function handleMoveToProcessing(appointment) {
+    return moveToProcessing(appointment);
+  }
+  function handleMoveToDelivering(appointment) {
+    return moveToDelivering(appointment);
+  }
   function handleMoveToCompleted(appointment) {
     return moveToCompleted(appointment);
   }
@@ -158,7 +183,7 @@ export default function OrdersPage() {
         onChangeIndex={setValue}
         slideClassName={classes.swipeableViews}
       >
-        <OrderTab index={0}
+        {/* <OrderTab index={0}
                         label="In Progress"
                         value={value}
                         rangeRef={rangeRef}
@@ -170,8 +195,8 @@ export default function OrdersPage() {
                         onEditClick={handleEditClick}
                         onDeleteClick={handleDeleteClick}
                         handleSearch={handleSearch}
-        />
-        <OrderTab index={1}
+        /> */}
+        <OrderTab index={0}
                         label="Processing"
                         value={value}
                         rangeRef={rangeRef}
@@ -179,20 +204,33 @@ export default function OrdersPage() {
                         user={user}
                         setUser={setUser}
                         isLoading={isLoading}
-                        onMoveClick={handleMoveToCompleted}
+                        onMoveClick={handleMoveToProcessing}
                         onEditClick={handleEditClick}
                         onDeleteClick={handleDeleteClick}
                         handleSearch={handleSearch}
         />
-        <OrderTab index={2}
+        <OrderTab index={1}
                   label="Delivering"
-                        disableMove
                         value={value}
                         rangeRef={rangeRef}
                         data={data}
                         user={user}
                         setUser={setUser}
                         isLoading={isLoading}
+                        onMoveClick={handleMoveToDelivering}
+                        handleSearch={handleSearch}
+                        onEditClick={handleEditClick}
+                        onDeleteClick={handleDeleteClick}
+        />
+        <OrderTab index={2}
+                  label="Completed"
+                        value={value}
+                        rangeRef={rangeRef}
+                        data={data}
+                        user={user}
+                        setUser={setUser}
+                        isLoading={isLoading}
+                        onMoveClick={handleMoveToCompleted}
                         handleSearch={handleSearch}
                         onEditClick={handleEditClick}
                         onDeleteClick={handleDeleteClick}
