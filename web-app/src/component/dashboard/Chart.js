@@ -1,47 +1,113 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { LineChart, axisClasses } from "@mui/x-charts";
-import { ChartsTextStyle } from "@mui/x-charts/ChartsText";
+import { useTheme, useMediaQuery, MenuItem, IconButton, Popover, Grid } from "@material-ui/core";
 import Title from "./Title";
-import { useTheme } from "@material-ui/core";
+import { useQuery } from "react-query";
+import { OrderDetailService } from "../../service/OrderDetailService";
+import { QueryKeys } from "../../service/QueryKeys";
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
-// Generate Sales Data
-function createData(time, amount) {
-  return { time, amount: amount ?? null };
+const orderDetailService = new OrderDetailService();
+
+function mapOrdersToChartData(orders) {
+  const aggregatedData = orders.reduce((acc, order) => {
+    const date = new Date(order.dateTime);
+    const hour = date.getHours();
+    const time = `${date.toDateString()} ${hour}:00`;
+
+    if (!acc[time]) {
+      acc[time] = 0;
+    }
+    acc[time] += order.total;
+    return acc;
+  }, {});
+
+  return Object.entries(aggregatedData).map(([time, amount]) => ({ time, amount }));
 }
-
-const data = [
-  createData("00:00", 0),
-  createData("03:00", 300),
-  createData("06:00", 600),
-  createData("09:00", 800),
-  createData("12:00", 1500),
-  createData("15:00", 2000),
-  createData("18:00", 2400),
-  createData("21:00", 2400),
-  createData("24:00"),
-];
 
 export default function Chart() {
   const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const [selectedDay, setSelectedDay] = useState(""); 
+  const [anchorEl, setAnchorEl] = useState(null); 
+
+  const { data: orders } = useQuery(QueryKeys.ORDERDETAIL, () => orderDetailService.findAll());
+
+  const chartData = mapOrdersToChartData(orders);
+
+  const filteredChartData = selectedDay ? chartData.filter(data => {
+    const date = new Date(data.time);
+    return selectedDay === date.toDateString();
+  }) : chartData;
+
+  const handleDayChange = (date) => {
+    setSelectedDay(date);
+    setAnchorEl(null); 
+  };
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
 
   return (
     <React.Fragment>
-      <Title>Today</Title>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item>
+          <Title>Orders Chart</Title>
+        </Grid>
+        <Grid item>
+          <IconButton
+            aria-label="select-day"
+            aria-controls="select-day-menu"
+            aria-haspopup="true"
+            onClick={handlePopoverOpen}
+          >
+            <ArrowDropDownIcon />
+          </IconButton>
+          <Popover
+            id="select-day-menu"
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handlePopoverClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+          >
+            <MenuItem onClick={() => handleDayChange("")}>All Orders</MenuItem>
+              {Array.from(new Set(chartData.map(data => new Date(data.time).toDateString()))).map(date => (
+                <MenuItem key={date} onClick={() => handleDayChange(date)}>{date}</MenuItem>
+            ))}
+          </Popover>
+        </Grid>
+      </Grid>
       <div style={{ width: "100%", flexGrow: 1, overflow: "hidden" }}>
         <LineChart
-          dataset={data}
+          dataset={filteredChartData}
           margin={{
             top: 16,
-            right: 20,
-            left: 70,
-            bottom: 30,
+            right: isSmallScreen ? 10 : 20,
+            left: isSmallScreen ? 50 : 70,
+            bottom: isSmallScreen ? 40 : 60,
           }}
           xAxis={[
             {
               scaleType: "point",
               dataKey: "time",
-              tickNumber: 2,
+              tickNumber: Math.min(filteredChartData.length, isSmallScreen ? 5 : 10),
               tickLabelStyle: theme.typography.body2,
+              label: "Day",
+              labelStyle: theme.typography.body1,
             },
           ]}
           yAxis={[
@@ -52,20 +118,20 @@ export default function Chart() {
                 fill: theme.palette.text.primary,
               },
               tickLabelStyle: theme.typography.body2,
-              max: 2500,
-              tickNumber: 3,
+              tickNumber: 5,
             },
           ]}
           series={[
             {
               dataKey: "amount",
-              showMark: false,
+              showMark: true,
               color: theme.palette.primary.light,
+              lineStyle: { strokeWidth: 2 },
             },
           ]}
           sx={{
             [`.${axisClasses.root} line`]: {
-              stroke: theme.palette.text.secondary,
+              stroke: theme.palette.divider,
             },
             [`.${axisClasses.root} text`]: {
               fill: theme.palette.text.secondary,
@@ -73,6 +139,13 @@ export default function Chart() {
             [`& .${axisClasses.left} .${axisClasses.label}`]: {
               transform: "translateX(-25px)",
             },
+            [`.${axisClasses.bottom} .${axisClasses.label}`]: {
+              transform: "translateY(25px)",
+            },
+          }}
+          tooltip={{
+            show: true,
+            formatter: (value) => `$${value.toFixed(2)}`,
           }}
         />
       </div>
