@@ -23,6 +23,7 @@ const AppRoutes = [
   <Route key={11} path="/client/sign-in" element={<ClientSignIn />} />,
   <Route key={11} path="/client/sign-up" element={<ClientSignUp />} />,
   <Route key={11} path="/client/profile" element={<ClientProfile />} />,
+  <Route key={11} path="/payment/success" element={<ClientLayout />} />,
 ];
 
 export default AppRoutes;

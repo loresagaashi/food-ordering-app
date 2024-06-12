@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mcdonalds.foodordering.model.OrderDetail;
 import com.mcdonalds.foodordering.service.OrderDetailService;
+import com.mcdonalds.foodordering.service.PaymentService;
 
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
 
@@ -26,6 +27,8 @@ public class OrderDetailController extends BasicControllerOperations<OrderDetail
     public OrderDetailController(OrderDetailService service) {
         super(service);
     }
+
+    private PaymentService paymentService;
 
     @GetMapping("/all/{status}")
     public Map<LocalDate, List<OrderDetail>> findByDateTimeBetweenAndStatus(@PathVariable String status,

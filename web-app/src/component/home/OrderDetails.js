@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useMutation, useQuery } from "react-query";
 import { QueryKeys } from "../../service/QueryKeys";
 import useUser from '../../hooks/useUser';
-import {useNavigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
 import UserAccountDialog from './UserAccountDialog';
 import { OrderDetailService } from '../../service/OrderDetailService';
 import useCart from "./useCart";
@@ -112,7 +112,7 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
   const {mutateAsync: createOrder, isLoading} = useMutation(orderDetails => orderDetailService.create(orderDetails));
   const [checklist, setChecklist] = useState([]);
   const [checklistValues, setChecklistValues] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (user) {
       setFirstName(user?.user?.firstName);
@@ -148,11 +148,45 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
       setPaymentType('');
     });
   }
+
   const handleSubmit = async () => {
     if (firstName && lastName && email && address && phoneNumber && city && paymentType) {
         setMessage('Order submitted successfully!');
         setOpen(true);
-        await saveOrder();
+
+        if (paymentType === 'CARD') {
+          try {
+            const order = {
+              status: "IN_PROGRESS",
+              dateTime: new Date(),
+              startDateTime: new Date(),
+              endDateTime: null,
+              total: total,
+              lines: initialOrderLines,
+              customer: user?.user,
+              paymentType: paymentType,
+              notes: notes,
+              address: address,
+              city: city
+            };
+
+            const paymentLinkResponse = await axios.post('http://localhost:8080/api/payment/create-link', order);
+
+            const paymentResponse = paymentLinkResponse.data;
+
+            await saveOrder();
+
+            if (paymentResponse && paymentResponse.payment_url) {
+              window.location.href = paymentResponse.payment_url;
+            }
+          } catch (error) {
+            setMessage(error.message);
+            setOpen(true);
+            setError(true);
+          }
+        } else {
+          await saveOrder();
+        }
     } else {
       setMessage('Please fill in all the fields.');
       setOpen(true);
