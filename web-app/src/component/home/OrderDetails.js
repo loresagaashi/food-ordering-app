@@ -1,15 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { makeStyles, Typography, List, ListItem, ListItemText, RadioGroup, Radio, FormControlLabel, TextareaAutosize, MenuItem, Select, InputLabel, FormControl, TextField, Button, Snackbar, Checkbox } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { makeStyles, Typography, List, ListItem, ListItemText, RadioGroup, Radio, FormControlLabel, TextareaAutosize, MenuItem, Select, InputLabel, FormControl, TextField, Button, Snackbar, Checkbox, Modal, Grid } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import axios from 'axios';
 import { useMutation, useQuery } from "react-query";
 import { QueryKeys } from "../../service/QueryKeys";
 import useUser from '../../hooks/useUser';
-import {Navigate, useNavigate} from "react-router-dom";
-import UserAccountDialog from './UserAccountDialog';
 import { OrderDetailService } from '../../service/OrderDetailService';
-import useCart from "./useCart";
 import useCities from '../../hooks/useCities';
+import OrderLines from './OrderLines';
+import ProductListWithBonusPoints from './ProductListWithBonusPoints';
 
 const useStyles = makeStyles((theme) => ({
    container: {
@@ -71,21 +70,24 @@ const useStyles = makeStyles((theme) => ({
     color: 'red',
     marginTop: theme.spacing(1),
   },
-
+  freeProductButton: {
+    backgroundColor: theme.palette.primary.main, 
+    color: '#fff',
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  },
+  root: {
+    flexGrow: 1,
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "40px",
+  },
 }));
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-
-// const fetchCities = async () => {
-//   try {
-//     const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/city/all`);
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error fetching cities:', error);
-//   }
-// };
 
 const orderDetailService = new OrderDetailService();
 
@@ -96,7 +98,6 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
   const classes = useStyles();
   const {user} = useUser();
   const [city, setCity] = useState('');
-  // const { data: cities } = useQuery(QueryKeys.CITY, fetchCities);
   const {cities} = useCities();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -112,7 +113,47 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
   const {mutateAsync: createOrder, isLoading} = useMutation(orderDetails => orderDetailService.create(orderDetails));
   const [checklist, setChecklist] = useState([]);
   const [checklistValues, setChecklistValues] = useState([]);
-  const navigate = useNavigate();
+  const [totalBonusPoints, setTotalBonusPoints] = useState(0);
+  const [showFreeItems, setShowFreeItems] = useState(false); 
+  const [freeItems, setFreeItems] = useState([]); 
+  const [freeProductMessage, setFreeProductMessage] = useState('');
+  const [modalOpen, setModalOpen] = useState(false); 
+  const [selectedProducts, setSelectedProducts] = useState([]); 
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const { data: productsData } = useQuery(QueryKeys.PRODUCTS);
+
+  const handleSelectFreeItems = (items) => {
+    setFreeItems(items);
+  };
+
+  useEffect(() => {
+    let message = '';
+    if (totalBonusPoints >= 100) {
+      message = 'You can get 4 free products!';
+    } else if (totalBonusPoints >= 51) {
+      message = 'You can get 2 free products!';
+    } else if (totalBonusPoints >= 50) {
+      message = 'You can get 1 free product!';
+    }
+    setFreeProductMessage(message);
+  }, [totalBonusPoints]);
+  
+  
+  const handleFreeProduct = () => {
+    let numberOfFreeProducts = 0;
+    if (totalBonusPoints >= 100) {
+      numberOfFreeProducts = 4;
+    } else if (totalBonusPoints >= 51) {
+      numberOfFreeProducts = 2;
+    } else if (totalBonusPoints >= 50) {
+      numberOfFreeProducts = 1;
+    }
+    setShowFreeItems(true);
+    setModalOpen(true); 
+    handleOpenModal(); 
+  };
+
   useEffect(() => {
     if (user) {
       setFirstName(user?.user?.firstName);
@@ -120,6 +161,7 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
       setEmail(user?.user?.email);
       setPhoneNumber(user?.user?.phoneNumber);
       setCity(user?.user?.city?.name);
+      setTotalBonusPoints(user?.user?.totalBonusPoints);
     }
   }, [user]);
 
@@ -230,6 +272,14 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
     setOpen(false);
   };
 
+  const handleOpenModal = () => setModalOpen(true);
+  const handleCloseModal = () => setModalOpen(false);
+
+  const onAddToCart = (selectedProducts) => {
+    setSelectedProducts(selectedProducts);
+    setModalOpen(false);
+  };
+
   return (
     <div className={classes.container}>
       <div className={classes.section}>
@@ -300,6 +350,36 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
             </Select>
          </FormControl>
 
+          <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+            <Typography variant="body1">Bonus Points:</Typography>
+            <Typography variant="body2" style={{ margin: '10px', fontWeight: 'bold', fontSize: '16px' }}>{totalBonusPoints}</Typography>
+            {totalBonusPoints >= 50 && (
+              <div>
+                <Button
+                  className={classes.freeProductButton}
+                  onClick={handleFreeProduct}
+                  variant="contained"
+                  size="medium"
+                  style={{ backgroundColor: '#4CAF50', color: '#fff' }}
+                >
+                  Get something free
+                </Button>
+                {freeProductMessage && (
+                  <Typography variant="body2" style={{ marginTop: '10px', color: 'green' }}>
+                    {freeProductMessage}
+                  </Typography>
+                )}
+                <ProductListWithBonusPoints
+                  open={modalOpen}
+                  onClose={handleCloseModal}
+                  products={productsData || []}
+                  onAddToCart={onAddToCart}
+                  maxSelectableProducts={totalBonusPoints >= 100 ? 4 : totalBonusPoints >= 51 ? 2 : totalBonusPoints >= 50 ? 1 : 0}
+                />
+              </div>
+            )}
+          </div>
+    
           <TextareaAutosize
             aria-label="order-notes"
             minRows={3}
@@ -311,7 +391,7 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
           <Typography variant="body2" color="textSecondary">
             Like: Add pickles for extra flavor!
           </Typography>
-
+    
           <div>
             <Typography variant="body1" style={{ marginTop: '15px' }}>Checklist:</Typography>
             <List>
@@ -327,7 +407,7 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
                     fullWidth
                     variant="outlined"
                     value={item}
-                    onChange={(e) => handleItemChange(e.target.value, index)} // Separate handler for TextField
+                    onChange={(e) => handleItemChange(e.target.value, index)}
                     placeholder="Enter name"
                     size = "small"
                   />
@@ -363,31 +443,7 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
       </div>
 
       <div className={classes.section}>
-         <Typography variant="h6">Order Lines</Typography>
-         <List>
-          {initialOrderLines.map((line, index) => (
-            <React.Fragment key={index}>
-              <ListItem style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <ListItemText
-                   primary={
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span>{line.product?.name}</span>
-                        <span>{`${line.quantity} x ${line.price}$`}</span>
-                      </div>
-                   }
-                   primaryTypographyProps={{ variant: 'body1' }}
-                   secondary={`${line.amount}$`}
-                   secondaryTypographyProps={{ variant: 'body1', align: 'right' }}
-                />
-              </ListItem>
-              <hr />
-            </React.Fragment>
-          ))}
-         </List>
-
-         <Typography variant="body1" className={classes.total}>
-            Total: {total}$
-         </Typography>
+        <OrderLines initialOrderLines={initialOrderLines} total={total} />
       </div>
 
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>

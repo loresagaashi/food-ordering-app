@@ -77,7 +77,7 @@ export default function CustomersView({}) {
     },
     {
       title: "Bonus Points",
-      field: "bonusPoints",
+      field: "totalBonusPoints",
       editComponent: (props) => NumberFieldTableCell(props, errorRef),
     },
   ];

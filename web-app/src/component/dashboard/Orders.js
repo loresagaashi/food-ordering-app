@@ -16,13 +16,13 @@ export default function Orders({ orders, visibleOrders, showMoreOrders }) {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell></TableCell>
+            <TableCell>ID</TableCell>
             <TableCell>Date</TableCell>
             <TableCell>Customer</TableCell>
             <TableCell>Email</TableCell>
             <TableCell>Address</TableCell>
             <TableCell>City</TableCell>
-            {/* <TableCell>Payment Method</TableCell> */}
+            <TableCell>Payment Method</TableCell>
             <TableCell>Status</TableCell>
             <TableCell align="right">Sale Amount</TableCell>
           </TableRow>
@@ -33,12 +33,13 @@ export default function Orders({ orders, visibleOrders, showMoreOrders }) {
               orderNumber++;
               return (
                 <TableRow key={order.id}>
-                  <TableCell>{orderNumber}</TableCell>
+                  <TableCell>{order.id}</TableCell>
                   <TableCell>{order.dateTime}</TableCell>
                   <TableCell>{`${order.customer.firstName} ${order.customer.lastName}`}</TableCell>
                   <TableCell>{order.customer.email}</TableCell>
                   <TableCell>{order.address}</TableCell>
                   <TableCell>{order.city}</TableCell>
+                  <TableCell>{order.paymentType}</TableCell>
                   <TableCell>{order.status}</TableCell>
                   <TableCell align="right">{`$${order.total}`}</TableCell>
                 </TableRow>
