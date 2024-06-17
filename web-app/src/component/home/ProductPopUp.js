@@ -1,5 +1,7 @@
-import { Backdrop, Button, Fade, Grid, Modal, Typography, makeStyles } from "@material-ui/core";
-import { useState } from "react";
+import React, { useState } from 'react';
+import { Backdrop, Button, Fade, Modal, Typography, makeStyles } from "@material-ui/core";
+import { useQuery } from "react-query";
+import { QueryKeys } from "../../service/QueryKeys";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,49 +19,92 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '20px',
   },
   productName: {
-    marginBottom: '25px' ,
-    marginBottom: theme.spacing(2),
+    marginBottom: '25px',
     fontWeight: 'bold',
     fontFamily: "'Roboto Slab', serif",
     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
   },
+  sizeOption: {
+    display: 'inline-block',
+    margin: '0 10px',
+  },
+  sizeLabel: {
+    display: 'block',
+    width: '40px',
+    height: '40px',
+    borderRadius: '50%',
+    border: '2px solid #000',
+    lineHeight: '36px',
+    textAlign: 'center',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s, color 0.3s',
+  },
+  sizeInput: {
+    display: 'none',
+    '&:checked + $sizeLabel': {
+      backgroundColor: '#FFAC1C',
+      color: '#fff',
+    },
+  },
 }));
-
-  function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <Grid
-      container
-      spacing={2}
-      role="tabpanel"
-      hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
-      style={{ margin: 0, width: "100%" }}
-      {...other}
-    >
-      {value === index && children}
-    </Grid>
-  );
-}
 
 function ProductPopUp({ product, handleClose, handleAddToCart }) {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(1);
+  const [size, setSize] = useState('Small'); // Default size
+  const [menu, setMenu] = useState(false); // Menu option state
 
-  const popupWidth = 700;
-  const popupHeight = 500;
+  const { data: productsData, isLoading, isError } = useQuery(QueryKeys.PRODUCTS);
+  const filteredProducts = productsData ? productsData.filter(product => product.category.name === 'Beverages') : [];
+
+  const calculatePrice = (basePrice, size) => {
+    let price = basePrice;
+    switch (size) {
+      case 'Medium':
+        price *= 1.3;
+        break;
+      case 'Large':
+        price *= 1.6;
+        break;
+      default:
+        break;
+    }
+    return menu ? price + 2.8 : price;
+  };
 
   const onAddToCart = () => {
     const itemToAdd = {
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: calculatePrice(product.price, size),
       imageUrl: product.imageUrl,
       bonusPoints: product.bonusPoints,
       quantity: quantity,
+      menu:menu,
+      ...(product.category === 'Beverages' && { size }),
     };
+
+    if (menu) {
+      // Add Fries to the cart
+      handleAddToCart({
+        id: 'fries',
+        name: 'Fries',
+        price: 2,
+        imageUrl: '../../../products/fries.jpeg',
+        bonusPoints: 0,
+        quantity: 1
+      });
+
+      // Add Coca Cola to the cart
+      handleAddToCart({
+        id: 'coca-cola',
+        name: 'Coca Cola',
+        price: 1.5,
+        imageUrl: '../../../products/coca-cola.jfif',
+        bonusPoints: 0,
+        quantity: 1
+      });
+    }
 
     handleAddToCart(itemToAdd);
     handleClose();
@@ -75,12 +120,20 @@ function ProductPopUp({ product, handleClose, handleAddToCart }) {
     }
   };
 
+  const handleSizeChange = (event) => {
+    setSize(event.target.value);
+  };
+
+  const handleMenuChange = () => {
+    setMenu(!menu);
+  };
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
       className={classes.modal}
-      open={true}
+      open={true} // Ensure modal is open based on your implementation
       onClose={handleClose}
       closeAfterTransition
       BackdropComponent={Backdrop}
@@ -89,9 +142,9 @@ function ProductPopUp({ product, handleClose, handleAddToCart }) {
       }}
     >
       <Fade in={true}>
-        <div className={classes.modalContent} style={{ width: popupWidth, height: popupHeight }}>
+        <div className={classes.modalContent} style={{ width: 800, height: 600 }}>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button onClick={handleClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', marginTop: '7px'}}>
+            <button onClick={handleClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', marginTop: '7px' }}>
               &#10006;
             </button>
           </div>
@@ -107,17 +160,77 @@ function ProductPopUp({ product, handleClose, handleAddToCart }) {
             </div>
             <div style={{ flex: '2', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <Typography variant="h4" id="transition-modal-title" className={classes.productName}>
-                {product.name}
+                {product.name} {menu && "+ Menu"}
               </Typography>
               <Typography variant="body1" id="transition-modal-description" style={{ marginBottom: '20px' }}>
                 {product.description}
               </Typography>
               <Typography variant="body1" style={{ marginRight: 12, color: '#FFAC1C', fontWeight: 'bold' }}>
-                Price: {product.price} $
+                Price: ${calculatePrice(product.price, size).toFixed(2)}
               </Typography>
               <Typography variant="body1" style={{ marginBottom: '5px', marginRight: 12, color: 'green' }}>
                 Bonus points: {product.bonusPoints}
               </Typography>
+              {filteredProducts.length > 0 && (
+                <div style={{ marginTop: 20 }}>
+                  <Typography variant="body1" style={{ marginBottom: '10px' }}>
+                    Select Size:
+                  </Typography>
+                  <div>
+                    <div className={classes.sizeOption}>
+                      <input
+                        type="radio"
+                        id="sizeSmall"
+                        name="size"
+                        value="Small"
+                        className={classes.sizeInput}
+                        checked={size === 'Small'}
+                        onChange={handleSizeChange}
+                      />
+                      <label htmlFor="sizeSmall" className={classes.sizeLabel}>
+                        S
+                      </label>
+                    </div>
+                    <div className={classes.sizeOption}>
+                      <input
+                        type="radio"
+                        id="sizeMedium"
+                        name="size"
+                        value="Medium"
+                        className={classes.sizeInput}
+                        checked={size === 'Medium'}
+                        onChange={handleSizeChange}
+                      />
+                      <label htmlFor="sizeMedium" className={classes.sizeLabel}>
+                        M
+                      </label>
+                    </div>
+                    <div className={classes.sizeOption}>
+                      <input
+                        type="radio"
+                        id="sizeLarge"
+                        name="size"
+                        value="Large"
+                        className={classes.sizeInput}
+                        checked={size === 'Large'}
+                        onChange={handleSizeChange}
+                      />
+                      <label htmlFor="sizeLarge" className={classes.sizeLabel}>
+                        L
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div style={{ marginTop: 20 }}>
+                <input
+                  type="checkbox"
+                  id="menuOption"
+                  checked={menu}
+                  onChange={handleMenuChange}
+                />
+                <label htmlFor="menuOption">Add Menu (Fries & Coca Cola) for $2.8:</label>
+              </div>
               <div style={{ display: 'flex', alignItems: 'center', marginTop: 20 }}>
                 <Button variant="outlined" onClick={handleDecreaseQuantity} style={{ marginRight: 10, width: 30, height: 30 }}>
                   -
@@ -128,7 +241,7 @@ function ProductPopUp({ product, handleClose, handleAddToCart }) {
                 <Button variant="outlined" onClick={handleIncreaseQuantity} style={{ width: 30, height: 30, marginRight: 15 }}>
                   +
                 </Button>
-                <Button onClick={() => onAddToCart()} style={{ padding: '4px 13px', background: '#FFAC1C', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '4px', fontSize: '12px'}}>
+                <Button onClick={onAddToCart} style={{ padding: '4px 13px', background: '#FFAC1C', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '4px', fontSize: '12px' }}>
                   Add to Cart
                 </Button>
               </div>

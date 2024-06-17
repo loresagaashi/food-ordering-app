@@ -110,6 +110,16 @@ export default function OrderEditDialog({
           },
         }),
     },
+    {
+      title: "Address",
+      render: () =>
+        `${order?.address}, ${order?.city}`,
+    },
+    {
+      title: "Payment Method",
+      field: "paymentMethod",
+      render: () => order?.paymentType,
+    },
   ];
 
   const [isLoading, setIsLoading] = useState(false);

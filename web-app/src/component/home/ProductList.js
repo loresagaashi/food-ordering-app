@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { QueryKeys } from "../../service/QueryKeys";
 import MuiAlert from '@material-ui/lab/Alert';
 import ProductPopUp from "./ProductPopUp";
-import OfferList from "../../component/home/OfferList"; // Import OfferList component
+import OfferList from "../../component/home/OfferList"; 
 import { useTheme } from '@mui/material/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +52,7 @@ function TabPanel(props) {
 export default function ProductList({ products, onAddToCart }) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const { data: categories, isLoading } = useQuery(QueryKeys.CATEGORIES); // Destructure isLoading
+  const { data: categories, isLoading } = useQuery(QueryKeys.CATEGORIES); 
   const [selectedProduct, setSelectedProduct] = useState(null);
   const theme = useTheme();
 
@@ -84,9 +84,8 @@ export default function ProductList({ products, onAddToCart }) {
     setShowSuccess(false);
   };
 
-  // Check if categories is undefined or loading
   if (isLoading || !categories) {
-    return <div>Loading...</div>; // or some loading indicator
+    return <div>Loading...</div>; 
   }
 
   return (

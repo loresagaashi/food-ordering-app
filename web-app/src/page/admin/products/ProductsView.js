@@ -17,6 +17,11 @@ export default function ProductsView({}) {
     const errorRef = useRef();
     const {data: allCategories} = useQuery(QueryKeys.CATEGORIES, () => categoryService.findAll());
     const columns = [
+      {
+        title: "Id",
+        field: "id",
+        editComponent: (props) => TextFieldTableCell(props, errorRef),
+      },
         {
           title: "Name",
           field: "name",

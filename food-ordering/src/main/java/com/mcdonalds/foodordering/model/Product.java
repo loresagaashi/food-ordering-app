@@ -26,4 +26,7 @@ public class Product extends BaseEntity {
     private Integer bonusPoints;
 
     private String imageUrl;
+
+    @Enumerated(EnumType.STRING)
+    private Size size;
 }

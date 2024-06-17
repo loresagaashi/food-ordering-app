@@ -6,7 +6,6 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import AlertDialog from '../AlertDialog';
 import MuiAlert from '@material-ui/lab/Alert';
 import OrderDetails from './OrderDetails';
-import useCart from "./useCart";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -64,7 +63,7 @@ export default function ShoppingCart({
   handleIncreaseQuantity,
   handleDecreaseQuantity,
   handleOrderIsDone,
-  user
+  user,
 }) {
   const classes = useStyles();
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
@@ -142,7 +141,7 @@ export default function ShoppingCart({
                   style={{ height: 50, width: 80, marginRight: 10 }}
                 />
                 <ListItemText
-                  primary={<b>{item.name}</b>}
+                  primary={<b>{item.name} {item.menu && "+Menu"}</b>}
                   secondary={
                     <>
                       <Typography component="span" variant="body2" color="textPrimary">
