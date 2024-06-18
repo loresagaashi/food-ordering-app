@@ -13,8 +13,8 @@ function mapOrdersToChartData(orders) {
   const aggregatedData = orders.reduce((acc, order) => {
     const date = new Date(order.dateTime);
     const hour = date.getHours();
-    const time = `${date.toDateString()} ${hour}:00`;
-
+    // const time = `${date.toDateString()} ${hour}:00`;
+    const time = `${hour}:00`; 
     if (!acc[time]) {
       acc[time] = 0;
     }
@@ -98,7 +98,7 @@ export default function Chart() {
             top: 16,
             right: isSmallScreen ? 10 : 20,
             left: isSmallScreen ? 50 : 70,
-            bottom: isSmallScreen ? 40 : 60,
+            bottom: isSmallScreen ? 40 : 80,
           }}
           xAxis={[
             {
@@ -106,7 +106,7 @@ export default function Chart() {
               dataKey: "time",
               tickNumber: Math.min(filteredChartData.length, isSmallScreen ? 5 : 10),
               tickLabelStyle: theme.typography.body2,
-              label: "Day",
+              label: "Hour",
               labelStyle: theme.typography.body1,
             },
           ]}
