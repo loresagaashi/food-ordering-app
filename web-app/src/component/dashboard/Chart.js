@@ -13,7 +13,6 @@ function mapOrdersToChartData(orders) {
   const aggregatedData = orders.reduce((acc, order) => {
     const date = new Date(order.dateTime);
     const hour = date.getHours();
-    // const time = `${date.toDateString()} ${hour}:00`;
     const time = `${hour}:00`; 
     if (!acc[time]) {
       acc[time] = 0;

@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
-export default function OrderLines({ initialOrderLines, total }) {
+export default function OrderLines({ initialOrderLines, selectedProducts, total }) {
   const classes = useStyles();
 
   return (
@@ -24,7 +24,7 @@ export default function OrderLines({ initialOrderLines, total }) {
                   primary={
                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span>{line.product?.name}</span>
-                        <span>{`${line.quantity} x ${line.price}$`}</span>
+                        <span>{`${line.quantity} x ${line.price.toFixed(2)}$`}</span>
                      </div>
                   }
                   primaryTypographyProps={{ variant: 'body1' }}
@@ -36,6 +36,16 @@ export default function OrderLines({ initialOrderLines, total }) {
             </React.Fragment>
           ))}
       </List>
+      {selectedProducts.length > 0 && (
+         selectedProducts.map((product, index) => (
+            <ListItem key={`selected-${index}`}>
+               <ListItemText
+                  primary={`${product.name}`}
+                  secondary={`FREE`}
+               />
+            </ListItem>
+         ))
+      )}
 
       <Typography variant="body1" className={classes.total}>
          Total: {total}$

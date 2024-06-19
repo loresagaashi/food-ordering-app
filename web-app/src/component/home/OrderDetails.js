@@ -443,7 +443,7 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
       </div>
 
       <div className={classes.section}>
-        <OrderLines initialOrderLines={initialOrderLines} total={total} />
+        <OrderLines initialOrderLines={initialOrderLines} selectedProducts={selectedProducts} total={total} />
       </div>
 
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
