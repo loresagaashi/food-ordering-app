@@ -9,6 +9,7 @@ import { OrderDetailService } from '../../service/OrderDetailService';
 import useCities from '../../hooks/useCities';
 import OrderLines from './OrderLines';
 import ProductListWithBonusPoints from './ProductListWithBonusPoints';
+import { CustomerService } from '../../service/CustomerService';
 
 const useStyles = makeStyles((theme) => ({
    container: {
@@ -90,15 +91,19 @@ function Alert(props) {
 }
 
 const orderDetailService = new OrderDetailService();
+const customerService = new CustomerService();
 
-export default function OrderDetails ({ orderDetails,total, setShowModal, handleOrderIsDone }) {
+export default function OrderDetails ({ orderDetails, total, setShowModal, handleOrderIsDone }) {
 
   const initialOrderLines = JSON.parse(localStorage.getItem("lines")) || [];
 
   const classes = useStyles();
-  const {user} = useUser();
+  const { user, setUser } = useUser();
   const [city, setCity] = useState('');
   const {cities} = useCities();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedSuccessfully, setEditedSuccessfully] = useState(false);
+  const [editFailed, setEditFailed] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [nameError, setNameError] = useState('');
@@ -110,22 +115,28 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState('');
-  const {mutateAsync: createOrder, isLoading} = useMutation(orderDetails => orderDetailService.create(orderDetails));
+  const { mutateAsync: createOrder, isLoading } = useMutation(orderDetails => orderDetailService.create(orderDetails));
   const [checklist, setChecklist] = useState([]);
   const [checklistValues, setChecklistValues] = useState([]);
   const [totalBonusPoints, setTotalBonusPoints] = useState(0);
   const [showFreeItems, setShowFreeItems] = useState(false); 
   const [freeItems, setFreeItems] = useState([]); 
   const [freeProductMessage, setFreeProductMessage] = useState('');
-  const [modalOpen, setModalOpen] = useState(false); 
-  const [selectedProducts, setSelectedProducts] = useState([]); 
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState(() => {
+    const savedProducts = localStorage.getItem('selectedProducts');
+    return savedProducts ? JSON.parse(savedProducts) : [];
+  });
   const { data: productsData } = useQuery(QueryKeys.PRODUCTS);
-
-  const handleSelectFreeItems = (items) => {
-    setFreeItems(items);
-  };
+  const { mutateAsync: updateCustomer } = useMutation(
+    (cust) => customerService.update(cust),
+    {
+      onSuccess: (data) => {
+        console.log('updated here', data)
+      },
+      onError: (e) => (console.log(e)),
+    }
+  );
 
   useEffect(() => {
     let message = '';
@@ -150,8 +161,7 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
       numberOfFreeProducts = 1;
     }
     setShowFreeItems(true);
-    setModalOpen(true); 
-    handleOpenModal(); 
+    handleOpenModal();
   };
 
   useEffect(() => {
@@ -165,7 +175,7 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
     }
   }, [user]);
 
-  function saveOrder() {
+  const saveOrder = async () => {
     const order = {
       status: "IN_PROGRESS",
       dateTime: new Date(),
@@ -178,6 +188,19 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
       notes: notes,
       address: address,
       city: city
+    }
+    const updatedUser = {
+      ...user.user,
+      totalBonusPoints: totalBonusPoints - 50,
+    };
+    try {
+      await updateCustomer(updatedUser);
+      const userLocalStorage = {accessToken: user?.accessToken, refreshToken: user?.refreshToken, user: {...updatedUser}};
+      setUser(userLocalStorage)
+      setIsEditing(false);
+      setEditedSuccessfully(true);
+    } catch (error) {
+      setEditFailed(true);
     }
 
     return createOrder(order)
@@ -277,7 +300,7 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
 
   const onAddToCart = (selectedProducts) => {
     setSelectedProducts(selectedProducts);
-    setModalOpen(false);
+    handleCloseModal();
   };
 
   return (
@@ -375,6 +398,8 @@ export default function OrderDetails ({ orderDetails,total, setShowModal, handle
                   products={productsData || []}
                   onAddToCart={onAddToCart}
                   maxSelectableProducts={totalBonusPoints >= 100 ? 4 : totalBonusPoints >= 51 ? 2 : totalBonusPoints >= 50 ? 1 : 0}
+                  selectedProducts={selectedProducts}
+                  setSelectedProducts={setSelectedProducts}
                 />
               </div>
             )}

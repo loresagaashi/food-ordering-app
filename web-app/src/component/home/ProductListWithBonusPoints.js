@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Grid, Typography, Button, Checkbox } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import red from '@material-ui/core/colors/red';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -65,27 +66,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProductListWithBonusPoints = ({ open, onClose, products, onAddToCart, maxSelectableProducts }) => {
+const RedCheckbox = withStyles({
+  root: {
+    color: red[400],
+    '&$checked': {
+      color: red[600],
+    },
+  },
+  checked: {},
+})((props) => <Checkbox color="default" {...props} />);
+
+const ProductListWithBonusPoints = ({ open, onClose, products, onAddToCart, maxSelectableProducts, selectedProducts, setSelectedProducts }) => {
   const classes = useStyles();
-  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [localSelectedProducts, setLocalSelectedProducts] = useState([...selectedProducts]);
 
   useEffect(() => {
-    setSelectedProducts([]);
-  }, [open]);
+    setLocalSelectedProducts([...selectedProducts]);
+  }, [open, selectedProducts]);
 
   const handleProductSelect = (product) => {
-    if (selectedProducts.some((p) => p.id === product.id)) {
-      setSelectedProducts(selectedProducts.filter((p) => p.id !== product.id));
-    } else if (selectedProducts.length < maxSelectableProducts) {
-      setSelectedProducts([...selectedProducts, product]);
+    if (localSelectedProducts.some((p) => p.id === product.id)) {
+      setLocalSelectedProducts(localSelectedProducts.filter((p) => p.id !== product.id));
+    } else if (localSelectedProducts.length < maxSelectableProducts) {
+      setLocalSelectedProducts([...localSelectedProducts, product]);
     }
   };
 
   const handleAddToCart = () => {
-    onAddToCart(selectedProducts);
-    setSelectedProducts([]);
+    setSelectedProducts(localSelectedProducts);
+    localStorage.setItem('selectedProducts', JSON.stringify(localSelectedProducts));
+    onAddToCart(localSelectedProducts);
+    setLocalSelectedProducts([]);
   };
-
+  
   return (
     <Modal open={open} onClose={onClose} className={classes.modal}>
       <div className={classes.modalContent}>
@@ -112,12 +125,18 @@ const ProductListWithBonusPoints = ({ open, onClose, products, onAddToCart, maxS
                   {product.name}
                 </Typography>
                 <div className={classes.checkboxContainer}>
-                  <Checkbox
-                    checked={selectedProducts.some((p) => p.id === product.id)}
-                    color="primary"
-                    inputProps={{ "aria-label": "primary checkbox" }}
-                    disabled={selectedProducts.length >= maxSelectableProducts && !selectedProducts.some((p) => p.id === product.id)}
-                  />
+                  {localSelectedProducts.length >= maxSelectableProducts && !localSelectedProducts.some((p) => p.id === product.id) ? (
+                    <RedCheckbox
+                      checked={localSelectedProducts.some((p) => p.id === product.id)}
+                      disabled
+                    />
+                  ) : (
+                    <Checkbox
+                      checked={localSelectedProducts.some((p) => p.id === product.id)}
+                      color="primary"
+                      inputProps={{ "aria-label": "primary checkbox" }}
+                    />
+                  )}
                 </div>
               </div>
             </Grid>
@@ -129,7 +148,7 @@ const ProductListWithBonusPoints = ({ open, onClose, products, onAddToCart, maxS
             onClick={handleAddToCart}
             className={classes.modalButton}
           >
-            Add to Cart
+            Select
           </Button>
         </div>
       </div>

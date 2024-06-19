@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, Typography, List, ListItem, ListItemText } from '@material-ui/core';
+import { makeStyles, Typography, List, ListItem, ListItemText, Grid } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
    total: {
@@ -37,15 +37,20 @@ export default function OrderLines({ initialOrderLines, selectedProducts, total 
           ))}
       </List>
       {selectedProducts.length > 0 && (
-         selectedProducts.map((product, index) => (
-            <ListItem key={`selected-${index}`}>
-               <ListItemText
-                  primary={`${product.name}`}
-                  secondary={`FREE`}
-               />
-            </ListItem>
-         ))
+        selectedProducts.map((product, index) => (
+          <ListItem key={`selected-${index}`}>
+            <Grid container spacing={2}>
+              <Grid item xs={8}>
+                <Typography variant="body1">{product.name}</Typography>
+              </Grid>
+              <Grid item xs={4} style={{ textAlign: 'right' }}>
+                <Typography variant="body2">FREE</Typography>
+              </Grid>
+            </Grid>
+          </ListItem>
+        ))
       )}
+      <hr/>
 
       <Typography variant="body1" className={classes.total}>
          Total: {total}$
