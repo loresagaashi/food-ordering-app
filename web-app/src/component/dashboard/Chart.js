@@ -27,8 +27,8 @@ function mapOrdersToChartData(orders) {
 export default function Chart() {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const [selectedDay, setSelectedDay] = useState(""); 
-  const [anchorEl, setAnchorEl] = useState(null); 
+  const [selectedDay, setSelectedDay] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const { data: orders } = useQuery(QueryKeys.ORDERDETAIL, () => orderDetailService.findAll());
 
@@ -41,7 +41,7 @@ export default function Chart() {
 
   const handleDayChange = (date) => {
     setSelectedDay(date);
-    setAnchorEl(null); 
+    setAnchorEl(null);
   };
 
   const handlePopoverOpen = (event) => {
@@ -84,8 +84,8 @@ export default function Chart() {
             }}
           >
             <MenuItem onClick={() => handleDayChange("")}>All Orders</MenuItem>
-              {Array.from(new Set(chartData.map(data => new Date(data.time).toDateString()))).map(date => (
-                <MenuItem key={date} onClick={() => handleDayChange(date)}>{date}</MenuItem>
+            {Array.from(new Set(orders.map(order => new Date(order.dateTime).toDateString()))).map(date => (
+              <MenuItem key={date} onClick={() => handleDayChange(date)}>{date}</MenuItem>
             ))}
           </Popover>
         </Grid>
@@ -97,7 +97,7 @@ export default function Chart() {
             top: 16,
             right: isSmallScreen ? 10 : 20,
             left: isSmallScreen ? 50 : 70,
-            bottom: isSmallScreen ? 40 : 80,
+            bottom: isSmallScreen ? 50 : 70,
           }}
           xAxis={[
             {
@@ -105,7 +105,7 @@ export default function Chart() {
               dataKey: "time",
               tickNumber: Math.min(filteredChartData.length, isSmallScreen ? 5 : 10),
               tickLabelStyle: theme.typography.body2,
-              label: "Hour",
+              label: "Hour", 
               labelStyle: theme.typography.body1,
             },
           ]}
