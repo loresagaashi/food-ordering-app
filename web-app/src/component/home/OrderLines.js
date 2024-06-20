@@ -37,20 +37,22 @@ export default function OrderLines({ initialOrderLines, selectedProducts, total 
           ))}
       </List>
       {selectedProducts.length > 0 && (
-        selectedProducts.map((product, index) => (
-          <ListItem key={`selected-${index}`}>
-            <Grid container spacing={2}>
-              <Grid item xs={8}>
-                <Typography variant="body1">{product.name}</Typography>
-              </Grid>
-              <Grid item xs={4} style={{ textAlign: 'right' }}>
-                <Typography variant="body2">FREE</Typography>
-              </Grid>
-            </Grid>
-          </ListItem>
-        ))
+         <>
+            {selectedProducts.map((product, index) => (
+               <ListItem key={`selected-${index}`}>
+               <Grid container spacing={2}>
+                  <Grid item xs={8}>
+                     <Typography variant="body1">{product.name}</Typography>
+                  </Grid>
+                  <Grid item xs={4} style={{ textAlign: 'right' }}>
+                     <Typography variant="body2">FREE</Typography>
+                  </Grid>
+               </Grid>
+               </ListItem>
+            ))}
+         <hr/>
+         </>
       )}
-      <hr/>
 
       <Typography variant="body1" className={classes.total}>
          Total: {total}$

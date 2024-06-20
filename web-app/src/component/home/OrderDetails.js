@@ -183,7 +183,16 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
       startDateTime: new Date(),
       endDateTime: null,
       total: total,
-      lines: initialOrderLines,
+      lines: [
+        ...initialOrderLines,
+        ...freeItems.map(item => ({
+          product: item, 
+          price: 0,
+          quantity: 1,
+          amount: 0, 
+          notes: '-',     
+        }))
+      ],
       customer: user?.user,
       paymentType: paymentType,
       notes: notes,
@@ -207,6 +216,8 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
     return createOrder(order)
     .then(() => {
       localStorage.removeItem("lines");
+      localStorage.removeItem('selectedProducts');
+      setSelectedProducts([]);
       handleOrderIsDone();
       setShowModal(false);
       setError(false);
@@ -296,11 +307,17 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
     setOpen(false);
   };
 
+  const onAddFreeItem = (selectedFreeItem) => {
+    setFreeItems([...freeItems, ...selectedFreeItem]);
+  };
+
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
 
   const onAddToCart = (selectedProducts) => {
     setSelectedProducts(selectedProducts);
+    const selectedFreeProducts = productsData.filter(product => selectedProducts.some(p => p.id === product.id));
+    onAddFreeItem(selectedFreeProducts);
     handleCloseModal();
   };
 
@@ -401,6 +418,8 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
                   maxSelectableProducts={totalBonusPoints >= 100 ? 4 : totalBonusPoints >= 51 ? 2 : totalBonusPoints >= 50 ? 1 : 0}
                   selectedProducts={selectedProducts}
                   setSelectedProducts={setSelectedProducts}
+                  freeItems={freeItems}
+                  onAddFreeItem={onAddFreeItem}
                 />
               </div>
             )}
@@ -469,7 +488,12 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
       </div>
 
       <div className={classes.section}>
-        <OrderLines initialOrderLines={initialOrderLines} selectedProducts={selectedProducts} total={total} />
+        <OrderLines
+          initialOrderLines={initialOrderLines}
+          selectedProducts={selectedProducts}
+          freeItems={freeItems}
+          total={total}
+        />
       </div>
 
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
