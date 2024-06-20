@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Title from './Title';
+import { format } from "date-fns";
 
 export default function Orders({ orders, visibleOrders, showMoreOrders }) {
   let orderNumber = 0;
@@ -20,6 +21,11 @@ export default function Orders({ orders, visibleOrders, showMoreOrders }) {
     } else {
       setExpandedOrderId(orderId);
     }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return format(date, 'MM/dd/yyyy HH:mm');
   };
 
   return (
@@ -49,7 +55,7 @@ export default function Orders({ orders, visibleOrders, showMoreOrders }) {
                 <React.Fragment key={order.id}>
                   <TableRow>
                     <TableCell>{order.id}</TableCell>
-                    <TableCell>{order.dateTime}</TableCell>
+                    <TableCell>{formatDate(order.dateTime)}</TableCell>
                     <TableCell>{`${order.customer.firstName} ${order.customer.lastName}`}</TableCell>
                     <TableCell>{order.customer.email}</TableCell>
                     <TableCell>{order.address}</TableCell>

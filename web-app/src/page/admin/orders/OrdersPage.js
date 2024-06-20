@@ -141,9 +141,9 @@ export default function OrdersPage() {
     const filters = {
       status: statusByIndex.get(value),
       user: user,
-      from: format(rangeRef.current.from, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
-      to: format(rangeRef.current.to, "yyyy-MM-dd'T'HH:mm:ss.SSS")
-    }
+      from: format(rangeRef.current.from, "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"), 
+      to: format(rangeRef.current.to, "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")  
+    };  
     searchOrders(filters)
   }
 

@@ -10,6 +10,7 @@ import useCities from '../../hooks/useCities';
 import OrderLines from './OrderLines';
 import ProductListWithBonusPoints from './ProductListWithBonusPoints';
 import { CustomerService } from '../../service/CustomerService';
+import {parseISO} from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
    container: {
@@ -223,8 +224,8 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
           try {
             const order = {
               status: "IN_PROGRESS",
-              dateTime: new Date(),
-              startDateTime: new Date(),
+              dateTime: parseISO(new Date()),
+              startDateTime: parseISO(new Date()),
               endDateTime: null,
               total: total,
               lines: initialOrderLines,

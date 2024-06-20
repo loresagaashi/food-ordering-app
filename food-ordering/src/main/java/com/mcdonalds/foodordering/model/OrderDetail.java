@@ -9,7 +9,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -23,11 +24,11 @@ public class OrderDetail extends BaseEntity {
 
     private BigDecimal total;
 
-    private LocalDateTime dateTime;
+    private ZonedDateTime dateTime;
 
-    private LocalDateTime startDateTime;
+    private ZonedDateTime startDateTime;
 
-    private LocalDateTime endDateTime;
+    private ZonedDateTime endDateTime;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
@@ -48,4 +49,18 @@ public class OrderDetail extends BaseEntity {
     private String address;
 
     private String city;
+
+    @PrePersist
+    @PreUpdate
+    private void adjustDates() {
+        if (this.dateTime != null) {
+            this.dateTime = this.dateTime.withZoneSameInstant(ZoneId.of("UTC"));
+        }
+        if (this.startDateTime != null) {
+            this.startDateTime = this.startDateTime.withZoneSameInstant(ZoneId.of("UTC"));
+        }
+        if (this.endDateTime != null) {
+            this.endDateTime = this.endDateTime.withZoneSameInstant(ZoneId.of("UTC"));
+        }
+    }
 }

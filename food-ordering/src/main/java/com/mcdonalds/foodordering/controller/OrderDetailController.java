@@ -1,7 +1,8 @@
 package com.mcdonalds.foodordering.controller;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+// import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +34,8 @@ public class OrderDetailController extends BasicControllerOperations<OrderDetail
     @GetMapping("/all/{status}")
     public Map<LocalDate, List<OrderDetail>> findByDateTimeBetweenAndStatus(@PathVariable String status,
                                                                             @RequestParam(required = false) String customer,
-                                                                            @RequestParam @DateTimeFormat(iso = DATE_TIME) LocalDateTime from,
-                                                                            @RequestParam @DateTimeFormat(iso = DATE_TIME) LocalDateTime to) {
+                                                                            @RequestParam @DateTimeFormat(iso = DATE_TIME) ZonedDateTime from,
+                                                                            @RequestParam @DateTimeFormat(iso = DATE_TIME) ZonedDateTime to) {
                     return service.findAllByDateBetweenAndStatus(customer, from, to, status);
                                                                             }
 

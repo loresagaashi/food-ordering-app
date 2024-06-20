@@ -106,7 +106,7 @@ export default function OrderTitle({ order, className, moveLabel, onMoveClick, o
             renderValue: row => `${row?.name}${row?.hasMenu ? " +menu" : ""}` 
         },
     ];
-    console.log('order', order)
+    // console.log('order', order)
 
     function handleMoveClick() {
         onMoveClick(order);
@@ -148,7 +148,7 @@ export default function OrderTitle({ order, className, moveLabel, onMoveClick, o
                             <Box display="flex" alignItems="baseline">
                                 <Typography noWrap className={classes.label} variant="body2" component="span">From:</Typography>
                                 <Typography noWrap className={classes.value} variant="body2" component="span"
-                                    color="textSecondary">{getTime(order?.startDateTime)}</Typography>
+                                    color="textSecondary">{format(new Date(order?.dateTime), 'HH:mm')}</Typography>
                             </Box>
                             <Box display="flex" alignItems="baseline">
                                 <Typography noWrap className={classes.label} variant="body2" component="span">To:</Typography>

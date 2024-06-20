@@ -1,7 +1,7 @@
 package com.mcdonalds.foodordering.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -44,32 +44,32 @@ public class OrderDetailService extends BasicServiceOperations<OrderDetailReposi
 
     public OrderDetail moveToProgress(OrderDetail orderDetail) {
         orderDetail.setStatus(OrderStatus.IN_PROGRESS);
-        orderDetail.setStartDateTime(LocalDateTime.now());
+        orderDetail.setStartDateTime(ZonedDateTime.now());
 
         return save(orderDetail);
     }
 
     public OrderDetail moveToProcessing(OrderDetail orderDetail) {
         orderDetail.setStatus(OrderStatus.PROCESSING);
-        orderDetail.setEndDateTime(LocalDateTime.now());
+        orderDetail.setEndDateTime(ZonedDateTime.now());
 
         return save(orderDetail);
     }
 
     public OrderDetail moveToDelivering(OrderDetail orderDetail) {
         orderDetail.setStatus(OrderStatus.DELIVERING);
-        orderDetail.setEndDateTime(LocalDateTime.now());
+        orderDetail.setEndDateTime(ZonedDateTime.now());
 
         return save(orderDetail);
     }
 
     public OrderDetail moveToCompleted(OrderDetail orderDetail) {
         orderDetail.setStatus(OrderStatus.COMPLETED);
-        orderDetail.setEndDateTime(LocalDateTime.now());
+        orderDetail.setEndDateTime(ZonedDateTime.now());
 
         return save(orderDetail);
     }
-    public Map<LocalDate, List<OrderDetail>> findAllByDateBetweenAndStatus(String customer, LocalDateTime from, LocalDateTime to, String status){
+    public Map<LocalDate, List<OrderDetail>> findAllByDateBetweenAndStatus(String customer, ZonedDateTime from, ZonedDateTime to, String status){
         if (customer == null) {
             customer = "";
         }

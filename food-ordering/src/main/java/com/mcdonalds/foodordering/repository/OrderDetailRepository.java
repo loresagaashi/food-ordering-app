@@ -5,7 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import com.mcdonalds.foodordering.model.OrderDetail;
 
-import java.time.LocalDateTime;
+// import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 // import java.util.Date;
 
@@ -18,8 +19,8 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long>{
         "AND o.status = ?4 "+
         "ORDER BY o.dateTime"
     )
-    List<OrderDetail> findByDateTimeBetweenAndStatus(String customer, LocalDateTime from, LocalDateTime to, OrderStatus statusType);
+    List<OrderDetail> findByDateTimeBetweenAndStatus(String customer, ZonedDateTime from, ZonedDateTime to, OrderStatus statusType);
     
     //Kur tshtohen punetort
-    // List<Offer> findByDateTimeIsAfterAndStatusOfferLines_Emplyee_IdIn(LocalDateTime dateTime, OrderStatus statusType, Set<Long> employeeIds);
+    // List<Offer> findByDateTimeIsAfterAndStatusOfferLines_Emplyee_IdIn(ZonedDateTime dateTime, OrderStatus statusType, Set<Long> employeeIds);
 }

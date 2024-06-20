@@ -74,7 +74,7 @@ export default function OrderEditDialog({
       onError: (e) => (errorRef.current = e),
     }
   );
-  console.log('order', order)
+  // console.log('order', order)
 
   const columns = [
     {
@@ -117,7 +117,6 @@ export default function OrderEditDialog({
     },
     {
       title: "Payment Method",
-      field: "paymentMethod",
       render: () => order?.paymentType,
     },
   ];
