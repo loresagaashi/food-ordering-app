@@ -10,7 +10,6 @@ import useCities from '../../hooks/useCities';
 import OrderLines from './OrderLines';
 import ProductListWithBonusPoints from './ProductListWithBonusPoints';
 import { CustomerService } from '../../service/CustomerService';
-import {parseISO} from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
    container: {
@@ -176,94 +175,121 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
     }
   }, [user]);
 
-  const saveOrder = async () => {
-    const order = {
-      status: "IN_PROGRESS",
-      dateTime: new Date(),
-      startDateTime: new Date(),
-      endDateTime: null,
-      total: total,
-      lines: [
-        ...initialOrderLines,
-        ...freeItems.map(item => ({
-          product: item, 
-          price: 0,
-          quantity: 1,
-          amount: 0, 
-          notes: '-',     
-        }))
-      ],
-      customer: user?.user,
-      paymentType: paymentType,
-      notes: notes,
-      address: address,
-      city: city
-    }
-    const updatedUser = {
-      ...user.user,
-      totalBonusPoints: totalBonusPoints - 50,
-    };
+  const saveOrder = async (order) => {
     try {
-      await updateCustomer(updatedUser);
-      const userLocalStorage = {accessToken: user?.accessToken, refreshToken: user?.refreshToken, user: {...updatedUser}};
-      setUser(userLocalStorage)
-      setIsEditing(false);
-      setEditedSuccessfully(true);
-    } catch (error) {
-      setEditFailed(true);
-    }
+      if (user && user.user) {
+        const updatedUser = {
+          ...user.user,
+          totalBonusPoints: totalBonusPoints - 50,
+        };
+        await updateCustomer(updatedUser);
+        const userLocalStorage = {
+          accessToken: user.accessToken,
+          refreshToken: user.refreshToken,
+          user: { ...updatedUser },
+        };
+        setUser(userLocalStorage);
+        setIsEditing(false);
+        setEditedSuccessfully(true);
+      }
 
-    return createOrder(order)
-    .then(() => {
+      await createOrder(order);
+  
       localStorage.removeItem("lines");
-      localStorage.removeItem('selectedProducts');
+      localStorage.removeItem("selectedProducts");
       setSelectedProducts([]);
       handleOrderIsDone();
       setShowModal(false);
       setError(false);
       setNotes('');
       setPaymentType('');
-    });
-  }
+    } catch (error) {
+      setEditFailed(true);
+      throw error;
+    }
+  };
 
   const handleSubmit = async () => {
     if (firstName && lastName && email && address && phoneNumber && city && paymentType) {
-        setMessage('Order submitted successfully!');
-        setOpen(true);
+      setMessage('Order submitted successfully!');
+      setOpen(true);
+  
+      let order;
+      if (user && user.user) {
+        order = {
+          status: "IN_PROGRESS",
+          dateTime: new Date(),
+          startDateTime: new Date(),
+          endDateTime: null,
+          total: total,
+          lines: [
+            ...initialOrderLines,
+            ...freeItems.map((item) => ({
+              product: item,
+              price: 0,
+              quantity: 1,
+              amount: 0,
+              notes: '-',
+            })),
+          ],
+          customer: user.user,
+          paymentType: paymentType,
+          notes: notes,
+          address: address,
+          city: city.city
+  
+        };
+      } else {
+        order = {
+          status: "IN_PROGRESS",
+          dateTime: new Date(),
+          startDateTime: new Date(),
+          endDateTime: null,
+          total: total,
+          lines: [
+            ...initialOrderLines,
+            ...freeItems.map((item) => ({
+              product: item,
+              price: 0,
+              quantity: 1,
+              amount: 0,
+              notes: '-',
+            })),
+          ],
+          customer: {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            phoneNumber: phoneNumber,
+            city: city.city,
+            totalBonusPoints: 0,
+          },
+          paymentType: paymentType,
+          notes: notes,
+          address: address,
+          city: city.city
+  
+        };
+      }
+  
+      try {
 
+        await saveOrder(order);
+  
         if (paymentType === 'CARD') {
-          try {
-            const order = {
-              status: "IN_PROGRESS",
-              dateTime: parseISO(new Date()),
-              startDateTime: parseISO(new Date()),
-              endDateTime: null,
-              total: total,
-              lines: initialOrderLines,
-              customer: user?.user,
-              paymentType: paymentType,
-              notes: notes,
-              address: address,
-              city: city
-            };
-
-            const paymentLinkResponse = await axios.post('http://localhost:8080/api/payment/create-link', order);
-
-            const paymentResponse = paymentLinkResponse.data;
-
-            await saveOrder();
-
-            if (paymentResponse && paymentResponse.payment_url) {
-              window.location.href = paymentResponse.payment_url;
-            }
-          } catch (error) {
-            setMessage(error.message);
-            setOpen(true);
-            setError(true);
+          const paymentLinkResponse = await axios.post('http://localhost:8080/api/payment/create-link', order);
+          
+          const paymentResponse = paymentLinkResponse.data;
+  
+          if (paymentResponse && paymentResponse.payment_url) {
+            window.location.href = paymentResponse.payment_url;
           }
-        } else {
-          await saveOrder();
         }
+      } catch (error) {
+        setMessage(error.message);
+        setOpen(true);
+        setError(true);
+      }
     } else {
       setMessage('Please fill in all the fields.');
       setOpen(true);
