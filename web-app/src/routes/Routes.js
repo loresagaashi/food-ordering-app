@@ -6,6 +6,7 @@ import ClientLayout from "../page/client/ClientLayout";
 import ClientSignUp from "../page/client/ClientSignUp";
 import PrivateRoute from "../component/PrivateRoute";
 import ClientProfile from "../page/client/ClientProfile";
+import PaymentSuccess from "../component/PaymentSuccess";
 
 const AppRoutes = [
   // Client routes
@@ -23,7 +24,7 @@ const AppRoutes = [
   <Route key={11} path="/client/sign-in" element={<ClientSignIn />} />,
   <Route key={11} path="/client/sign-up" element={<ClientSignUp />} />,
   <Route key={11} path="/client/profile" element={<ClientProfile />} />,
-  <Route key={11} path="/payment/success" element={<ClientLayout />} />,
+  <Route key={11} path="/payment/success" element={<PaymentSuccess />} />,
 ];
 
 export default AppRoutes;

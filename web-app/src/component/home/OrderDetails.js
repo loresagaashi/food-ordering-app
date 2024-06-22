@@ -180,7 +180,7 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
       if (user && user.user) {
         const updatedUser = {
           ...user.user,
-          totalBonusPoints: totalBonusPoints - 50,
+          totalBonusPoints: freeItems.length > 2 ? user.user.totalBonusPoints - 100 : freeItems.length >= 1 ? user.user.totalBonusPoints - 50 : user.user.totalBonusPoints,
         };
         await updateCustomer(updatedUser);
         const userLocalStorage = {
@@ -208,6 +208,7 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
       throw error;
     }
   };
+  
 
   const handleSubmit = async () => {
     if (firstName && lastName && email && address && phoneNumber && city && paymentType) {
@@ -232,7 +233,11 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
               notes: '-',
             })),
           ],
-          customer: user.user,
+          customer: {
+            ...user.user,
+            totalBonusPoints: freeItems.length > 2 ? user.user.totalBonusPoints - 100 : freeItems.length >= 1 ? user.user.totalBonusPoints - 50 : user.user.totalBonusPoints,
+          },
+          
           paymentType: paymentType,
           notes: notes,
           address: address,
@@ -283,8 +288,11 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
   
           if (paymentResponse && paymentResponse.payment_url) {
             window.location.href = paymentResponse.payment_url;
+            return;
           }
         }
+        setMessage('Order submitted successfully!');
+        setOpen(true);
       } catch (error) {
         setMessage(error.message);
         setOpen(true);
