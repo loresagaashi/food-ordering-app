@@ -12,8 +12,9 @@ const orderDetailService = new OrderDetailService();
 function mapOrdersToChartData(orders) {
   const aggregatedData = orders.reduce((acc, order) => {
     const date = new Date(order.dateTime);
+    const dateKey = date.toISOString().split('T')[0]; // 'YYYY-MM-DD'
     const hour = date.getHours();
-    const time = `${hour}:00`; 
+    const time = `${dateKey} ${hour}:00`; // 'YYYY-MM-DD HH:00'
     if (!acc[time]) {
       acc[time] = 0;
     }
@@ -30,13 +31,13 @@ export default function Chart() {
   const [selectedDay, setSelectedDay] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const { data: orders } = useQuery(QueryKeys.ORDERDETAIL, () => orderDetailService.findAll());
+  const { data: orders = [] } = useQuery(QueryKeys.ORDERDETAIL, () => orderDetailService.findAll());
 
   const chartData = mapOrdersToChartData(orders);
 
   const filteredChartData = selectedDay ? chartData.filter(data => {
-    const date = new Date(data.time);
-    return selectedDay === date.toDateString();
+    const date = data.time.split(' ')[0];
+    return selectedDay === date;
   }) : chartData;
 
   const handleDayChange = (date) => {
@@ -84,7 +85,7 @@ export default function Chart() {
             }}
           >
             <MenuItem onClick={() => handleDayChange("")}>All Orders</MenuItem>
-            {Array.from(new Set(orders.map(order => new Date(order.dateTime).toDateString()))).map(date => (
+            {Array.from(new Set(orders.map(order => new Date(order.dateTime).toISOString().split('T')[0]))).map(date => (
               <MenuItem key={date} onClick={() => handleDayChange(date)}>{date}</MenuItem>
             ))}
           </Popover>
@@ -105,7 +106,7 @@ export default function Chart() {
               dataKey: "time",
               tickNumber: Math.min(filteredChartData.length, isSmallScreen ? 5 : 10),
               tickLabelStyle: theme.typography.body2,
-              label: "Hour", 
+              label: "Time",
               labelStyle: theme.typography.body1,
             },
           ]}

@@ -121,6 +121,7 @@ const ClientProfile = () => {
         phoneNumber: event.target.phoneNumber.value,
         city: { id: city, name: event.target.city.value },
         birthDate: event.target.birthDate.value,
+        totalBonusPoints: event.target.totalBonusPoints.value,
     };
     try {
       await updateCustomer(updatedUser);
