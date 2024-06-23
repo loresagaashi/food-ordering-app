@@ -7,6 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { useTheme, useMediaQuery } from '@mui/material';
 import Title from './Title';
 import { format } from "date-fns";
 
@@ -28,22 +29,25 @@ export default function Orders({ orders, visibleOrders, showMoreOrders }) {
     return format(date, 'MM/dd/yyyy HH:mm');
   };
 
+  const theme = useTheme();
+  const isDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
   return (
     <React.Fragment>
       <Title>Recent Orders</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Date</TableCell>
-            <TableCell>Customer</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Address</TableCell>
-            <TableCell>City</TableCell>
-            <TableCell>Payment Method</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell align="right">Sale Amount</TableCell>
-            <TableCell>Order Lines</TableCell>
+            <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>ID</TableCell>
+            <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>Date</TableCell>
+            <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>Customer</TableCell>
+            <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>Email</TableCell>
+            <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>Address</TableCell>
+            <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>City</TableCell>
+            <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>Payment Method</TableCell>
+            <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>Status</TableCell>
+            <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }} align="right">Sale Amount</TableCell>
+            <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>Order Lines</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -54,15 +58,15 @@ export default function Orders({ orders, visibleOrders, showMoreOrders }) {
               return (
                 <React.Fragment key={order.id}>
                   <TableRow>
-                    <TableCell>{order.id}</TableCell>
-                    <TableCell>{formatDate(order.dateTime)}</TableCell>
-                    <TableCell>{`${order.customer.firstName} ${order.customer.lastName}`}</TableCell>
-                    <TableCell>{order.customer.email}</TableCell>
-                    <TableCell>{order.address}</TableCell>
-                    <TableCell>{order.city}</TableCell>
-                    <TableCell>{order.paymentType}</TableCell>
-                    <TableCell>{order.status}</TableCell>
-                    <TableCell align="right">{`$${order.total.toFixed(2)}`}</TableCell>
+                    <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>{order.id}</TableCell>
+                    <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>{formatDate(order.dateTime)}</TableCell>
+                    <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>{`${order.customer.firstName} ${order.customer.lastName}`}</TableCell>
+                    <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>{order.customer.email}</TableCell>
+                    <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>{order.address}</TableCell>
+                    <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>{order.city}</TableCell>
+                    <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>{order.paymentType}</TableCell>
+                    <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>{order.status}</TableCell>
+                    <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }} align="right">{`$${order.total.toFixed(2)}`}</TableCell>
                     <TableCell>
                       <Paper
                         elevation={3}
@@ -73,7 +77,13 @@ export default function Orders({ orders, visibleOrders, showMoreOrders }) {
                         }}
                         onClick={() => toggleOrderLines(order.id)}
                       >
-                        <Typography variant="body2" color="primary" sx={{ textDecoration: 'none' }}>
+                        <Typography 
+                          variant="body2" 
+                          sx={{ 
+                            textDecoration: 'none', 
+                            color: isDarkMode ? '#fff' : theme.palette.primary.main 
+                          }}
+                        >
                           {isExpanded ? 'Hide Lines' : 'Show Lines'}
                         </Typography>
                       </Paper>
@@ -86,17 +96,17 @@ export default function Orders({ orders, visibleOrders, showMoreOrders }) {
                           <Table size="small">
                             <TableHead>
                               <TableRow>
-                                <TableCell style={{fontWeight: 'bold'}}>Product</TableCell>
-                                <TableCell style={{fontWeight: 'bold'}}>Quantity</TableCell>
-                                <TableCell style={{fontWeight: 'bold'}} align="right">Total Price</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold', color: isDarkMode ? '#fff' : 'inherit' }}>Product</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold', color: isDarkMode ? '#fff' : 'inherit' }}>Quantity</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold', color: isDarkMode ? '#fff' : 'inherit' }} align="right">Total Price</TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
                               {order.lines.map((line, index) => (
                                 <TableRow key={index}>
-                                  <TableCell>{line.product.name}</TableCell>
-                                  <TableCell>{line.quantity}</TableCell>
-                                  <TableCell align="right">{`${line.quantity} x ${line.price.toFixed(2)}`} {' - '} {`${(line.quantity * line.price).toFixed(2)}$`}</TableCell>
+                                  <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>{line.product.name}</TableCell>
+                                  <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>{line.quantity}</TableCell>
+                                  <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }} align="right">{`${line.quantity} x ${line.price.toFixed(2)}`} {' - '} {`${(line.quantity * line.price).toFixed(2)}$`}</TableCell>
                                 </TableRow>
                               ))}
                             </TableBody>
@@ -116,7 +126,7 @@ export default function Orders({ orders, visibleOrders, showMoreOrders }) {
         </TableBody>
       </Table>
       {orders && visibleOrders < orders.length && (
-        <Link color="primary" href="#" onClick={showMoreOrders} sx={{ mt: 3 }} style={{fontSize: '16px'}}>
+        <Link color="primary" href="#" onClick={showMoreOrders} sx={{ mt: 3 }} style={{ fontSize: '16px' }}>
           See more orders
         </Link>
       )}

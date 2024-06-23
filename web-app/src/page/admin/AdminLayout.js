@@ -29,6 +29,12 @@ import StoreLocationsView from "./storelocations/StoreLocationsView";
 import DeliveryHoursView from "./deliveryHours/DeliveryHoursView";
 import useUser from "../../hooks/useUser";
 import OrdersPage from "./orders/OrdersPage";
+import DarkModeIcon from '@material-ui/icons/Brightness4';
+import LightModeIcon from '@material-ui/icons/Brightness7';
+import useDarkMode from "../../hooks/useDarkMode";
+import {
+  useTheme,
+} from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -117,6 +123,8 @@ export default function AdminLayout({}) {
   const [ open, setOpen ] = React.useState(true);
   const location = useLocation();
   const { user } = useUser();
+  const toggleDarkMode = useDarkMode();
+  const theme = useTheme();
 
   function handleDrawerOpen() {
     setOpen(true);
@@ -157,6 +165,9 @@ export default function AdminLayout({}) {
           >
             {locationPath === 'orderDetails' ? 'Orders' : locationPath.charAt(0).toUpperCase() + locationPath.slice(1)}
           </Typography>
+          <IconButton color="inherit" onClick={toggleDarkMode}>
+            {theme.palette.type === 'dark' ? <LightModeIcon/> : <DarkModeIcon/>}
+          </IconButton>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
               <NotificationsIcon/>

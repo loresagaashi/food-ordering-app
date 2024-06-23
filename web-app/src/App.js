@@ -12,6 +12,7 @@ import { Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { CartProvider } from "./context/CartContext";
+import DarkMode from "./context/DarkMode";
 
 const customTheme = {
   overrides: {
@@ -66,8 +67,10 @@ function App() {
         <QueryClientProvider client={queryClient}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <ThemeProvider theme={createTheme(theme)}>
+          <DarkMode.Provider value={{theme, setTheme}}>
             <CssBaseline />
             <Routes>{AppRoutes}</Routes>
+            </DarkMode.Provider>
           </ThemeProvider>
           </MuiPickersUtilsProvider>
         </QueryClientProvider>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   CircularProgress,
   Paper,
@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  useTheme,
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,6 +29,7 @@ import { useMutation, useQuery } from 'react-query';
 import { QueryKeys } from '../../service/QueryKeys';
 import { OrderDetailService } from '../../service/OrderDetailService';
 import { CustomerService } from "../../service/CustomerService";
+import DarkMode from '../../context/DarkMode';
 
 const useStyles = makeStyles((theme) => ({
   profileContainer: {
@@ -35,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#EEEEEE',
+    backgroundColor: theme.palette.background.default,
     padding: theme.spacing(5),
   },
   card: {
@@ -43,6 +45,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     maxWidth: '800px',
     padding: theme.spacing(3),
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.text.primary,
   },
   avatarSection: {
     backgroundColor: theme.palette.primary.main,
@@ -81,6 +85,7 @@ const orderDetailService = new OrderDetailService();
 const customerService = new CustomerService();
 
 const ClientProfile = () => {
+  const { theme, setTheme } = useContext(DarkMode);
   const classes = useStyles();
   const { user, setUser } = useUser();
   const [isEditing, setIsEditing] = useState(false);
@@ -110,23 +115,23 @@ const ClientProfile = () => {
   const handleSave = async (event) => {
     event.preventDefault();
     let city = '';
-    if(event.target.city.value){
+    if (event.target.city.value) {
       city = cities.find(city => city.name === event.target.city.value)?.id;
     }
     const updatedUser = {
-        ...user.user,
-        firstName: event.target.firstName.value,
-        lastName: event.target.lastName.value,
-        email: event.target.email.value,
-        phoneNumber: event.target.phoneNumber.value,
-        city: { id: city, name: event.target.city.value },
-        birthDate: event.target.birthDate.value,
-        totalBonusPoints: event.target.totalBonusPoints.value,
+      ...user.user,
+      firstName: event.target.firstName.value,
+      lastName: event.target.lastName.value,
+      email: event.target.email.value,
+      phoneNumber: event.target.phoneNumber.value,
+      city: { id: city, name: event.target.city.value },
+      birthDate: event.target.birthDate.value,
+      totalBonusPoints: event.target.totalBonusPoints.value,
     };
     try {
       await updateCustomer(updatedUser);
-      const userLocalStorage = {accessToken: user?.accessToken, refreshToken: user?.refreshToken, user: {...updatedUser}};
-      setUser(userLocalStorage)
+      const userLocalStorage = { accessToken: user?.accessToken, refreshToken: user?.refreshToken, user: { ...updatedUser } };
+      setUser(userLocalStorage);
       setIsEditing(false);
       setEditedSuccessfully(true);
     } catch (error) {
@@ -187,7 +192,7 @@ const ClientProfile = () => {
           <Typography variant="body2">{user?.user.totalBonusPoints}</Typography>
         </Grid>
         <Grid>
-          <Button variant="outlined" color="secondary" style={{marginTop: '16px'}} onClick={handleViewOrdersClick}>
+          <Button variant="outlined" color="secondary" style={{ marginTop: '16px' }} onClick={handleViewOrdersClick}>
             View my orders
           </Button>
         </Grid>
@@ -275,7 +280,7 @@ const ClientProfile = () => {
 
   return (
     <>
-      <MuiAppBar/>
+      <MuiAppBar />
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <section className={classes.profileContainer}>
           <Paper elevation={3} className={classes.card}>

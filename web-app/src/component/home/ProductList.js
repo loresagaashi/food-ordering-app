@@ -160,13 +160,14 @@ export default function ProductList({ products, onAddToCart }) {
                             src={`../../../products/${product.imageUrl}`}
                             alt={product.name}
                             className={classes.productImage}
+                            style={{  marginBottom: '10px', marginTop:'10px' }}
                           />
                           <div className={classes.productInfo}>
                             <div>
-                              <Typography style={{ fontWeight: "bold", marginTop: '15px' }}>
+                              <Typography style={{ fontWeight: "bold", marginTop: '35px' }}>
                                 {product.name}
                               </Typography>
-                              <Typography>
+                              <Typography style={{ marginBottom: '10px' }}>
                                 {product.price}$
                               </Typography>
                             </div>

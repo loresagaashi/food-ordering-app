@@ -16,6 +16,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: theme.spacing(1), 
+    backgroundColor: theme.palette.background.default,
+    color: theme.palette.text.primary,
     [theme.breakpoints.up('md')]: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -26,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     border: `2px solid ${theme.palette.primary.main}`,
     borderRadius: '4px',
-    backgroundColor: '#f9f9f9',
+    backgroundColor: theme.palette.background.paper,
     marginBottom: theme.spacing(2),
     [theme.breakpoints.up('md')]: {
       width: '48%',
@@ -46,11 +48,12 @@ const useStyles = makeStyles((theme) => ({
   header: {
     display: 'flex',
     justifyContent: 'space-between',
-    color: 'Black',
+    color: theme.palette.text.primary,
     marginBottom: theme.spacing(2),
   },
   input: {
     marginBottom: theme.spacing(1), 
+    backgroundColor: theme.palette.background.paper,
     [theme.breakpoints.down('sm')]: {
       fontSize: '12px',
     },
