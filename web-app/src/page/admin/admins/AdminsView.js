@@ -5,6 +5,7 @@ import { QueryKeys } from "../../../service/QueryKeys";
 import { AdminService } from "../../../service/AdminService";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import LockIcon from '@material-ui/icons/Lock';
 
 const adminsService = new AdminService();
 
@@ -30,6 +31,12 @@ export default function AdminsView({}) {
           {
             title: "Password",
             field: "password",
+            render: () => (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <LockIcon />
+                <span style={{ marginLeft: 5 }}>••••••••</span>
+              </div>
+            ),
             editComponent: (props) => TextFieldTableCell(props, errorRef),
           },
           {

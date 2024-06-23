@@ -120,13 +120,12 @@ const ClientProfile = () => {
     }
     const updatedUser = {
       ...user.user,
-      firstName: event.target.firstName.value,
-      lastName: event.target.lastName.value,
-      email: event.target.email.value,
-      phoneNumber: event.target.phoneNumber.value,
-      city: { id: city, name: event.target.city.value },
-      birthDate: event.target.birthDate.value,
-      totalBonusPoints: event.target.totalBonusPoints.value,
+      firstName: event.target.firstName?.value,
+      lastName: event.target.lastName?.value,
+      email: event.target.email?.value,
+      phoneNumber: event.target.phoneNumber?.value,
+      city: { id: city, name: event.target.city?.value },
+      birthDate: event.target.birthDate?.value,
     };
     try {
       await updateCustomer(updatedUser);
