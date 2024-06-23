@@ -35,7 +35,7 @@ export default function Orders({ orders, visibleOrders, showMoreOrders }) {
   return (
     <React.Fragment>
       <Title>Recent Orders</Title>
-      <Table size="small">
+      <Table size="small" sx={{ backgroundColor: isDarkMode ? '#424242' : 'inherit' }}>
         <TableHead>
           <TableRow>
             <TableCell sx={{ color: isDarkMode ? '#fff' : 'inherit' }}>ID</TableCell>
@@ -72,7 +72,7 @@ export default function Orders({ orders, visibleOrders, showMoreOrders }) {
                         elevation={3}
                         sx={{
                           padding: '10px',
-                          background: '#f0f0f0',
+                          background: isDarkMode ? '#616161' : '#f0f0f0',
                           cursor: 'pointer',
                         }}
                         onClick={() => toggleOrderLines(order.id)}
@@ -92,8 +92,8 @@ export default function Orders({ orders, visibleOrders, showMoreOrders }) {
                   {isExpanded && (
                     <TableRow>
                       <TableCell colSpan={10}>
-                        <Paper elevation={3} sx={{ padding: '10px', background: '#f9f9f9' }}>
-                          <Table size="small">
+                        <Paper elevation={3} sx={{ padding: '10px', background: isDarkMode ? '#757575' : '#f9f9f9' }}>
+                          <Table size="small" sx={{ backgroundColor: isDarkMode ? '#424242' : 'inherit' }}>
                             <TableHead>
                               <TableRow>
                                 <TableCell sx={{ fontWeight: 'bold', color: isDarkMode ? '#fff' : 'inherit' }}>Product</TableCell>

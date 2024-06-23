@@ -14,16 +14,74 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.75)',
     padding: theme.spacing(2, 4, 3),
     borderRadius: '20px',
+    maxWidth: '90%',
+    maxHeight: '90%',
+    overflow: 'auto',
+    [theme.breakpoints.up('sm')]: {
+      maxWidth: 800,
+      maxHeight: 600,
+    },
   },
   productName: {
-    marginBottom: '25px' ,
-    marginBottom: theme.spacing(2),
+    marginBottom: '15px',
     fontWeight: 'bold',
     fontFamily: "'Roboto Slab', serif",
     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1.5rem',
+    },
   },
-
+  productImage: {
+    width: '100%',
+    maxWidth: 300,
+    height: 'auto',
+    marginRight: '20px',
+    [theme.breakpoints.down('xs')]: {
+      maxWidth: '100%',
+    },
+  },
+  priceText: {
+    marginRight: 12,
+    color: '#FFAC1C',
+    fontWeight: 'bold',
+    fontSize: '1.2rem',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1rem',
+    },
+  },
+  bonusPointsText: {
+    marginBottom: '5px',
+    marginRight: 12,
+    color: 'green',
+    fontSize: '0.9rem',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '0.8rem',
+    },
+  },
+  sizeOption: {
+    display: 'inline-block',
+    margin: '0 10px',
+  },
+  sizeLabel: {
+    display: 'block',
+    width: '40px',
+    height: '40px',
+    borderRadius: '50%',
+    border: '2px solid #000',
+    lineHeight: '36px',
+    textAlign: 'center',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s, color 0.3s',
+  },
+  sizeInput: {
+    display: 'none',
+    '&:checked + $sizeLabel': {
+      backgroundColor: '#FFAC1C',
+      color: '#fff',
+    },
+  },
 }));
+
 
   function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -49,7 +107,7 @@ function OfferPopUp({ offer, handleClose, handleAddToCart }) {
   const [quantity, setQuantity] = useState(1);
 
   const popupWidth = 700;
-  const popupHeight = 500;
+  const popupHeight = 600;
 
   const onAddToCart = () => {
     const itemToAdd = {
@@ -95,8 +153,11 @@ function OfferPopUp({ offer, handleClose, handleAddToCart }) {
               &#10006;
             </button>
           </div>
+          <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+
+          
           <div style={{ display: 'flex', alignItems: 'center', height: '85%' }}>
-            <div style={{ flex: '1' }}>
               <img
               src={`../../../products/${offer.imageUrl}`}
               alt={offer.name}
@@ -105,6 +166,8 @@ function OfferPopUp({ offer, handleClose, handleAddToCart }) {
                 style={{ marginRight: '20px' }}
               />
             </div>
+            </Grid>
+            <Grid item xs={12} md={6}>
             <div style={{ flex: '2', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <Typography variant="h4" id="transition-modal-title" className={classes.productName}>
                 {offer.name}
@@ -143,8 +206,9 @@ function OfferPopUp({ offer, handleClose, handleAddToCart }) {
                 </Button>
               </div>
             </div>
+            </Grid>
+            </Grid>
           </div>
-        </div>
       </Fade>
     </Modal>
   );

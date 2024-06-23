@@ -113,7 +113,7 @@ export default function OrderEditDialog({
     {
       title: "Address",
       render: () =>
-        `${order?.address}, ${order?.city}`,
+        `${order?.address}, ${order?.customer.city.name}`,
     },
     {
       title: "Payment Method",
