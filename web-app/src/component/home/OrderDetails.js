@@ -12,77 +12,104 @@ import ProductListWithBonusPoints from './ProductListWithBonusPoints';
 import { CustomerService } from '../../service/CustomerService';
 
 const useStyles = makeStyles((theme) => ({
-   container: {
-     display: 'flex',
-     justifyContent: 'space-between',
-     padding: theme.spacing(2),
-   },
-   section: {
-     width: '48%',
-     padding: theme.spacing(2),
-     border: `2px solid ${theme.palette.primary.main}`,
-     borderRadius: '4px',
-     backgroundColor: '#f9f9f9',
-   },
-   radioGroup: {
-     display: 'flex',
-     flexDirection: 'row',
-   },
-   formControlLabel: {
-     marginRight: theme.spacing(15),
-   },
-   formControl: {
-     width: '100%',
-   },
-   header: {
-     display: 'flex',
-     justifyContent: 'space-between',
-     color: 'Black',
-     marginBottom: theme.spacing(2),
-   },
-   input: {
-     marginBottom: theme.spacing(2),
-   },
-   buttonContainer: {
-     display: 'flex',
-     justifyContent: 'center',
-     marginTop: theme.spacing(2),
-   },
-   button: {
-     backgroundColor: theme.palette.secondary.main,
-     color: '#fff',
-     '&:hover': {
-       backgroundColor: theme.palette.secondary.dark,
-     },
-   },
-   notes: {
-     marginTop: theme.spacing(2),
-     padding: theme.spacing(1),
-     border: `1px solid ${theme.palette.secondary.main}`,
-     borderRadius: '4px',
-   },
-   total: {
-     textAlign: 'right',
-     fontWeight: 'bold',
-     color: theme.palette.secondary.main,
-     marginTop: theme.spacing(2),
-   },
-   errorMessage: {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    padding: theme.spacing(1), 
+    [theme.breakpoints.up('md')]: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+  },
+  section: {
+    width: '100%',
+    padding: theme.spacing(2),
+    border: `2px solid ${theme.palette.primary.main}`,
+    borderRadius: '4px',
+    backgroundColor: '#f9f9f9',
+    marginBottom: theme.spacing(2),
+    [theme.breakpoints.up('md')]: {
+      width: '48%',
+      marginBottom: 0,
+    },
+  },
+  radioGroup: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  formControlLabel: {
+    marginRight: theme.spacing(15),
+  },
+  formControl: {
+    width: '100%',
+  },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    color: 'Black',
+    marginBottom: theme.spacing(2),
+  },
+  input: {
+    marginBottom: theme.spacing(1), 
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '12px',
+    },
+    '@media (max-width: 320px) and (max-height: 608px)': {
+      fontSize: '10px',
+    },
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: theme.spacing(2),
+  },
+  button: {
+    backgroundColor: theme.palette.secondary.main,
+    color: '#fff',
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark,
+    },
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '12px',
+    },
+    '@media (max-width: 320px) and (max-height: 608px)': {
+      fontSize: '10px',
+    },
+  },
+  notes: {
+    marginTop: theme.spacing(1), 
+    padding: theme.spacing(1),
+    border: `1px solid ${theme.palette.secondary.main}`,
+    borderRadius: '4px',
+  },
+  total: {
+    textAlign: 'right',
+    fontWeight: 'bold',
+    color: theme.palette.secondary.main,
+    marginTop: theme.spacing(2),
+  },
+  errorMessage: {
     color: 'red',
     marginTop: theme.spacing(1),
   },
   freeProductButton: {
-    backgroundColor: theme.palette.primary.main, 
+    backgroundColor: theme.palette.primary.main,
     color: '#fff',
     '&:hover': {
       backgroundColor: theme.palette.primary.dark,
     },
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '12px',
+    },
+    '@media (max-width: 320px) and (max-height: 608px)': {
+      fontSize: '10px',
+    },
   },
   root: {
     flexGrow: 1,
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "40px",
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '40px',
   },
 }));
 

@@ -9,7 +9,10 @@ import OrderDetails from './OrderDetails';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
-    width: '400px',
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '400px',
+    },
   },
   drawerHeader: {
     padding: theme.spacing(2),
