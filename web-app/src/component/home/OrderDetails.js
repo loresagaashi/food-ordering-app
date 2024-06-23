@@ -167,6 +167,9 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
       onError: (e) => (console.log(e)),
     }
   );
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState('success');
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     let message = '';
@@ -182,14 +185,9 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
   
   
   const handleFreeProduct = () => {
-    let numberOfFreeProducts = 0;
-    if (totalBonusPoints >= 100) {
-      numberOfFreeProducts = 4;
-    } else if (totalBonusPoints >= 51) {
-      numberOfFreeProducts = 2;
-    } else if (totalBonusPoints >= 50) {
-      numberOfFreeProducts = 1;
-    }
+    
+    const numberOfFreeProducts = totalBonusPoints >= 100 ? 4 : totalBonusPoints >= 51 ? 2 : totalBonusPoints >= 50 ? 1 : 0;
+
     setShowFreeItems(true);
     handleOpenModal();
   };
@@ -381,8 +379,24 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
   const onAddToCart = (selectedProducts) => {
     setSelectedProducts(selectedProducts);
     const selectedFreeProducts = productsData.filter(product => selectedProducts.some(p => p.id === product.id));
-    onAddFreeItem(selectedFreeProducts);
+  
+    const numberOfFreeProducts = totalBonusPoints >= 100 ? 4 : totalBonusPoints >= 51 ? 2 : totalBonusPoints >= 50 ? 1 : 0;
+  
+    if (selectedFreeProducts.length < numberOfFreeProducts) {
+      handleAlert(`Please select ${numberOfFreeProducts} free product${numberOfFreeProducts > 1 ? 's' : ''}.`, 'error');
+      return;
+    }
+
+    const productsToAdd = selectedFreeProducts.slice(0, numberOfFreeProducts - freeItems.length);
+  
+    onAddFreeItem(productsToAdd);
     handleCloseModal();
+  };
+
+  const handleAlert = (message, severity) => {
+    setAlertMessage(message);
+    setAlertSeverity(severity);
+    setAlertOpen(true);
   };
 
   return (
@@ -563,6 +577,12 @@ export default function OrderDetails ({ orderDetails, total, setShowModal, handl
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={error ? "error" : "success"}>
           {message}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar open={alertOpen} autoHideDuration={6000} onClose={() => setAlertOpen(false)}>
+        <Alert onClose={() => setAlertOpen(false)} severity={alertSeverity}>
+          {alertMessage}
         </Alert>
       </Snackbar>
     </div>

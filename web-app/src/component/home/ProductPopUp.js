@@ -267,7 +267,7 @@ function ProductPopUp({ product, handleClose, handleAddToCart }) {
                     checked={menu}
                     onChange={handleMenuChange}
                   />
-                  <label htmlFor="menuOption">Add Menu (Fries & Coca Cola) for $2.8:</label>
+                  <label htmlFor="menuOption">Add Menu (Fries & Coca Cola) for $2.8</label>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', marginTop: 20 }}>
                   <Button variant="outlined" onClick={handleDecreaseQuantity} style={{ marginRight: 10, width: 30, height: 30 }}>
