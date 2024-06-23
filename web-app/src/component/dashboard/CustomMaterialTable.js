@@ -94,7 +94,7 @@ export default function CustomMaterialTable({
         <Typography
           variant={"h4"}
           style={{
-            whiteSpace: "nowrap",
+            whiteSpace: "normal",
             overflow: "hidden",
             textOverflow: "ellipsis",
             padding: "0.5em",

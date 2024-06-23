@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { makeStyles, Paper, Tab, Tabs, Snackbar, Grid, Typography } from "@material-ui/core";
+import { makeStyles, Paper, Tab, Tabs, Snackbar, Grid, Typography, useMediaQuery } from "@material-ui/core";
 import { useQuery } from "react-query";
 import { QueryKeys } from "../../service/QueryKeys";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -15,18 +15,48 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     width: '95%',
-    marginBottom:"100px",
-    marginTop:"40px"
+    marginBottom: "100px",
+    marginTop: "40px",
+    [theme.breakpoints.down('sm')]: {
+      marginTop: "20px",
+      marginBottom: "50px",
+      width: '100%',
+    },
   },
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+  productContainer: {
+    textAlign: "center",
+    position: "relative",
+    width: "100%",
+    cursor: "pointer",
+    transition: "transform 0.2s ease-in-out",
+    "&:hover": {
+      transform: "scale(1.05)",
+    },
   },
-  modalContent: {
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+  productImage: {
+    width: "100%",
+    height: "auto",
+    maxWidth: "250px",
+    maxHeight: "150px",
+  },
+  productInfo: {
+    position: "absolute",
+    top: "115%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    textAlign: "center",
+    width: "100%",
+    paddingBottom: '20px'
+  },
+  productItem: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "10px",
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'center',
+  },
   },
 }));
 
@@ -55,6 +85,8 @@ export default function ProductList({ products, onAddToCart }) {
   const { data: categories, isLoading } = useQuery(QueryKeys.CATEGORIES); 
   const [selectedProduct, setSelectedProduct] = useState(null);
   const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMediumScreen = useMediaQuery('(min-width: 600px) and (max-width: 1200px)');
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -96,7 +128,9 @@ export default function ProductList({ products, onAddToCart }) {
           onChange={handleChange}
           indicatorColor="primary"
           textColor="primary"
-          centered
+          variant={isSmallScreen || isMediumScreen ? "scrollable" : "standard"}
+          scrollButtons={isSmallScreen || isMediumScreen ? "on" : "off"}
+          centered={!isSmallScreen && !isMediumScreen}
         >
           {categories?.map((category, index) => (
             <Tab key={index} label={category.name} />
@@ -107,54 +141,41 @@ export default function ProductList({ products, onAddToCart }) {
           <Grid container spacing={2}>
             {categories.map((category, index) => (
               <TabPanel key={index} value={value} index={index}>
-                {category?.products?.map((product) => (
-                  <Grid
-                    key={product.id}
-                    item
-                    xs={4}
-                    style={{
-                      marginBottom: "60px",
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                    onClick={() => handleProductClick(product)}
-                  >
-                    <div
+                <Grid container spacing={2}>
+                  {category?.products?.map((product) => (
+                    <Grid
+                      key={product.id}
+                      item
+                      xs={12} 
+                      sm={6}  
+                      md={4} 
                       style={{
-                        textAlign: "center",
-                        position: "relative",
-                        width: "100%",
-                        cursor: "pointer",
+                        marginBottom: "10px",
                       }}
+                      onClick={() => handleProductClick(product)}
                     >
-                      <img
-                        src={`../../../products/${product.imageUrl}`}
-                        alt={product.name}
-                        width={"250px"}
-                        height={"150px"}
-                      />
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "115%",
-                          left: "50%",
-                          transform: "translate(-50%, -50%)",
-                          textAlign: "center",
-                          width: "100%",
-                        }}
-                      >
-                        <div>
-                          <Typography style={{ fontWeight: "bold", marginTop: '15px' }}>
-                            {product.name}
-                          </Typography>
-                          <Typography>
-                            {product.price}$
-                          </Typography>
+                      <div className={classes.productItem}>
+                        <div className={classes.productContainer}>
+                          <img
+                            src={`../../../products/${product.imageUrl}`}
+                            alt={product.name}
+                            className={classes.productImage}
+                          />
+                          <div className={classes.productInfo}>
+                            <div>
+                              <Typography style={{ fontWeight: "bold", marginTop: '15px' }}>
+                                {product.name}
+                              </Typography>
+                              <Typography>
+                                {product.price}$
+                              </Typography>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Grid>
-                ))}
+                    </Grid>
+                  ))}
+                </Grid>
               </TabPanel>
             ))}
             <TabPanel value={value} index={categories.length}>

@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
   cartButton: {
     display: "flex",
     alignItems: "center",
+    marginRight: '20px',
   },
   totalPrice: {
     marginLeft: theme.spacing(1),
@@ -75,7 +76,7 @@ export default function HomePage() {
   };
 
   return (
-    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+    <Box display="flex" flexDirection="column" justifyContent="center">
       <Box className={classes.buttonContainer} display="flex" justifyContent="flex-end" width="100%">
         <Button color="primary" variant="contained" onClick={toggleCartDrawer} className={classes.cartButton}>
           <ShoppingCartIcon />
@@ -84,7 +85,7 @@ export default function HomePage() {
           </Typography>
         </Button>
       </Box>
-      <Box style={{ margin: "60px", borderRadius: "20px", width: "80%" }}>
+      <Box style={{ margin: "60px auto", borderRadius: "20px", width: "80%" }}>
         <Carousel>
           {items.map((item, i) => (
             <Item key={i} item={item} />
