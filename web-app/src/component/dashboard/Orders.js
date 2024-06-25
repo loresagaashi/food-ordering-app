@@ -30,7 +30,7 @@ export default function Orders({ orders, visibleOrders, showMoreOrders }) {
   };
 
   const theme = useTheme();
-  const isDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const isDarkMode = theme.palette.mode === 'dark';
 
   return (
     <React.Fragment>
