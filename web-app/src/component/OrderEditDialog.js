@@ -74,8 +74,7 @@ export default function OrderEditDialog({
       onError: (e) => (errorRef.current = e),
     }
   );
-  // console.log('order', order)
-
+  
   const columns = [
     {
       title: "Product",
@@ -113,11 +112,16 @@ export default function OrderEditDialog({
     {
       title: "Address",
       render: () =>
-        `${order?.address}, ${order?.customer.city.name}`,
+        `${order?.address || ''}, ${order?.customer?.city?.name || ''}`,
     },
     {
       title: "Payment Method",
       render: () => order?.paymentType,
+    },
+    {
+      title: "Phone Number",
+      render: () =>
+        ` ${order?.customer?.phoneNumber || ''}`,
     },
   ];
 
@@ -209,7 +213,7 @@ export default function OrderEditDialog({
                   padding: "0.5em",
                 }}
               >
-                {`${order.customer.firstName} ${order.customer.lastName}`}{" "}
+                {`${order?.customer?.firstName || ''} ${order?.customer?.lastName || ''}`}{" "}
               </Typography>
             </Box>
           }

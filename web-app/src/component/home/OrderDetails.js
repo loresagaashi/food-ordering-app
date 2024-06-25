@@ -336,14 +336,7 @@ export default function OrderDetails({
               notes: "-",
             })),
           ],
-          customer: {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            phoneNumber: phoneNumber,
-            city: city?.city,
-            totalBonusPoints: 0,
-          },
+          
           paymentType: paymentType,
           notes: notes,
           address: address,
@@ -478,7 +471,6 @@ export default function OrderDetails({
 
         <TextField
           label="Name and Last Name"
-          value={`${firstName} ${lastName}`}
           onChange={handleNameChange}
           fullWidth
           className={classes.input}

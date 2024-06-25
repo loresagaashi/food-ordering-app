@@ -28,15 +28,17 @@ public class OrderDetailService extends BasicServiceOperations<OrderDetailReposi
 
     @Override
     public OrderDetail save(OrderDetail orderDetail) {
-        int totalBonusPoints = orderDetail.getLines().stream()
-                .mapToInt(line -> Optional.ofNullable(line.getProduct().getBonusPoints()).orElse(0) * line.getQuantity().intValue())
-                .sum();
+        if(orderDetail.getCustomer() != null) {
+            int totalBonusPoints = orderDetail.getLines().stream()
+                    .mapToInt(line -> Optional.ofNullable(line.getProduct().getBonusPoints()).orElse(0) * line.getQuantity().intValue())
+                    .sum();
 
-        Customer customer = orderDetail.getCustomer();
+            Customer customer = orderDetail.getCustomer();
 
-        customer.setTotalBonusPoints(customer.getTotalBonusPoints() + totalBonusPoints);
+            customer.setTotalBonusPoints(customer.getTotalBonusPoints() + totalBonusPoints);
 
-        customerRepository.save(customer);
+            customerRepository.save(customer);
+        }
 
         return super.save(orderDetail);
     }

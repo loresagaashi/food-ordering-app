@@ -135,7 +135,7 @@ export default function OrderTitle({ order, className, moveLabel, onMoveClick, o
                 <CardContent>
                     <Box display="flex" className={classes.header}>
                         <Typography variant="h5" component="h2" style={{ color: "lightgoldenrodyellow" }}>
-                            {order?.customer.firstName + " " + order?.customer.lastName}
+                        {order?.customer ? `${order.customer.firstName} ${order.customer.lastName}` : "Guest Mode"}
                         </Typography>
                         
                         <Typography variant="h5" color="textSecondary" component="h1" style={{ color: "darkslategray" }}>
