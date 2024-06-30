@@ -55,11 +55,11 @@ const useStyles = makeStyles((theme) => ({
   bonusPointsText: {
     marginBottom: '5px',
     marginRight: 12,
-    color: 'green',
     fontSize: '0.9rem',
     [theme.breakpoints.down('xs')]: {
       fontSize: '0.8rem',
     },
+    color: theme.palette.type === 'dark' ? '#32de84' : 'green',
   },
   sizeOption: {
     display: 'inline-block',
